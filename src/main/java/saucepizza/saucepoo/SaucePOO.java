@@ -7,7 +7,7 @@ public class SaucePOO {
         System.out.println("Hola sauce!");
         System.out.println("sigo sin aprenderme los atajos...");
         System.out.println("Apenas probar lo que estas editanto");
-        String dato = new String("Ok");
+        String dato = new String("ajamyap");
         System.out.println(dato);
     }
 }
