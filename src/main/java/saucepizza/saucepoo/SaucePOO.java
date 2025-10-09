@@ -6,6 +6,8 @@ public class SaucePOO {
     public static void main(String[] args) {
         System.out.println("Hola sauce!");
         System.out.println("sigo sin aprenderme los atajos...");
-        System.out.println("que se supone que hago aca?");
+        System.out.println("Apenas probar lo que estas editanto");
+        String dato = new String("Ok");
+        System.out.println(dato);
     }
 }
