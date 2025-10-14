@@ -8,5 +8,6 @@ public class SaucePOO {
         SplashScreen inicio = new SplashScreen();
         inicio.setLocationRelativeTo(null);
         inicio.setVisible(true);
+        System.out.println("denada, adios");
     }
 }
