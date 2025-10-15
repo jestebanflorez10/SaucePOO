@@ -44,7 +44,7 @@ public class SplashScreen extends javax.swing.JFrame {
 
         jPanel1.setBackground(java.awt.Color.white);
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\EQUIPO\\Documents\\GitHub\\SaucePOO\\src\\main\\resources\\img\\Splashlogo.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon( getClass().getResource("/img/Splashlogo.png")));
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
         jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
@@ -63,7 +63,7 @@ public class SplashScreen extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap(50, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
