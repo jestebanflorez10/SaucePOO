@@ -3,21 +3,29 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package saucepizza.saucepoo.igu;
-
+import java.sql.SQLException;
+import javax.swing.JOptionPane;
+import saucepizza.saucepoo.logic.Usuario;
+import saucepizza.saucepoo.logic.Usuario_Servicio;
 import javax.swing.ImageIcon;
 
-/**
- *
- * @author juane
- */
 public class IniciodeSesion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(IniciodeSesion.class.getName());
-
+    private Usuario_Servicio usuarioService = new Usuario_Servicio();
     /**
      * Creates new form IniciodeSesion
      */
     public IniciodeSesion() {
+        try {
+            usuarioService.crearTablaUsuarios();
+            if (usuarioService.login("demo", "demo") == null) {
+                usuarioService.crearUsuario("demo", "demo", "Cajero", true);
+                System.out.println("Usuario demo creado.");
+            }
+        } catch (SQLException | IllegalStateException ex) {
+            ex.printStackTrace();
+        }
         initComponents();
         try {
             this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
@@ -211,7 +219,30 @@ public class IniciodeSesion extends javax.swing.JFrame {
     }//GEN-LAST:event_btn_salirActionPerformed
 
     private void btn_ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ingresarActionPerformed
-        // TODO add your handling code here:
+       String usuario = txt_usuario.getText();
+       String password = new String(pss_password.getPassword());
+
+        try {
+            Usuario user = usuarioService.login(usuario, password);
+            if (user != null) {
+                if (user.esAdmin()) {
+                     JOptionPane.showMessageDialog(this, "Es Administrador");
+
+                } else if (user.esCajero()) {
+                    JOptionPane.showMessageDialog(this, "Es Cajero");
+                }
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
+            }
+        } catch (IllegalStateException ex) {
+            JOptionPane.showMessageDialog(this, ex.getMessage());
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error base de datos");
+        }
+    
+        
     }//GEN-LAST:event_btn_ingresarActionPerformed
 
     private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed

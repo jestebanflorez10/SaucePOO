@@ -3,11 +3,56 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>saucepizza</groupId>
     <artifactId>SaucePOO</artifactId>
-    <version>1.0-POO</version>
+    <version>prerelease 0.3</version>
     <packaging>jar</packaging>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.release>24</maven.compiler.release>
         <exec.mainClass>saucepizza.saucepoo.SaucePOO</exec.mainClass>
     </properties>
+    <dependencies>
+        <dependency>
+            <groupId>org.xerial</groupId>
+            <artifactId>sqlite-jdbc</artifactId>
+            <version>3.42.0.0</version>
+        </dependency>
+    </dependencies>
+    <build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jar-plugin</artifactId>
+            <version>3.2.2</version>
+            <configuration>
+                <archive>
+                    <manifest>
+                        <mainClass>saucepizza.saucepoo.SaucePOO</mainClass>
+                    </manifest>
+                </archive>
+            </configuration>
+        </plugin>
+       <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-shade-plugin</artifactId>
+      <version>3.2.4</version>
+      <executions>
+        <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>shade</goal>
+          </goals>
+          <configuration>
+            <transformers>
+              <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                <mainClass>saucepizza.saucepoo.SaucePOO</mainClass>
+              </transformer>
+            </transformers>
+          </configuration>
+        </execution>
+      </executions>
+    </plugin>
+    </plugins>
+</build>
+    <name>Sauce</name>
+    <description>El proyecto consiste en desarrollar una aplicación de escritorio en Java Swing para la gestión integral de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario mediante una interfaz gráfica intuitiva. Está dirigido a dos tipos de usuarios: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.</description>
 </project>

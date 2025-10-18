@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>saucepizza</groupId>
+  <artifactId>SaucePOO</artifactId>
+  <name>Sauce</name>
+  <version>prerelease 0.3</version>
+  <description>El proyecto consiste en desarrollar una aplicación de escritorio en Java Swing para la gestión integral de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario mediante una interfaz gráfica intuitiva. Está dirigido a dos tipos de usuarios: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.</description>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-jar-plugin</artifactId>
+        <version>3.2.2</version>
+        <configuration>
+          <archive>
+            <manifest>
+              <mainClass>saucepizza.saucepoo.SaucePOO</mainClass>
+            </manifest>
+          </archive>
+        </configuration>
+      </plugin>
+      <plugin>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.2.4</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <transformers>
+                <transformer>
+                  <mainClass>saucepizza.saucepoo.SaucePOO</mainClass>
+                </transformer>
+              </transformers>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <properties>
+    <maven.compiler.release>24</maven.compiler.release>
+    <exec.mainClass>saucepizza.saucepoo.SaucePOO</exec.mainClass>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+</project>
