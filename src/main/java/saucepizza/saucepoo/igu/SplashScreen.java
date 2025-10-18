@@ -18,10 +18,11 @@ public class SplashScreen extends javax.swing.JFrame {
     public SplashScreen() {
         initComponents();
         try {
-            this.setIconImage(new ImageIcon(getClass().getResource("/img/logo.png")).getImage());
+            this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
         } catch (Exception e) {
             System.err.println("Error al cargar el icono: " + e.getMessage());
         }
+        cargar();
     }
 
     /**
@@ -51,7 +52,7 @@ public class SplashScreen extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(255, 255, 255));
 
-        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\juane\\OneDrive\\Documentos\\Cursos\\Java-Varios\\SaucePOO\\src\\main\\resources\\img\\Splashlogo.png")); // NOI18N
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/Splashlogo.png"))); // NOI18N
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -65,7 +66,7 @@ public class SplashScreen extends javax.swing.JFrame {
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(22, Short.MAX_VALUE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel2)
                 .addGap(30, 30, 30))
         );
@@ -137,4 +138,31 @@ public class SplashScreen extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     // End of variables declaration//GEN-END:variables
+
+    
+       private void cargar() {
+        new Thread(() -> {
+            try {
+                for (int i = 0; i <= 100; i++) {
+                    Thread.sleep(10); // velocidad de carga (ajústalo)                    
+                }
+
+                // Cuando termina la carga
+                abrirLogin();
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void abrirLogin() {
+        java.awt.EventQueue.invokeLater(() -> {
+            IniciodeSesion login = new IniciodeSesion(); // tu segunda ventana
+            login.setLocationRelativeTo(null);
+            login.setVisible(true);
+            this.dispose(); // cierra el splash
+        });
+    }
+    
 }
