@@ -6,21 +6,23 @@ package saucepizza.saucepoo.igu;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import saucepizza.saucepoo.logic.Usuario;
-import saucepizza.saucepoo.logic.Usuario_Servicio;
+//import saucepizza.saucepoo.logic.Usuario_Servicio;
+import saucepizza.saucepoo.logic.Controladora;
 import javax.swing.ImageIcon;
 
 public class IniciodeSesion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(IniciodeSesion.class.getName());
-    private Usuario_Servicio usuarioService = new Usuario_Servicio();
+    /*private Usuario_Servicio usuarioService = new Usuario_Servicio();*/
+    private Controladora control = new Controladora();
     /**
      * Creates new form IniciodeSesion
      */
     public IniciodeSesion() {
         try {
-            usuarioService.crearTablaUsuarios();
-            if (usuarioService.login("demo", "demo") == null) {
-                usuarioService.crearUsuario("demo", "demo", "Cajero", true);
+            control.getUsuarioService().crearTablaUsuarios();
+            if (control.getUsuarioService().login("demo", "demo") == null) {
+                control.getUsuarioService().crearUsuario("demo", "demo", "Cajero", true);
                 System.out.println("Usuario demo creado.");
             }
         } catch (SQLException | IllegalStateException ex) {
@@ -223,7 +225,7 @@ public class IniciodeSesion extends javax.swing.JFrame {
        String password = new String(pss_password.getPassword());
 
         try {
-            Usuario user = usuarioService.login(usuario, password);
+            Usuario user = control.getUsuarioService().login(usuario, password);
             if (user != null) {
                 if (user.esAdmin()) {
                      JOptionPane.showMessageDialog(this, "Es Administrador");

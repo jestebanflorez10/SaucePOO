@@ -13,7 +13,7 @@ public class Usuario_Servicio {
     }
     public void crearTablaUsuarios() throws SQLException {
     dao.crearTablaUsuarios();
-}
+       }
 
     /** Crea un usuario demo o cualquiera */
     public void crearUsuario(String username, String password, String tipo, boolean activo) throws SQLException {
