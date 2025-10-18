@@ -231,7 +231,10 @@ public class IniciodeSesion extends javax.swing.JFrame {
                      JOptionPane.showMessageDialog(this, "Es Administrador");
 
                 } else if (user.esCajero()) {
-                    JOptionPane.showMessageDialog(this, "Es Cajero");
+                    Servicio_Cajero window = new Servicio_Cajero();
+                    window.setLocationRelativeTo(null);
+                    window.setVisible(true);
+                    this.dispose();
                 }
                 this.dispose();
             } else {
