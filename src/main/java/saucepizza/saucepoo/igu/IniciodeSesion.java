@@ -4,6 +4,8 @@
  */
 package saucepizza.saucepoo.igu;
 
+import javax.swing.ImageIcon;
+
 /**
  *
  * @author juane
@@ -17,6 +19,11 @@ public class IniciodeSesion extends javax.swing.JFrame {
      */
     public IniciodeSesion() {
         initComponents();
+        try {
+            this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
+        } catch (Exception e) {
+            System.err.println("Error al cargar el icono: " + e.getMessage());
+        }
     }
 
     /**
@@ -28,21 +35,188 @@ public class IniciodeSesion extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        txt_usuario = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        btn_ingresar = new javax.swing.JButton();
+        btn_salir = new javax.swing.JButton();
+        pss_password = new javax.swing.JPasswordField();
+        img_logob = new javax.swing.JLabel();
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Iniciar Sesion || Sauce Software");
+        setUndecorated(true);
+        setResizable(false);
+
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/loginizza.png"))); // NOI18N
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel2.setText("EMPRESA DEMO");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 36)); // NOI18N
+        jLabel3.setText("INICIAR SESIÓN");
+
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel4.setText("USUARIO");
+
+        jLabel5.setFont(new java.awt.Font("Segoe UI", 0, 22)); // NOI18N
+        jLabel5.setText("CONTRASEÑA");
+
+        txt_usuario.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        txt_usuario.setToolTipText("Ingrese su usuario en este campo");
+        txt_usuario.setBorder(null);
+        txt_usuario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_usuarioActionPerformed(evt);
+            }
+        });
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+
+        jLabel6.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        jLabel6.setText("Software gracias a");
+
+        jLabel7.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/minilogo.png"))); // NOI18N
+
+        btn_ingresar.setBackground(new java.awt.Color(227, 40, 32));
+        btn_ingresar.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btn_ingresar.setForeground(new java.awt.Color(255, 255, 255));
+        btn_ingresar.setText("INGRESAR");
+        btn_ingresar.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_ingresar.setFocusPainted(false);
+        btn_ingresar.setFocusable(false);
+        btn_ingresar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_ingresarActionPerformed(evt);
+            }
+        });
+
+        btn_salir.setBackground(new java.awt.Color(240, 240, 240));
+        btn_salir.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
+        btn_salir.setForeground(new java.awt.Color(227, 40, 32));
+        btn_salir.setText("SALIR");
+        btn_salir.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_salir.setFocusPainted(false);
+        btn_salir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_salirActionPerformed(evt);
+            }
+        });
+
+        pss_password.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        pss_password.setBorder(null);
+
+        img_logob.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png"))); // NOI18N
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(91, 91, 91)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(btn_ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39)
+                        .addComponent(btn_salir, javax.swing.GroupLayout.PREFERRED_SIZE, 197, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 169, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addGap(14, 14, 14)
+                                .addComponent(jLabel6)
+                                .addGap(17, 17, 17))))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(img_logob)
+                                .addGap(34, 34, 34)
+                                .addComponent(jLabel2))
+                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jLabel5)
+                                .addComponent(jLabel4)
+                                .addComponent(txt_usuario)
+                                .addComponent(jSeparator1)
+                                .addComponent(jSeparator2, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                                .addComponent(jLabel3)
+                                .addComponent(pss_password)))
+                        .addGap(0, 259, Short.MAX_VALUE)))
+                .addComponent(jLabel1))
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jLabel1)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(35, 35, 35)
+                        .addComponent(img_logob)
+                        .addGap(18, 18, 18))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel2)
+                        .addGap(79, 79, 79)))
+                .addComponent(jLabel3)
+                .addGap(63, 63, 63)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(txt_usuario, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
+                .addComponent(jLabel5)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(pss_password, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel7))
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btn_ingresar, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btn_salir, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE))))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1270, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 768, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_salirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_salirActionPerformed
+       System.exit(0);
+    }//GEN-LAST:event_btn_salirActionPerformed
+
+    private void btn_ingresarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_ingresarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_ingresarActionPerformed
+
+    private void txt_usuarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_usuarioActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_usuarioActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +244,20 @@ public class IniciodeSesion extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btn_ingresar;
+    private javax.swing.JButton btn_salir;
+    private javax.swing.JLabel img_logob;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JPasswordField pss_password;
+    private javax.swing.JTextField txt_usuario;
     // End of variables declaration//GEN-END:variables
 }
