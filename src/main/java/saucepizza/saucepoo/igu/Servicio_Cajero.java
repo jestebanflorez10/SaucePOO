@@ -4,6 +4,13 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.sql.*;
+import javax.swing.JOptionPane;
+import static saucepizza.saucepoo.igu.UtilidadesPedidos.obtenerFechaHoraActual;
+import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Pedido;
+import saucepizza.saucepoo.logic.Producto;
+import saucepizza.saucepoo.persistencia.ConexionSQLite;
 /**
  *
  * @author EQUIPO
@@ -11,13 +18,42 @@ package saucepizza.saucepoo.igu;
 public class Servicio_Cajero extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
-
+    private Controladora control = new Controladora();
+    private Pedido pedidoActual;
     /**
      * Creates new form Servicio_Cajero
      */
     public Servicio_Cajero() {
+        control.getPedidoServicio().crearTablasPedidos();
+        iniciarNuevoPedido();        
         initComponents();
     }
+    private void iniciarNuevoPedido() {
+        pedidoActual = control.getPedidoServicio().crearPedido(" ", // crea método para obtener fecha actual como String
+        obtenerNuevoIdPedido(),     // crea método para generar un ID único
+        "Sauce Pizza",
+        "Cliente");  
+        }
+    public int obtenerNuevoIdPedido() {
+    int nuevoId = 1; // valor por defecto
+    String sql = "SELECT MAX(id) AS max_id FROM pedido";
+
+    try (Connection conn = ConexionSQLite.getConexion();
+         Statement stmt = conn.createStatement();
+         ResultSet rs = stmt.executeQuery(sql)) {
+
+        if (rs.next()) {
+            nuevoId = rs.getInt("max_id") + 1;
+        }
+    } catch (SQLException e) {
+        System.out.println("Error al obtener nuevo ID pedido: " + e.getMessage());
+    }
+    return nuevoId;}
+
+        private void actualizarVistaTotales() {
+            control.getPedidoServicio().actualizarTotales(pedidoActual);
+            jLabel4.setText(String.format("Total: %.2f", pedidoActual.getTotal()));
+            }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -120,21 +156,47 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         jLabel3.setText("Servicio");
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Total");
 
-        jButton4.setText("jButton4");
+        jButton4.setText("Pizza Pepperoni");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
 
-        jButton5.setText("jButton5");
+        jButton5.setText("Pizza Queso");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
 
-        jButton6.setText("jButton6");
+        jButton6.setText("Pizza Carne ");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
 
-        jButton7.setText("jButton7");
+        jButton7.setText("Soda");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
 
         jButton8.setBackground(new java.awt.Color(227, 40, 32));
         jButton8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton8.setForeground(new java.awt.Color(255, 255, 255));
         jButton8.setText("Pagar");
         jButton8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        jButton8.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton8ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -147,23 +209,26 @@ public class Servicio_Cajero extends javax.swing.JFrame {
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jButton4)
                             .addComponent(jButton6))
-                        .addGap(129, 129, 129)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jButton7)
-                            .addComponent(jButton5)))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(72, 72, 72)
+                                .addComponent(jButton5))
+                            .addGroup(jPanel3Layout.createSequentialGroup()
+                                .addGap(80, 80, 80)
+                                .addComponent(jButton7))))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jLabel3)))
-                .addContainerGap(696, Short.MAX_VALUE))
+                .addContainerGap(732, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 220, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(114, 114, 114))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(278, 278, 278))))
+                        .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(158, 158, 158))))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -178,11 +243,11 @@ public class Servicio_Cajero extends javax.swing.JFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton6)
                     .addComponent(jButton7))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 348, Short.MAX_VALUE)
                 .addComponent(jLabel4)
-                .addGap(14, 14, 14)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(79, 79, 79))
+                .addGap(81, 81, 81))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -225,6 +290,51 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             window.setVisible(true);
             this.dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        Producto prod = new Producto("Pepperoni", 1000, 1, 0);
+        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
+        actualizarVistaTotales();
+    }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
+        //Pagos  ¿
+        pedidoActual.setFecha(obtenerFechaHoraActual());
+        String nombreCliente = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente:", 
+                                                   "Nombre del Cliente", JOptionPane.PLAIN_MESSAGE);
+
+        // Validar que el usuario haya ingresado algo y no haya cancelado
+        if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {
+        pedidoActual.setNombreCliente(nombreCliente.trim());
+        } else {
+        // En caso de Cancelar o dejar vacío, asignar un valor por defecto o mostrar mensaje
+        pedidoActual.setNombreCliente("Cliente");
+        JOptionPane.showMessageDialog(null, "Se asignó nombre por defecto: Cliente", 
+                                  "Aviso", JOptionPane.INFORMATION_MESSAGE);
+                    }
+        control.getPedidoServicio().registrarPedido(pedidoActual);
+        JOptionPane.showMessageDialog(this, "Pedido registrado. Total: " + pedidoActual.getTotal());
+        iniciarNuevoPedido();        
+        actualizarVistaTotales();
+    }//GEN-LAST:event_jButton8ActionPerformed
+
+    private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+        Producto prod = new Producto("Queso", 1500, 1, 1);
+        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
+        actualizarVistaTotales();
+    }//GEN-LAST:event_jButton5ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        Producto prod = new Producto("Carne", 1700, 2, 2);
+        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
+        actualizarVistaTotales();
+    }//GEN-LAST:event_jButton6ActionPerformed
+
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        Producto prod = new Producto("Soda", 500, 1, 3);
+        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
+        actualizarVistaTotales();
+    }//GEN-LAST:event_jButton7ActionPerformed
 
     /**
      * @param args the command line arguments

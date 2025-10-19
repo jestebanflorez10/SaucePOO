@@ -11,14 +11,14 @@ public class Pedido {
     private double total;
     private ArrayList<Producto> listaProductos; //lista de datos dinamica
 
-    public Pedido(String fecha, int id, String nombreEmpresa, String nombreCliente, double subTotal, double impuestos, double total) {
+    public Pedido(String fecha, int id, String nombreEmpresa, String nombreCliente) {
         this.fecha = fecha;
         this.id = id;
         this.nombreEmpresa = nombreEmpresa;
         this.nombreCliente = nombreCliente;
-        this.subTotal = subTotal;
-        this.impuestos = impuestos;
-        this.total = total;
+        this.subTotal = 0;
+        this.impuestos = 0;
+        this.total = 0;
         this.listaProductos = new ArrayList<>();
     }
 
@@ -76,5 +76,22 @@ public class Pedido {
 
     public void setTotal(double total) {
         this.total = total;
+    }
+
+    public ArrayList<Producto> getListaProductos() {
+        return listaProductos;
+    }
+
+    public void setListaProductos(ArrayList<Producto> listaProductos) {
+        this.listaProductos = listaProductos;
+    }
+    public void agregarProducto(Producto nuevoProducto) {
+        for (Producto p : listaProductos) {
+            if (p.getId() == nuevoProducto.getId()) {
+                p.setCantidad(p.getCantidad() + nuevoProducto.getCantidad());
+                return;
+            }
+        }
+        listaProductos.add(nuevoProducto);
     }
 }
