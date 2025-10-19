@@ -1,9 +1,7 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
 package saucepizza.saucepoo.igu;
 
+import java.io.File;
+import java.net.URL;
 import java.sql.*;
 import java.util.Stack;
 import javax.swing.ImageIcon;
@@ -13,6 +11,7 @@ import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
 import saucepizza.saucepoo.persistencia.ConexionSQLite;
+import saucepizza.saucepoo.recibo.GeneradorFactura;
 /**
  *
  * @author EQUIPO
@@ -302,7 +301,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(292, 292, 292))
+                .addGap(213, 213, 213))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -400,25 +399,83 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        //Pagos  ¿
-        pedidoActual.setFecha(obtenerFechaHoraActual());
-        String nombreCliente = JOptionPane.showInputDialog(null, "Ingrese el nombre del cliente:", 
-                                                   "Nombre del Cliente", JOptionPane.PLAIN_MESSAGE);
+        // Actualizar fecha y solicitar nombre de cliente
+    pedidoActual.setFecha(obtenerFechaHoraActual());
+    String nombreCliente = JOptionPane.showInputDialog(
+        this,
+        "Ingrese el nombre del cliente:",
+        "Nombre del Cliente",
+        JOptionPane.PLAIN_MESSAGE
+    );
 
-        // Validar que el usuario haya ingresado algo y no haya cancelado
-        if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {
+    if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {
         pedidoActual.setNombreCliente(nombreCliente.trim());
-        } else {
-        // En caso de Cancelar o dejar vacío, asignar un valor por defecto o mostrar mensaje
+    } else {
         pedidoActual.setNombreCliente("Cliente");
-        JOptionPane.showMessageDialog(null, "Se asignó nombre por defecto: Cliente", 
-                                  "Aviso", JOptionPane.INFORMATION_MESSAGE);
-                    }
+        JOptionPane.showMessageDialog(
+            this,
+            "Se asignó nombre por defecto: Cliente",
+            "Aviso",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+    }
+
+    try {
+        // Crear carpeta de facturas si no existe
+        File carpetaFacturas = new File("facturas");
+        if (!carpetaFacturas.exists()) {
+            carpetaFacturas.mkdirs();
+        }
+
+        // Registrar pedido en la base de datos
         control.getPedidoServicio().registrarPedido(pedidoActual);
-        JOptionPane.showMessageDialog(this, "Pedido registrado. Total: " + pedidoActual.getTotal());
-        iniciarNuevoPedido();        
-        actualizarVistaTotales();
-        actualizarTablaPedido();
+
+        // Preparar rutas
+        String rutaPDFrelativa = "facturas/factura_" + pedidoActual.getId() + ".pdf";
+        File archivoPDF = new File(rutaPDFrelativa);
+        String rutaPDFabsoluta = archivoPDF.getAbsolutePath();
+
+        URL jasperURL = getClass().getClassLoader()
+            .getResource("saucepizza/saucepoo/reportes/factura_pedido.jasper");
+        if (jasperURL == null) {
+            String msg = "No se encuentra factura_pedido.jasper en el classpath.\n" +
+                         "No se generó la factura.";
+            System.out.println(msg);
+            JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String rutaJasper = jasperURL.getPath();
+
+        // Generar PDF
+        GeneradorFactura generador = new GeneradorFactura();
+        generador.generarPDF(pedidoActual, rutaPDFrelativa);
+
+        // Mensajes de confirmación
+        System.out.println("Ruta absoluta PDF: " + rutaPDFabsoluta);
+        System.out.println("Ruta archivo Jasper: " + rutaJasper);
+        JOptionPane.showMessageDialog(
+            this,
+            "Pedido registrado y factura generada:\n" +
+            rutaPDFabsoluta + "\nArchivo Jasper: " + rutaJasper,
+            "Éxito",
+            JOptionPane.INFORMATION_MESSAGE
+        );
+
+    } catch (Exception ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(
+            this,
+            "Error al generar la factura: " + ex.getMessage(),
+            "Error",
+            JOptionPane.ERROR_MESSAGE
+        );
+        return;
+    }
+
+    // Actualizar interfaz para un nuevo pedido
+    iniciarNuevoPedido();
+    actualizarVistaTotales();
+    actualizarTablaPedido();
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
