@@ -10,9 +10,44 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
-
+/// # GeneradorFactura
+/// 
+/// Clase responsable de generar un archivo PDF de factura a partir de un pedido.
+/// Utiliza JasperReports para crear, rellenar y exportar la factura.
+///
+/// ## Ejemplo de uso
+/// 
+/// ```
+/// Pedido pedido = ...; // Pedido previamente configurado
+/// GeneradorFactura gen = new GeneradorFactura();
+/// gen.generarPDF(pedido, "salida/factura.pdf");
+/// ```
+///
+/// ## Dependencias
+/// - JasperReports (net.sf.jasperreports)
+/// - BeanCollectionDataSource para la lista de productos
+/// - Pedido como fuente principal de datos
+///
+/// ---
 public class GeneradorFactura {
-
+    /// Genera un archivo PDF de factura a partir de un pedido y lo guarda en la ruta indicada.
+    ///
+    /// El método realiza los siguientes pasos:
+    /// 1. Prepara los parámetros de cabecera para la factura.
+    /// 2. Crea el datasource con la lista de productos del pedido.
+    /// 3. Carga la plantilla Jasper de la factura.
+    /// 4. Rellena la plantilla con datos y exporta a PDF.
+    /// 5. Intenta abrir el archivo PDF generado.
+    ///
+    /// Si ocurre algún error durante el proceso, se muestra un mensaje informativo al usuario.
+    ///
+    /// ### Ejemplo
+    /// ```
+    /// generador.generarPDF(pedido, "factura_001.pdf");
+    /// ```
+    ///@param pedido  El pedido con toda la información necesaria para generar la factura
+    ///@param rutaSalida Ruta completa donde se guardará el archivo PDF generado
+    ///@see Pedido
     public void generarPDF(Pedido pedido, String rutaSalida) {
         try {
             // 1. Preparar parámetros (datos de cabecera)

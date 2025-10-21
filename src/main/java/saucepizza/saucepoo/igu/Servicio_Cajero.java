@@ -1,8 +1,6 @@
 package saucepizza.saucepoo.igu;
 
-import java.io.File;
-import java.net.URL;
-import java.sql.*;
+
 import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -10,8 +8,7 @@ import static saucepizza.saucepoo.igu.UtilidadesPedidos.obtenerFechaHoraActual;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
-import saucepizza.saucepoo.persistencia.ConexionSQLite;
-import saucepizza.saucepoo.recibo.GeneradorFactura;
+import saucepizza.saucepoo.recibo.ImprimirFactura;
 /**
  *
  * @author EQUIPO
@@ -51,31 +48,16 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         }
 
     private void iniciarNuevoPedido() {
-        pedidoActual = control.getPedidoServicio().crearPedido(" ", // crea método para obtener fecha actual como String
-        obtenerNuevoIdPedido(),     // crea método para generar un ID único
-        "Sauce Pizza",
-        "Cliente");  
+        pedidoActual = control.getPedidoServicio().crearPedido(" ", // crea método para obtener fecha actual como String    // crea método para generar un ID único
+        "Sauce Pizza", //Nombre del local
+        "Cliente");  //Un cliente predeterminado, se asignara uno despues
         }
-    public int obtenerNuevoIdPedido() {
-    int nuevoId = 1; // valor por defecto
-    String sql = "SELECT MAX(id) AS max_id FROM pedido";
+    
 
-    try (Connection conn = ConexionSQLite.getConexion();
-         Statement stmt = conn.createStatement();
-         ResultSet rs = stmt.executeQuery(sql)) {
-
-        if (rs.next()) {
-            nuevoId = rs.getInt("max_id") + 1;
-        }
-    } catch (SQLException e) {
-        System.out.println("Error al obtener nuevo ID pedido: " + e.getMessage());
-    }
-    return nuevoId;}
-
-        private void actualizarVistaTotales() {
+    private void actualizarVistaTotales() {
             control.getPedidoServicio().actualizarTotales(pedidoActual);
             jLabel4.setText(String.format("Total: %.2f", pedidoActual.getTotal()));
-            }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -399,79 +381,20 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // Actualizar fecha y solicitar nombre de cliente
+    // Actualizar fecha y solicitar nombre de cliente
     pedidoActual.setFecha(obtenerFechaHoraActual());
-    String nombreCliente = JOptionPane.showInputDialog(
-        this,
-        "Ingrese el nombre del cliente:",
-        "Nombre del Cliente",
-        JOptionPane.PLAIN_MESSAGE
-    );
-
-    if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {
-        pedidoActual.setNombreCliente(nombreCliente.trim());
+    //Pedir el nombre del cliente o usar uno predeterminado
+    String nombreCliente = JOptionPane.showInputDialog(this,"Ingrese el nombre del cliente:","Nombre del Cliente",JOptionPane.PLAIN_MESSAGE);
+    if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {pedidoActual.setNombreCliente(nombreCliente.trim());
     } else {
         pedidoActual.setNombreCliente("Cliente");
-        JOptionPane.showMessageDialog(
-            this,
-            "Se asignó nombre por defecto: Cliente",
-            "Aviso",
-            JOptionPane.INFORMATION_MESSAGE
-        );
+        JOptionPane.showMessageDialog(this,"Se asignó nombre por defecto: Cliente","Aviso",JOptionPane.INFORMATION_MESSAGE);
     }
-
-    try {
-        // Crear carpeta de facturas si no existe
-        File carpetaFacturas = new File("facturas");
-        if (!carpetaFacturas.exists()) {
-            carpetaFacturas.mkdirs();
-        }
-
-        // Registrar pedido en la base de datos
-        control.getPedidoServicio().registrarPedido(pedidoActual);
-
-        // Preparar rutas
-        String rutaPDFrelativa = "facturas/factura_" + pedidoActual.getId() + ".pdf";
-        File archivoPDF = new File(rutaPDFrelativa);
-        String rutaPDFabsoluta = archivoPDF.getAbsolutePath();
-
-        URL jasperURL = getClass().getClassLoader()
-            .getResource("saucepizza/saucepoo/reportes/factura_pedido.jasper");
-        if (jasperURL == null) {
-            String msg = "No se encuentra factura_pedido.jasper en el classpath.\n" +
-                         "No se generó la factura.";
-            System.out.println(msg);
-            JOptionPane.showMessageDialog(this, msg, "Error", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-        String rutaJasper = jasperURL.getPath();
-
-        // Generar PDF
-        GeneradorFactura generador = new GeneradorFactura();
-        generador.generarPDF(pedidoActual, rutaPDFrelativa);
-
-        // Mensajes de confirmación
-        System.out.println("Ruta absoluta PDF: " + rutaPDFabsoluta);
-        System.out.println("Ruta archivo Jasper: " + rutaJasper);
-        JOptionPane.showMessageDialog(
-            this,
-            "Pedido registrado y factura generada:\n" +
-            rutaPDFabsoluta + "\nArchivo Jasper: " + rutaJasper,
-            "Éxito",
-            JOptionPane.INFORMATION_MESSAGE
-        );
-
-    } catch (Exception ex) {
-        ex.printStackTrace();
-        JOptionPane.showMessageDialog(
-            this,
-            "Error al generar la factura: " + ex.getMessage(),
-            "Error",
-            JOptionPane.ERROR_MESSAGE
-        );
-        return;
-    }
-
+    //Registrar en las bases de datos
+    control.getPedidoServicio().registrarPedido(pedidoActual);
+    //Generar la factura
+    ImprimirFactura imprime = new ImprimirFactura();
+    imprime.generarfactura(pedidoActual);
     // Actualizar interfaz para un nuevo pedido
     iniciarNuevoPedido();
     actualizarVistaTotales();

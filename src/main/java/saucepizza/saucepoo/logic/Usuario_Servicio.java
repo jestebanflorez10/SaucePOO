@@ -1,29 +1,29 @@
 package saucepizza.saucepoo.logic;
 
 import java.sql.SQLException;
-import saucepizza.saucepoo.persistencia.UsuarioDAO;
-import saucepizza.saucepoo.logic.Usuario;
+import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
+
 
 public class Usuario_Servicio {
-    private UsuarioDAO dao = new UsuarioDAO();
+    private ControladoraPersistencia controlP = new ControladoraPersistencia();
 
     /** Inicializa la BD creando la tabla si no existe */
     public void inicializarBase() throws SQLException {
-        dao.crearTablaUsuarios();
+        controlP.getUsuarioDAO().crearTablaUsuarios();
     }
     public void crearTablaUsuarios() throws SQLException {
-    dao.crearTablaUsuarios();
+        controlP.getUsuarioDAO().crearTablaUsuarios();
        }
 
     /** Crea un usuario demo o cualquiera */
     public void crearUsuario(String username, String password, String tipo, boolean activo) throws SQLException {
         Usuario u = new Usuario(0, username, password, tipo, activo);
-        dao.agregarUsuario(u);
+        controlP.getUsuarioDAO().agregarUsuario(u);
     }
 
     /** Valida login, lanza IllegalStateException si cajero desactivado */
     public Usuario login(String username, String password) throws SQLException, IllegalStateException {
-        Usuario usuario = dao.obtenerUsuarioPorUsername(username);
+        Usuario usuario = controlP.getUsuarioDAO().obtenerUsuarioPorUsername(username);
         if (usuario == null || !usuario.getPassword().equals(password)) {
             return null;
         }

@@ -12,5 +12,5 @@ public class Controladora {
     public Pedido_Servicio getPedidoServicio() { return this.pedidoServicio;}
 
     public void setPedidoServicio(Pedido_Servicio pedidoServicio) {this.pedidoServicio = pedidoServicio;}
-    
+       
 }

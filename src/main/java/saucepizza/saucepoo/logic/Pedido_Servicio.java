@@ -2,41 +2,39 @@ package saucepizza.saucepoo.logic;
 
 import java.sql.SQLException;
 import java.util.List;
-import saucepizza.saucepoo.persistencia.PedidoDAO;
-
+import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 public class Pedido_Servicio {
-    private PedidoDAO pedidoDAO = new PedidoDAO();
-
-    /** Inicializa la base de datos creando las tablas si no existen */
+    private ControladoraPersistencia controlP = new ControladoraPersistencia();
     public void inicializarBase() throws SQLException {
-        pedidoDAO.crearTablas();
+        controlP.getPedidoDAO().crearTablas();
     }
 
     /** Crea las tablas de pedidos y detalle explícitamente */
     public void crearTablasPedidos() {
-        pedidoDAO.crearTablas();
+        controlP.getPedidoDAO().crearTablas();
     }
 
     /** Registra un nuevo pedido con todos sus productos */
     public void registrarPedido(Pedido pedido) {
-        pedidoDAO.insertarPedidoConProductos(pedido);
+        controlP.getPedidoDAO().insertarPedidoConProductos(pedido);
     }
 
     /** Busca un pedido completo (cabecera + productos) por su ID */
     public Pedido obtenerPedidoPorId(int id) {
-        return pedidoDAO.buscarPedidoPorId(id);
+        return controlP.getPedidoDAO().buscarPedidoPorId(id);
     }
 
     /** Lista todos los pedidos (solo cabeceras) */
     public List<Pedido> listarTodosLosPedidos() {
-        return pedidoDAO.listarPedidos();
+        return controlP.getPedidoDAO().listarPedidos();
     }
 
     /**
      * Crea un nuevo pedido con los datos básicos y lo devuelve
      * para agregar productos antes de persistirlo.
      */
-    public Pedido crearPedido(String fecha, int id, String nombreEmpresa, String nombreCliente) {
+    public Pedido crearPedido(String fecha, String nombreEmpresa, String nombreCliente) {   
+        int id = controlP.obtenerNuevoIdPedido();
         return new Pedido(fecha, id, nombreEmpresa, nombreCliente);
     }
 
@@ -52,7 +50,7 @@ public class Pedido_Servicio {
      * @return true si existe, false en caso contrario.
      */
     public boolean existePedido(int id) {
-        return pedidoDAO.buscarPedidoPorId(id) != null;
+        return controlP.getPedidoDAO().buscarPedidoPorId(id) != null;
     }
 
     /**
