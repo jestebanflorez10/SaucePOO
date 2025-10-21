@@ -39,6 +39,6 @@ public class SaucePOO {
         
         System.out.println(art);
         System.out.println("Desarollado por Juan Esteban Florez, Andres Felipe Pilonieta, Maria Camila Giraldo y Eric Samuel Vargas");
-        System.out.println("Hecho en Java Swing con Maven");
+        System.out.println("Hecho en Java con la libreria Swing y el gestor de proyectos Maven");
     }
 }
