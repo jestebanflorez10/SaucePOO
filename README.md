@@ -1,6 +1,6 @@
 <p align="center">
   <a href="https://github.com/jestebanflorez10/SaucePOO">
-    <img src="https://github.com/jestebanflorez10/SaucePOO/blob/main/Sauce_Logo.png" alt="Logo Proyecto" />
+    <img src="https://github.com/jestebanflorez10/SaucePOO/blob/main/documentacion/Sauce_Logo.png" alt="Logo Proyecto" />
   </a>
 </p>
 <p align="center">
@@ -45,7 +45,7 @@ java -jar "SaucePOO-prerelase 0.3.jar"
 Al ejecutar el programa, este creara un directorio /database/ para guardar la base de datos de SQLite usuarios.db y un directorio /facturas/ para guardar en formato PDF las facturas creadas
 <p align="center">
   <a href="https://github.com/jestebanflorez10/SaucePOO">
-    <img src="https://github.com/jestebanflorez10/SaucePOO/blob/main/LogInDEMO.png" alt="Interfaz de Inicio de sesión" />
+    <img src="https://github.com/jestebanflorez10/SaucePOO/blob/main/documentacion/LogInDEMO.png" alt="Interfaz de Inicio de sesión" />
   </a>
 </p>
 
