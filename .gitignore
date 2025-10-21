@@ -1,2 +1,3 @@
 /target/
-Sauce/
+/Sauce/
+/database/usuarios.db
