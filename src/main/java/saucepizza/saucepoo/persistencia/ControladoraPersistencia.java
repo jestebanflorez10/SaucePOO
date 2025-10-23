@@ -8,7 +8,7 @@ import java.sql.Statement;
 public class ControladoraPersistencia {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private PedidoDAO pedidoDAO = new PedidoDAO();
- 
+    private ProductoAdminArchivos productoFile = new ProductoAdminArchivos();
     
   public int obtenerNuevoIdPedido() {
     int nuevoId = 1; // valor por defecto
@@ -30,6 +30,8 @@ public class ControladoraPersistencia {
     public void setUsuarioDAO(UsuarioDAO usuarioDAO) {this.usuarioDAO = usuarioDAO;}
     public PedidoDAO getPedidoDAO() {return pedidoDAO;}
     public void setPedidoDAO(PedidoDAO pedidoDAO) {this.pedidoDAO = pedidoDAO;}
+    public ProductoAdminArchivos getProductoFile() {return this.productoFile;}
+    public void setProductoFile(ProductoAdminArchivos productoFile) {this.productoFile = productoFile;}
   
   
   

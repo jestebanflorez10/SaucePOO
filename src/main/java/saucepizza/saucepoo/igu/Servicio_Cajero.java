@@ -373,7 +373,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQuitarUltimoActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Producto prod = new Producto("Pepperoni", 1000, 1, 0);
+        Producto prod = control.getProductoServicio().leer(0);//Producto("Pepperoni", 1000, 1, 0);
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
         actualizarVistaTotales();
@@ -402,7 +402,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Producto prod = new Producto("Queso", 1500, 1, 1);
+        Producto prod = control.getProductoServicio().leer(1); //Producto("Queso", 1500, 1, 1);
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
         actualizarVistaTotales();
@@ -410,7 +410,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        Producto prod = new Producto("Carne", 1700, 1, 2);
+        Producto prod = control.getProductoServicio().leer(2); //Producto("Carne", 1700, 1, 2);
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
         actualizarVistaTotales();
@@ -418,7 +418,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        Producto prod = new Producto("Soda", 500, 1, 3);
+        Producto prod =  control.getProductoServicio().leer(3);//Producto("Soda", 500, 1, 3);
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
         actualizarVistaTotales();
