@@ -58,6 +58,8 @@ public class GeneradorFactura {
             parametros.put("P_CLIENTE", pedido.getNombreCliente());
             parametros.put("P_SUBTOTAL", pedido.getSubTotal());
             parametros.put("P_IMPUESTOS", pedido.getImpuestos());
+            parametros.put("P_CAMBIO", pedido.getCambio());
+            parametros.put("P_EFECTIVO", pedido.getEfectivo());
             parametros.put("P_TOTAL", pedido.getTotal());
 
             // 2. Preparar datasource (lista de productos)

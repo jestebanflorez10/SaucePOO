@@ -9,6 +9,8 @@ public class Pedido {
     private double subTotal;
     private double impuestos;
     private double total;
+    private double cambio;
+    private double efectivo;
     private ArrayList<Producto> listaProductos; //lista de datos dinamica
 
     public Pedido(String fecha, int id, String nombreEmpresa, String nombreCliente) {
@@ -94,4 +96,20 @@ public class Pedido {
         }
         listaProductos.add(nuevoProducto);
     }
+
+    public double getCambio() {
+        return this.cambio;
+    }
+
+    public void setCambio(double cambio) {
+        this.cambio = cambio;
+    }
+    public double getEfectivo() {
+        return this.efectivo;
+    }
+
+    public void setEfectivo(double efectivo) {
+        this.efectivo = efectivo;
+    }
+    
 }

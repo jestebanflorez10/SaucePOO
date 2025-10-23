@@ -14,7 +14,16 @@ public class UtilidadesPedidos {
         Date ahora = new Date();
         return formato.format(ahora);
     }
-
+    private boolean tieneMaximoUnPunto(String texto) {
+        int contadorPuntos = 0;
+        for (char c : texto.toCharArray()) {
+            if (c == '.') {
+                contadorPuntos++;
+                if (contadorPuntos > 1) return false;
+            }
+        }
+        return true;
+    }
     
 }
 

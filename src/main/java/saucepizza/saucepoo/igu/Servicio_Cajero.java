@@ -4,7 +4,12 @@ package saucepizza.saucepoo.igu;
 import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import static saucepizza.saucepoo.igu.UtilidadesPedidos.obtenerFechaHoraActual;
+import javax.swing.JTextField;
+import javax.swing.text.AbstractDocument;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DocumentFilter;
+import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
@@ -58,7 +63,68 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             control.getPedidoServicio().actualizarTotales(pedidoActual);
             jLabel4.setText(String.format("Total: %.2f", pedidoActual.getTotal()));
     }
+    
+    private void efectivo(){
+    JTextField textField = new JTextField();
 
+        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
+    
+    // Método auxiliar para validar que solo haya un punto decimal en la cadena resultante
+    private boolean tieneMaximoUnPunto(String texto) {
+        int contadorPuntos = 0;
+        for (char c : texto.toCharArray()) {
+            if (c == '.') {
+                contadorPuntos++;
+                if (contadorPuntos > 1) return false;
+            }
+        }
+        return true;
+    }
+    
+    @Override
+    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
+        if (string.matches("[0-9.,]*")) {
+            // Construir la cadena resultante tras insertar el nuevo texto
+            String textoActual = fb.getDocument().getText(0, fb.getDocument().getLength());
+            StringBuilder sb = new StringBuilder(textoActual);
+            sb.insert(offset, string);
+            
+            // Reemplazamos comas por puntos (si usas coma como decimal)
+            String textoValidado = sb.toString().replace(',', '.');
+            
+            if (tieneMaximoUnPunto(textoValidado)) {
+                super.insertString(fb, offset, string, attr);
+            }
+        }
+    }
+
+    @Override
+    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
+        if (text.matches("[0-9.,]*")) {
+            String textoActual = fb.getDocument().getText(0, fb.getDocument().getLength());
+            StringBuilder sb = new StringBuilder(textoActual);
+            sb.replace(offset, offset + length, text);
+            
+            String textoValidado = sb.toString().replace(',', '.');
+            
+            if (tieneMaximoUnPunto(textoValidado)) {
+                super.replace(fb, offset, length, text, attrs);
+            }
+        }
+    }
+     });
+
+        int result = JOptionPane.showConfirmDialog(null, textField, "Ingrese el efectivo", JOptionPane.OK_CANCEL_OPTION);
+        if (result == JOptionPane.OK_OPTION) {
+            String exchange = textField.getText().replace(',', '.');
+            if (exchange.isBlank()) {
+                pedidoActual.setEfectivo(0);
+            } else {
+                pedidoActual.setEfectivo(Double.parseDouble(exchange));
+            }
+            System.out.println("Entrada: " + exchange);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -172,6 +238,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("Total");
 
+        jButton4.setBackground(new java.awt.Color(240, 240, 240));
         jButton4.setText("Pizza Pepperoni");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -179,6 +246,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             }
         });
 
+        jButton5.setBackground(new java.awt.Color(244, 240, 240));
         jButton5.setText("Pizza Queso");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -186,6 +254,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             }
         });
 
+        jButton6.setBackground(new java.awt.Color(240, 240, 240));
         jButton6.setText("Pizza Carne ");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -193,6 +262,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             }
         });
 
+        jButton7.setBackground(new java.awt.Color(240, 240, 240));
         jButton7.setText("Soda");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -383,6 +453,19 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
     // Actualizar fecha y solicitar nombre de cliente
     pedidoActual.setFecha(obtenerFechaHoraActual());
+    do{
+    efectivo();
+    if(pedidoActual.getTotal()>pedidoActual.getEfectivo()){
+        JOptionPane.showMessageDialog(this,"El efectivo es inferior que el total a pagar","Revise",JOptionPane.INFORMATION_MESSAGE);
+        }
+    }while(pedidoActual.getTotal()>pedidoActual.getEfectivo());
+    if (pedidoActual.getEfectivo() != 0) {
+        pedidoActual.setCambio(pedidoActual.getEfectivo()-pedidoActual.getTotal());
+        } 
+    else {
+        pedidoActual.setEfectivo(pedidoActual.getTotal());
+        pedidoActual.setCambio(0);
+        JOptionPane.showMessageDialog(this,"No se entrega cambio","Aviso",JOptionPane.INFORMATION_MESSAGE);}
     //Pedir el nombre del cliente o usar uno predeterminado
     String nombreCliente = JOptionPane.showInputDialog(this,"Ingrese el nombre del cliente:","Nombre del Cliente",JOptionPane.PLAIN_MESSAGE);
     if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {pedidoActual.setNombreCliente(nombreCliente.trim());
