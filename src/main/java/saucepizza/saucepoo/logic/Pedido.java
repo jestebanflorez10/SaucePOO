@@ -1,7 +1,8 @@
 package saucepizza.saucepoo.logic;
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Pedido {
+public class Pedido implements Serializable{
     private String fecha;
     private int id;
     private String nombreEmpresa;

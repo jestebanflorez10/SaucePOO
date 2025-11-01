@@ -29,7 +29,7 @@ public class ImprimirFactura {
     /// 5. Muestra mensajes de confirmación si todo ha salido como se esperaba
     /// ### Ejemplo
     /// ```
-    /// imprimir.generarfactura(pedidoActual,controladora);
+    /// imprimir.generarfactura(pedidoActual);
     /// ```
     ///@param pedidoActual El pedido con toda la información necesaria para generar la factura
     public void generarfactura(Pedido pedidoActual){

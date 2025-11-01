@@ -227,9 +227,11 @@ public class IniciodeSesion extends javax.swing.JFrame {
         try {
             Usuario user = control.getUsuarioService().login(usuario, password);
             if (user != null) {
-                if (user.esAdmin()) {
-                     JOptionPane.showMessageDialog(this, "Es Administrador");
-
+                if (user.esAdmin()) {                     
+                    Gestion_Administrador window = new Gestion_Administrador();
+                    window.setLocationRelativeTo(null);
+                    window.setVisible(true);
+                    this.dispose();
                 } else if (user.esCajero()) {
                     Servicio_Cajero window = new Servicio_Cajero();
                     window.setLocationRelativeTo(null);

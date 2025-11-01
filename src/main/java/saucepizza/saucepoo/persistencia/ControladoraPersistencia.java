@@ -4,12 +4,15 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import saucepizza.saucepoo.logic.Producto;
+import saucepizza.saucepoo.logic.Ventas;
 
 public class ControladoraPersistencia {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private PedidoDAO pedidoDAO = new PedidoDAO();
-    private ProductoAdminArchivos productoFile = new ProductoAdminArchivos();
-    
+    //private ProductoAdminArchivos productoFile = new ProductoAdminArchivos();
+    private ObjetoAdminArchivos<Producto> productoFile= new ObjetoAdminArchivos<>("productos","productos",Producto.class);
+    private ObjetoAdminArchivos<Ventas> ventasFile= new ObjetoAdminArchivos<>("ventas","ventas",Ventas.class);
   public int obtenerNuevoIdPedido() {
     int nuevoId = 1; // valor por defecto
     String sql = "SELECT MAX(id) AS max_id FROM pedido";
@@ -30,9 +33,14 @@ public class ControladoraPersistencia {
     public void setUsuarioDAO(UsuarioDAO usuarioDAO) {this.usuarioDAO = usuarioDAO;}
     public PedidoDAO getPedidoDAO() {return pedidoDAO;}
     public void setPedidoDAO(PedidoDAO pedidoDAO) {this.pedidoDAO = pedidoDAO;}
-    public ProductoAdminArchivos getProductoFile() {return this.productoFile;}
-    public void setProductoFile(ProductoAdminArchivos productoFile) {this.productoFile = productoFile;}
-  
+    public ObjetoAdminArchivos<Producto> getProductoFile() {return this.productoFile;}
+    public void setProductoFile(ObjetoAdminArchivos<Producto> productoFile) {this.productoFile = productoFile;}  
+    /*public ProductoAdminArchivos getProductoFile() {return this.productoFile;}
+    public void setProductoFile(ProductoAdminArchivos productoFile) {this.productoFile = productoFile;}*/
+
+    public ObjetoAdminArchivos<Ventas> getVentasFile() {return ventasFile;}
+    public void setVentasFile(ObjetoAdminArchivos<Ventas> ventasFile) {this.ventasFile = ventasFile;}
+    
   
   
 }

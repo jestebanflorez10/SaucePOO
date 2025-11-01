@@ -14,6 +14,11 @@ public class UtilidadesPedidos {
         Date ahora = new Date();
         return formato.format(ahora);
     }
+    public static String obtenerFecha() {
+        SimpleDateFormat formato = new SimpleDateFormat("dd-MM-yyyy");
+        Date ahora = new Date();
+        return formato.format(ahora);
+    }
     private boolean tieneMaximoUnPunto(String texto) {
         int contadorPuntos = 0;
         for (char c : texto.toCharArray()) {

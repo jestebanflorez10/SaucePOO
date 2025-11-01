@@ -13,6 +13,7 @@ import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
+import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.ImprimirFactura;
 /**
  *
@@ -23,8 +24,9 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
     private Controladora control = new Controladora();
     private Pedido pedidoActual;
+    private Ventas ventaActual;
     private Stack<Integer> historialProductoIds = new Stack<>();
-    public Servicio_Cajero() {
+    public Servicio_Cajero() {        
         control.getPedidoServicio().crearTablasPedidos();
         iniciarNuevoPedido();        
         initComponents();
@@ -53,6 +55,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         }
 
     private void iniciarNuevoPedido() {
+        ventaActual = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
         pedidoActual = control.getPedidoServicio().crearPedido(" ", // crea método para obtener fecha actual como String    // crea método para generar un ID único
         "Sauce Pizza", //Nombre del local
         "Cliente");  //Un cliente predeterminado, se asignara uno despues
@@ -451,7 +454,10 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-    // Actualizar fecha y solicitar nombre de cliente
+    if(pedidoActual.getListaProductos().isEmpty()){
+        JOptionPane.showMessageDialog(this,"Agregue productos antes de realizar el pago","No se puede completar su pedido",JOptionPane.ERROR_MESSAGE);
+    } else {
+     // Actualizar fecha y solicitar nombre de cliente
     pedidoActual.setFecha(obtenerFechaHoraActual());
     do{
     efectivo();
@@ -475,6 +481,10 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }
     //Registrar en las bases de datos
     control.getPedidoServicio().registrarPedido(pedidoActual);
+    //Registrar pedido en un archivo de ventas
+    
+    ventaActual.agregarPedido(pedidoActual);    
+    control.getVentasServicio().actualizar(ventaActual);
     //Generar la factura
     ImprimirFactura imprime = new ImprimirFactura();
     imprime.generarfactura(pedidoActual);
@@ -482,6 +492,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     iniciarNuevoPedido();
     actualizarVistaTotales();
     actualizarTablaPedido();
+    }
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
