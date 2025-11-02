@@ -50,7 +50,14 @@ public class Ventas implements Serializable{
     public ArrayList<Producto> getCantidadVendida() {
         return cantidadVendida;
     }
-
+    public int getUnidadesVendidas(){
+        int dato=0;
+        Iterator<Producto> it1 = this.cantidadVendida.iterator();
+        while(it1.hasNext()){
+            dato+=it1.next().getCantidad();
+        }
+        return dato;
+    }
     public void setCantidadVendida(ArrayList<Producto> cantidadVendida) {
         this.cantidadVendida = cantidadVendida;
     }

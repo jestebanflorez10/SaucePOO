@@ -11,6 +11,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
 import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
 import saucepizza.saucepoo.logic.Ventas;
@@ -23,10 +24,10 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaPedido;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
     private Controladora control = new Controladora();
-    private Pedido pedidoActual;
-    private Ventas ventaActual;
+    private Pedido pedidoActual; private Ventas ventaActual; private Empresa empresa;
     private Stack<Integer> historialProductoIds = new Stack<>();
-    public Servicio_Cajero() {        
+    public Servicio_Cajero() {
+        empresa = control.getEmpresaServicio().leer(String.valueOf(0));
         control.getPedidoServicio().crearTablasPedidos();
         iniciarNuevoPedido();        
         initComponents();
@@ -54,11 +55,13 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             }
         }
 
-    private void iniciarNuevoPedido() {
+    private void iniciarNuevoPedido() {        
         ventaActual = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
-        pedidoActual = control.getPedidoServicio().crearPedido(" ", // crea método para obtener fecha actual como String    // crea método para generar un ID único
-        "Sauce Pizza", //Nombre del local
-        "Cliente");  //Un cliente predeterminado, se asignara uno despues
+        if(ventaActual==null){
+        ventaActual = new Ventas(obtenerFecha());
+        control.getVentasServicio().crear(ventaActual);
+        }
+        pedidoActual = control.getPedidoServicio().crearPedido("Fecha Predeterminada",this.empresa.getNombre(), "Cliente Predeterminado");  
         }
     
 
@@ -481,10 +484,14 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }
     //Registrar en las bases de datos
     control.getPedidoServicio().registrarPedido(pedidoActual);
-    //Registrar pedido en un archivo de ventas
     
+    //Registrar pedido en archivos    
     ventaActual.agregarPedido(pedidoActual);    
     control.getVentasServicio().actualizar(ventaActual);
+    
+    empresa.agregarVenta(obtenerFecha(), ventaActual);
+    control.getEmpresaServicio().actualizar(empresa);
+    
     //Generar la factura
     ImprimirFactura imprime = new ImprimirFactura();
     imprime.generarfactura(pedidoActual);

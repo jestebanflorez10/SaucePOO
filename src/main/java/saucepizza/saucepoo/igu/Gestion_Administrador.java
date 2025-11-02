@@ -4,8 +4,13 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 import javax.swing.ImageIcon;
+import javax.swing.Timer;
 import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorIVentas;
 /**
@@ -13,6 +18,7 @@ import saucepizza.saucepoo.recibo.GeneradorIVentas;
  * @author juane
  */
 public class Gestion_Administrador extends javax.swing.JFrame {
+    private Empresa e;
     private javax.swing.table.DefaultTableModel modeloTablaInforme;
     private Controladora control = new Controladora();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestion_Administrador.class.getName());
@@ -21,6 +27,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
      * Creates new form Gestion_Administrador
      */
     public Gestion_Administrador() {
+        this.e=control.getEmpresaServicio().leer(String.valueOf(0));
         initComponents();
         try {
             this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
@@ -28,11 +35,70 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             System.err.println("Error al cargar el icono: " + e.getMessage());
         }      
         modeloTablaInforme = new javax.swing.table.DefaultTableModel(
-        new Object[]{"Fecha", "Total", "Unidades Vendidas", "Total", "Cambio"}, 0
+        new Object[]{"Fecha", "Unidades Vendidas", "Total", "Cambio"}, 0
         );
         jTable1.setModel(modeloTablaInforme);
-    
+        actualizarTablaInforme();
+        jLabel6.setText("HOY: "+ventasHoy());
+        new Timer(1000, e -> {
+            jLabel5.setText(UtilidadesPedidos.obtenerFechaHoraActual());
+        }).start();        
     }
+    private String ventasHoy(){
+    Iterator<Map.Entry<String,Ventas>> iterator = e.getRegistro().entrySet().iterator();
+        Ventas actual = null;
+        while (iterator.hasNext()) {
+        
+        Map.Entry<String, Ventas> entry = iterator.next();
+        if (entry.getKey().equals(UtilidadesPedidos.obtenerFecha())) {
+            actual = entry.getValue();
+            break;  // encontramos el objeto específico, salimos
+            }                 
+        }
+        if(actual!=null){
+            return String.valueOf(actual.getTotal());
+                } else {
+            return String.valueOf(0);  
+        }
+    }
+    private String calcularPorcentaje(String claveEspecifica){
+        Iterator<Map.Entry<String,Ventas>> iterator = e.getRegistro().entrySet().iterator();
+        Ventas anterior = null;
+        Ventas actual = null;
+        while (iterator.hasNext()) {
+        
+        Map.Entry<String, Ventas> entry = iterator.next();
+        if (entry.getKey().equals(claveEspecifica)) {
+            actual = entry.getValue();
+            break;  // encontramos el objeto específico, salimos
+            }
+            anterior = entry.getValue();  // guardamos el anterior mientras avanzamos
+            }
+
+        if (actual != null && anterior != null) {
+            double totalActual = actual.getTotal();
+            double totalAnterior = anterior.getTotal();
+            double porcentajeCambio = ((totalActual - totalAnterior) / totalAnterior) * 100;
+            return String.valueOf(porcentajeCambio);
+            } else {
+            return String.valueOf(0);
+            }
+        
+    }
+    
+    private void actualizarTablaInforme() {
+    //"Fecha", "Total", "Unidades Vendidas", "Total", "Cambio"
+    modeloTablaInforme.setRowCount(0); // Limpia la tabla
+    for (Map.Entry<String,Ventas> consulta: e.getRegistro().entrySet()) {
+        modeloTablaInforme.addRow(new Object[]{
+            consulta.getKey(),            
+            consulta.getValue().getUnidadesVendidas(),
+            consulta.getValue().getTotal(),
+            calcularPorcentaje(consulta.getKey())+"%",
+                });
+            }
+        }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.

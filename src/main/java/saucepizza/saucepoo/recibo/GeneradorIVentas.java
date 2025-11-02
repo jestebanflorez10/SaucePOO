@@ -2,12 +2,14 @@ package saucepizza.saucepoo.recibo;
 import java.awt.Desktop;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -94,6 +96,15 @@ public class GeneradorIVentas {
             
             // 3. CONVERTIR GRÁFICO A IMAGEN
             BufferedImage chartImage = chart.createBufferedImage(700, 300);
+            //EXTRA: Un logo!
+            BufferedImage imagen = null;
+            try {
+            imagen = ImageIO.read(
+                getClass().getResourceAsStream("/saucepizza/saucepoo/igu/images/business.png")
+                );
+             } catch (IOException e) {
+            e.printStackTrace();
+            }
             
             // 4. PREPARAR PARÁMETROS
             Map<String, Object> textoMostrar = new HashMap<>();
@@ -101,7 +112,7 @@ public class GeneradorIVentas {
                 ventaGenerar.getFecha() : "N/A");
             textoMostrar.put("P_TOTAL", String.valueOf(ventaGenerar.getTotal()));
             textoMostrar.put("CHART_IMAGE", chartImage);
-            
+            textoMostrar.put("LOGO_IMAGE", imagen);
             // 5. CARGAR Y LLENAR REPORTE
             List<?> datos = ventaGenerar.getCantidadVendida();
             JRBeanCollectionDataSource fuenteDatos = new JRBeanCollectionDataSource(datos);

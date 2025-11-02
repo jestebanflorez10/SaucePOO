@@ -5,7 +5,7 @@ import java.io.*;
 import java.nio.file.*;
 import java.util.ArrayList;
 public class ProductoAdminArchivos {
-    private static final String CARPETA_PRODUCTOS = "productos";
+    /*private static final String CARPETA_PRODUCTOS = "productos";
 
     public ProductoAdminArchivos() {
         try {
@@ -100,6 +100,6 @@ public class ProductoAdminArchivos {
         
         return productos;
         
-    }
+    }*/
     
 }
