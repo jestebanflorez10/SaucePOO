@@ -1,16 +1,23 @@
 
 package saucepizza.saucepoo.logic;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.TreeMap;
+import java.time.format.DateTimeFormatter;
 public class Empresa implements Serializable{
     private int id;
     private String nombre;
-    private HashMap<String, Ventas> registro;
-    public Empresa(String nombre){
+    private TreeMap<String, Ventas> registro;
+    private static final long serialVersionUID = 1L;
+
+    public Empresa(String nombre, int id){
+        
         this.nombre=nombre;
-        this.registro=new HashMap<String, Ventas>();
+        this.id=id;
+        this.registro=new TreeMap<>(new Comparador());
     }
 
     public String getNombre() {
@@ -39,11 +46,11 @@ public class Empresa implements Serializable{
         this.id = id;
     }
 
-    public HashMap<String, Ventas> getRegistro() {
+    public TreeMap<String, Ventas> getRegistro() {
         return registro;
     }
 
-    public void setRegistro(HashMap<String, Ventas> registro) {
+    public void setRegistro(TreeMap<String, Ventas> registro) {
         this.registro = registro;
     }
      public Set<String> todasVFechas(){    

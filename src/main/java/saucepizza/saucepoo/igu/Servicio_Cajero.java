@@ -26,8 +26,8 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private Controladora control = new Controladora();
     private Pedido pedidoActual; private Ventas ventaActual; private Empresa empresa;
     private Stack<Integer> historialProductoIds = new Stack<>();
-    public Servicio_Cajero() {
-        empresa = control.getEmpresaServicio().leer(String.valueOf(0));
+    public Servicio_Cajero() {          
+        empresa = control.getEmpresaServicio().leer(String.valueOf(1));
         control.getPedidoServicio().crearTablasPedidos();
         iniciarNuevoPedido();        
         initComponents();

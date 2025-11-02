@@ -9,14 +9,16 @@ import saucepizza.saucepoo.logic.Controladora;
 public class SaucePOO {
 
     public static void main(String[] args) {
-        Empresa pizzeria = new Empresa("Pizzeria Demo");
+        Empresa pizzeria = new Empresa("Pizzeria Demo",1);
         Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
         Producto prod2= new Producto("Queso", 1500, 1, 1);
         Producto prod3 = new Producto("Carne", 1700, 1, 2);
         Producto prod4= new Producto("Soda", 500, 1, 3);
-        //Ventas venta = new Ventas(UtilidadesPedidos.obtenerFecha());
         Controladora helper = new Controladora();
-        //helper.getEmpresaServicio().crear(pizzeria);
+        if(helper.getEmpresaServicio().leer(String.valueOf(1))==null){helper.getEmpresaServicio().crear(pizzeria);}
+        
+        System.out.println(pizzeria.getNombre());
+        System.out.println(helper.getEmpresaServicio().leer(String.valueOf(1)).getNombre());
         helper.getProductoServicio().crear(prod1);
         helper.getProductoServicio().crear(prod2);
         helper.getProductoServicio().crear(prod3);

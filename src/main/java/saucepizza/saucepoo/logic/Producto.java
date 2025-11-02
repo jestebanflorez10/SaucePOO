@@ -6,6 +6,7 @@ public class Producto implements Serializable{
     private double precio;
     private int cantidad;
     private int id;
+    private static final long serialVersionUID = 1L;
     public Producto(String nombre, double precio, int cantidad, int id) {
         this.nombre = nombre;
         this.precio = precio;

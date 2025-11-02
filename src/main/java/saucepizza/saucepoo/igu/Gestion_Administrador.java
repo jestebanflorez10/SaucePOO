@@ -4,9 +4,12 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import java.util.NavigableMap;
 import javax.swing.ImageIcon;
 import javax.swing.Timer;
 import saucepizza.saucepoo.logic.Controladora;
@@ -27,7 +30,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
      * Creates new form Gestion_Administrador
      */
     public Gestion_Administrador() {
-        this.e=control.getEmpresaServicio().leer(String.valueOf(0));
+        this.e=control.getEmpresaServicio().leer(String.valueOf(1));
         initComponents();
         try {
             this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
@@ -61,43 +64,30 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             return String.valueOf(0);  
         }
     }
-    private String calcularPorcentaje(String claveEspecifica){
-        Iterator<Map.Entry<String,Ventas>> iterator = e.getRegistro().entrySet().iterator();
-        Ventas anterior = null;
-        Ventas actual = null;
-        while (iterator.hasNext()) {
-        
-        Map.Entry<String, Ventas> entry = iterator.next();
-        if (entry.getKey().equals(claveEspecifica)) {
-            actual = entry.getValue();
-            break;  // encontramos el objeto específico, salimos
-            }
-            anterior = entry.getValue();  // guardamos el anterior mientras avanzamos
-            }
-
-        if (actual != null && anterior != null) {
-            double totalActual = actual.getTotal();
-            double totalAnterior = anterior.getTotal();
-            double porcentajeCambio = ((totalActual - totalAnterior) / totalAnterior) * 100;
-            return String.valueOf(porcentajeCambio);
-            } else {
-            return String.valueOf(0);
-            }
-        
-    }
-    
     private void actualizarTablaInforme() {
-    //"Fecha", "Total", "Unidades Vendidas", "Total", "Cambio"
     modeloTablaInforme.setRowCount(0); // Limpia la tabla
-    for (Map.Entry<String,Ventas> consulta: e.getRegistro().entrySet()) {
-        modeloTablaInforme.addRow(new Object[]{
-            consulta.getKey(),            
-            consulta.getValue().getUnidadesVendidas(),
-            consulta.getValue().getTotal(),
-            calcularPorcentaje(consulta.getKey())+"%",
-                });
+    NavigableMap<String, Ventas> registro = e.getRegistro();
+    List<Map.Entry<String, Ventas>> lista = new ArrayList<>(registro.descendingMap().entrySet());
+
+    for (int i = 0; i < lista.size(); i++) {
+        double porcentajeCambio = 0;
+        if (i + 1 < lista.size()) {
+            double actual = lista.get(i).getValue().getTotal();
+            double siguiente = lista.get(i + 1).getValue().getTotal();
+            if (siguiente != 0) {
+                porcentajeCambio = ((actual - siguiente) / siguiente) * 100;
+            } else {
+                porcentajeCambio = 0;
             }
         }
+        modeloTablaInforme.addRow(new Object[]{
+            lista.get(i).getKey(),
+            lista.get(i).getValue().getUnidadesVendidas(),
+            lista.get(i).getValue().getTotal(),
+            String.format("%.1f%%", porcentajeCambio) // Formato con 1 decimal
+        });
+    }
+}
     
 
     /**
@@ -257,7 +247,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
 
         jLabel5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel5.setText("NOTIFICACION");
+        jLabel5.setText("Reloj");
 
         jLabel6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);

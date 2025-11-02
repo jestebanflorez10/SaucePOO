@@ -8,6 +8,8 @@ public class Ventas implements Serializable{
     private ArrayList<Producto> cantidadVendida;   
     private Double total;
     private ArrayList<Pedido> pedidosV;
+    private static final long serialVersionUID = 1L;
+
     public Ventas(String date) {
         this.cantidadVendida = new ArrayList<Producto>();
         this.total = 0.0;

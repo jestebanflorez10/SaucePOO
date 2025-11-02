@@ -12,6 +12,7 @@ public class Pedido implements Serializable{
     private double total;
     private double cambio;
     private double efectivo;
+    private static final long serialVersionUID = 1L;
     private ArrayList<Producto> listaProductos; //lista de datos dinamica
 
     public Pedido(String fecha, int id, String nombreEmpresa, String nombreCliente) {
