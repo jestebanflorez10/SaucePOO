@@ -15,8 +15,7 @@ public class Empresa_Servicio {
        return control.getEmpresaFile().actualizar(e);
     }
     public boolean eliminar(String nombre){    
-        return control.getEmpresaFile().eliminar(nombre);
-        
+        return control.getEmpresaFile().eliminar(nombre);   
     }
     public ArrayList<Empresa> obtenerTodos(){ return control.getEmpresaFile().obtenerTodos();}
 }

@@ -7,6 +7,7 @@ import java.sql.Statement;
 import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Producto;
 import saucepizza.saucepoo.logic.Ventas;
+import saucepizza.saucepoo.logic.Mesa;
 
 public class ControladoraPersistencia {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
@@ -16,6 +17,7 @@ public class ControladoraPersistencia {
     private ObjetoAdminArchivos<Producto> productoFile= new ObjetoAdminArchivos<>("productos","productos",Producto.class);
     private ObjetoAdminArchivos<Ventas> ventasFile= new ObjetoAdminArchivos<>("ventas","ventas",Ventas.class);
     private ObjetoAdminArchivos<Empresa> empresaFile= new ObjetoAdminArchivos<>("empresa","pizzeria",Empresa.class);
+    private ObjetoAdminArchivos<Mesa> mesaFile = new ObjetoAdminArchivos<>("mesa", "mesa", Mesa.class);
   public int obtenerNuevoIdPedido() {
     int nuevoId = 1; // valor por defecto
     String sql = "SELECT MAX(id) AS max_id FROM pedido";
@@ -46,6 +48,15 @@ public class ControladoraPersistencia {
     
     public ObjetoAdminArchivos<Empresa> getEmpresaFile() {return empresaFile;}
     public void setEmpresaFile(ObjetoAdminArchivos<Empresa> empresaFile) {this.empresaFile = empresaFile;}
+
+    public ObjetoAdminArchivos<Mesa> getMesaFile() {
+        return this.mesaFile;
+    }
+
+    public void setMesaFile(ObjetoAdminArchivos<Mesa> mesaFile) {
+        this.mesaFile = mesaFile;
+    }
+    
   
   
 }
