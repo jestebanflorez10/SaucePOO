@@ -24,7 +24,7 @@ public class InventarioDAO {
                 nombre TEXT NOT NULL,
                 cantidad INTEGER NOT NULL
             );
-        """;
+        """; //Creas un formato de tabla
 
         try (Connection conn = abrirConexion();
              Statement stmt = conn.createStatement()) {
