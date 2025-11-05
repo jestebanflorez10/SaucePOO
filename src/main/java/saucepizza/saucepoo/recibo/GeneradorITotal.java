@@ -23,56 +23,63 @@ import javax.swing.JOptionPane; //Para mostrar mensajes en pantalla
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
-import org.jfree.chart.ChartFactory; //Contiene metodos para crear tablas
+/*import org.jfree.chart.ChartFactory; //Contiene metodos para crear tablas
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.category.DefaultCategoryDataset;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
 import org.jfree.chart.block.BlockBorder;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.renderer.category.StandardBarPainter;
-import org.jfree.chart.title.LegendTitle;
+import org.jfree.chart.title.LegendTitle;*/
+
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.util.Comparator;
 
 import saucepizza.saucepoo.logic.Ventas;
+import saucepizza.saucepoo.SaucePOO;
+import saucepizza.saucepoo.igu.UtilidadesPedidos;
+import saucepizza.saucepoo.logic.Comparador;
 import saucepizza.saucepoo.logic.Producto;
+import saucepizza.saucepoo.logic.Controladora;;
 
-public class GeneradorIVentas {
+public class GeneradorITotal {
     
-    public void ImprimirPDF(Ventas venta) {
+    public void ImprimirPDF(Controladora control) {
         try {
-            if (venta == null) {
+            if (control == null) {
                 JOptionPane.showMessageDialog(null, 
                     "Error: Venta nula", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            if (venta.getCantidadVendida() == null || venta.getCantidadVendida().isEmpty()) {
+            if (control.getVentasServicio().obtenerTodos() == null || control.getVentasServicio().obtenerTodos().isEmpty()) {
                 JOptionPane.showMessageDialog(null, 
-                    "Error: No hay datos de venta", "Error", JOptionPane.ERROR_MESSAGE);
+                    "Error: No hay datos de venta para generar informe", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            File carpetaReportesD = new File("reportes/dia");
+            File carpetaReportesD = new File("reportes/total");
             if (!carpetaReportesD.exists()) {
                 carpetaReportesD.mkdirs();
             }
             
-            String rutaPDFrelativa = "reportes/dia/informe_" + venta.getFecha() + ".pdf";
+            String rutaPDFrelativa = "reportes/total/informe_" + UtilidadesPedidos.obtenerFecha() + ".pdf";
             File archivoPDF = new File(rutaPDFrelativa);
             String rutaPDFabsoluta = archivoPDF.getAbsolutePath();
             
             URL jasperURL = getClass().getClassLoader()
-                .getResource("saucepizza/saucepoo/reportes/IVentas.jasper");
+                .getResource("saucepizza/saucepoo/reportes/InformeTotal.jasper");
             if (jasperURL == null) {
-                String msg = "No se encuentra IVentas.jasper en el classpath.";
+                String msg = "No se encuentra InformeTotal.jasper en el classpath.";
                 JOptionPane.showMessageDialog(null, msg, "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
             
-            generarPDF(venta, rutaPDFrelativa);
+            generarPDF(control, rutaPDFrelativa);
             
             JOptionPane.showMessageDialog(
                 null,
@@ -92,9 +99,9 @@ public class GeneradorIVentas {
         }
     }
 
-    private void generarPDF(Ventas ventaGenerar, String ruta) {
+    private void generarPDF(Controladora control, String ruta) {
         try {
-            DefaultCategoryDataset dataset = new DefaultCategoryDataset();
+            /*DefaultCategoryDataset dataset = new DefaultCategoryDataset();
             for (Producto producto : ventaGenerar.getCantidadVendida()) {
                 dataset.addValue(producto.getCantidad(), "Cantidad", producto.getNombre());
                 //valor - informacion de la columna -  clave de la columna
@@ -149,7 +156,7 @@ public class GeneradorIVentas {
 
             // 3. CONVERTIR GRÁFICO A IMAGEN CON MAYOR RESOLUCIÓN (ANTI-PIXELADO)
             BufferedImage chartImage = chart.createBufferedImage(1050, 450); // Doble resolución
-            //EXTRA: Un logo!
+            */
             BufferedImage imagen = null;
             try {
             imagen = ImageIO.read(
@@ -161,21 +168,20 @@ public class GeneradorIVentas {
             
             // 4. PREPARAR PARÁMETROS
             Map<String, Object> textoMostrar = new HashMap<>();
-            textoMostrar.put("P_FECHA", ventaGenerar.getFecha() != null ? 
-                ventaGenerar.getFecha() : "N/A");
-            textoMostrar.put("P_TOTAL", String.valueOf(ventaGenerar.getTotal()));
-            textoMostrar.put("CHART_IMAGE", chartImage);
             textoMostrar.put("LOGO_IMAGE", imagen);
+            textoMostrar.put("P_EMPRESA",SaucePOO.pizzeria);
+            textoMostrar.put("P_FECHAH", UtilidadesPedidos.obtenerFecha());
             // 5. CARGAR Y LLENAR REPORTE
-            List<?> datos = ventaGenerar.getCantidadVendida();
+            List<Ventas> datos = control.getVentasServicio().obtenerTodos();
+            datos.sort(Comparator.comparing(Ventas::getFecha,new Comparador()));
             JRBeanCollectionDataSource fuenteDatos = new JRBeanCollectionDataSource(datos);
             
             InputStream reporteStream = Thread.currentThread()
                 .getContextClassLoader()
-                .getResourceAsStream("saucepizza/saucepoo/reportes/IVentas.jasper");
+                .getResourceAsStream("saucepizza/saucepoo/reportes/InformeTotal.jasper");
             
             if (reporteStream == null) {
-                JOptionPane.showMessageDialog(null, "No se encuentra IVentas.jasper");
+                JOptionPane.showMessageDialog(null, "No se encuentra InformeTotal.jasper");
                 return;                
             }
             

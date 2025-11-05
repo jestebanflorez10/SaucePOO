@@ -11,17 +11,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import saucepizza.saucepoo.SaucePOO;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Ventas;
+import saucepizza.saucepoo.recibo.GeneradorITotal;
 import saucepizza.saucepoo.recibo.GeneradorIVentas;
 /**
  *
  * @author juane
  */
 public class Gestion_Administrador extends javax.swing.JFrame {
-    private Empresa e;
+    private String pizzaname;
     private javax.swing.table.DefaultTableModel modeloTablaInforme;
     private Controladora control = new Controladora();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestion_Administrador.class.getName());
@@ -30,7 +33,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
      * Creates new form Gestion_Administrador
      */
     public Gestion_Administrador() {
-        this.e=control.getEmpresaServicio().leer(String.valueOf(1));
+        this.pizzaname=SaucePOO.pizzeria;
         initComponents();
         try {
             this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
@@ -48,7 +51,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
         }).start();        
     }
     private String ventasHoy(){
-    Iterator<Map.Entry<String,Ventas>> iterator = e.getRegistro().entrySet().iterator();
+    Iterator<Map.Entry<String,Ventas>> iterator = control.getVentasServicio().segunFecha().entrySet().iterator();
         Ventas actual = null;
         while (iterator.hasNext()) {
         
@@ -66,7 +69,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     }
     private void actualizarTablaInforme() {
     modeloTablaInforme.setRowCount(0); // Limpia la tabla
-    NavigableMap<String, Ventas> registro = e.getRegistro();
+    NavigableMap<String, Ventas> registro = control.getVentasServicio().segunFecha();
     List<Map.Entry<String, Ventas>> lista = new ArrayList<>(registro.descendingMap().entrySet());
 
     for (int i = 0; i < lista.size(); i++) {
@@ -116,6 +119,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
         jButton3 = new javax.swing.JButton();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
+        jButton4 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -253,6 +257,17 @@ public class Gestion_Administrador extends javax.swing.JFrame {
         jLabel6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel6.setText("Hoy; ");
 
+        jButton4.setBackground(new java.awt.Color(240, 240, 240));
+        jButton4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        jButton4.setForeground(new java.awt.Color(227, 40, 32));
+        jButton4.setText("Consultar informes previos");
+        jButton4.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(227, 40, 32)));
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
@@ -269,7 +284,8 @@ public class Gestion_Administrador extends javax.swing.JFrame {
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))
                         .addGap(211, 211, 211)))
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -303,7 +319,9 @@ public class Gestion_Administrador extends javax.swing.JFrame {
                     .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(25, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -351,7 +369,8 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        
+        GeneradorITotal imprimir = new GeneradorITotal();
+        imprimir.ImprimirPDF(control);
         
     }//GEN-LAST:event_jButton10ActionPerformed
 
@@ -362,8 +381,20 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
-        // TODO add your handling code here:
+        int seleccion = jTable1.getSelectedRow();
+        if(seleccion!=-1){
+            String fechaselec = (String)jTable1.getValueAt(seleccion, 0);
+            GeneradorIVentas impresora = new GeneradorIVentas();
+            Ventas venta = control.getVentasServicio().leer(fechaselec);
+            impresora.ImprimirPDF(venta);
+        } else {
+        JOptionPane.showMessageDialog(null, "Intente seleccionar una venta del indice para generar el informe del dia");
+        }
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
+        // Acciones de ventas
+    }//GEN-LAST:event_jButton4ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -396,6 +427,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
+    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton9;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;

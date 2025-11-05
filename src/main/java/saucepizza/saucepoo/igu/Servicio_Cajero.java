@@ -9,6 +9,7 @@ import javax.swing.text.AbstractDocument;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DocumentFilter;
+import saucepizza.saucepoo.SaucePOO;
 import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Empresa;
@@ -24,10 +25,10 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaPedido;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
     private Controladora control = new Controladora();
-    private Pedido pedidoActual; private Ventas ventaActual; private Empresa empresa;
+    private Pedido pedidoActual; private Ventas ventaActual; private String pizzaname;
     private Stack<Integer> historialProductoIds = new Stack<>();
     public Servicio_Cajero() {          
-        empresa = control.getEmpresaServicio().leer(String.valueOf(1));
+        this.pizzaname=SaucePOO.pizzeria;
         control.getPedidoServicio().crearTablasPedidos();
         iniciarNuevoPedido();        
         initComponents();
@@ -61,7 +62,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         ventaActual = new Ventas(obtenerFecha());
         control.getVentasServicio().crear(ventaActual);
         }
-        pedidoActual = control.getPedidoServicio().crearPedido("Fecha Predeterminada",this.empresa.getNombre(), "Cliente Predeterminado");  
+        pedidoActual = control.getPedidoServicio().crearPedido("Fecha Predeterminada",this.pizzaname, "Cliente Predeterminado");  
         }
     
 
@@ -489,8 +490,8 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     ventaActual.agregarPedido(pedidoActual);    
     control.getVentasServicio().actualizar(ventaActual);
     
-    empresa.agregarVenta(obtenerFecha(), ventaActual);
-    control.getEmpresaServicio().actualizar(empresa);
+    /*empresa.agregarVenta(obtenerFecha(), ventaActual);
+    control.getEmpresaServicio().actualizar(empresa);*/
     
     //Generar la factura
     ImprimirFactura imprime = new ImprimirFactura();

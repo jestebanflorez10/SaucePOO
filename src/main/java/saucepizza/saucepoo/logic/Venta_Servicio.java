@@ -1,6 +1,8 @@
 
 package saucepizza.saucepoo.logic;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeMap;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 
 public class Venta_Servicio {
@@ -19,4 +21,14 @@ public class Venta_Servicio {
         
     }
     public ArrayList<Ventas> obtenerTodos(){ return control.getVentasFile().obtenerTodos();}
+    
+    public TreeMap<String, Ventas> segunFecha(){
+    TreeMap<String, Ventas> retorno = new TreeMap<>(new Comparador());
+    Iterator<Ventas> it1 = obtenerTodos().iterator();
+    while(it1.hasNext()){
+        Ventas v = it1.next();
+        retorno.put(v.getFecha(), v);
+    }
+    return retorno;
+    }
 }

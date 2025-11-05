@@ -6,7 +6,7 @@ public class Controladora {
   private Pedido_Servicio pedidoServicio = new Pedido_Servicio();
   private Producto_Servicio productoServicio = new Producto_Servicio();
   private Venta_Servicio ventasServicio = new Venta_Servicio();
-  private Empresa_Servicio empresaServicio = new Empresa_Servicio();
+  //private Empresa_Servicio empresaServicio = new Empresa_Servicio();
 
     public Usuario_Servicio getUsuarioService() {return this.usuarioService;}
 
@@ -24,8 +24,8 @@ public class Controladora {
     
     public void setVentasServicio(Venta_Servicio ventasServicio) {this.ventasServicio = ventasServicio;}
 
-    public Empresa_Servicio getEmpresaServicio() {   return this.empresaServicio;  }
+   /* public Empresa_Servicio getEmpresaServicio() {   return this.empresaServicio;  }
 
-    public void setEmpresaServicio(Empresa_Servicio empresaServicio) {this.empresaServicio = empresaServicio; }
+    public void setEmpresaServicio(Empresa_Servicio empresaServicio) {this.empresaServicio = empresaServicio; }*/
     
 }
