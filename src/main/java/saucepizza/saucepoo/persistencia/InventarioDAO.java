@@ -11,7 +11,6 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 import saucepizza.saucepoo.logic.Producto;
-import saucepizza.saucepoo.logic.Usuario;
 
 public class InventarioDAO {
     
@@ -22,8 +21,8 @@ public class InventarioDAO {
         String sql = """
             CREATE TABLE IF NOT EXISTS inventario (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
-                nombre TEXT UNIQUE NOT NULL,
-                cantidad INTEGER NOT NULL,
+                nombre TEXT NOT NULL,
+                cantidad INTEGER NOT NULL
             );
         """;
 
@@ -48,19 +47,7 @@ public class InventarioDAO {
         return DriverManager.getConnection(url);
     }
 
-    public void agregarInventario (Producto producto) throws SQLException {        
-        //    public Producto(String nombre, double precio, int cantidad, int id) 
-        String sql = "INSERT INTO inventario(nombre,cantidad,id) VALUES (?, ?, ?)";
-
-        try (Connection conn = abrirConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1,producto.getNombre());
-            pstmt.setInt(2, producto.getCantidad());
-            pstmt.executeUpdate();
-            System.out.println("Inventario agregado para producto: " + producto.getNombre());
-        }
-    }
-     public Producto obtenerInventarioPorNombre(String producto) throws SQLException {
+      public Producto obtenerInventarioPorNombre(String producto) throws SQLException {
         String sql = "SELECT * FROM inventario WHERE nombre = ?";
 
         try (Connection conn = abrirConexion();
@@ -103,17 +90,52 @@ public class InventarioDAO {
         }
         return inv;
     }
-    public void actualizarInventario(int id, int cantidad) throws SQLException {
-        String sql = "UPDATE usuarios SET activo = ? WHERE id = ?";
+        public int agregarInventario(Producto producto) throws SQLException {        
+        // Primero verifica si el producto ya existe
+        Producto existente = obtenerInventarioPorNombre(producto.getNombre());
+        if (existente != null) {
+            System.out.println("Producto ya existe con ID: " + existente.getId());
+            return existente.getId();
+        }
+
+        // Si no existe, entonces inserta
+        String sql = "INSERT INTO inventario(nombre, cantidad) VALUES (?, ?)";
+
+        try (Connection conn = abrirConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setInt(2, producto.getCantidad());
+            pstmt.executeUpdate();
+
+            // Obtener el ID generado automáticamente
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idGenerado = generatedKeys.getInt(1);
+                    System.out.println("Inventario agregado con ID: " + idGenerado);
+                    return idGenerado;
+                }
+            }
+        }
+        return -1;
+    }
+
+    public void actualizarInventario(Producto producto) throws SQLException {
+        String sql = "UPDATE inventario SET cantidad = ? WHERE id = ?";
 
         try (Connection conn = abrirConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, cantidad);
-            pstmt.setInt(2, id);
-            pstmt.executeUpdate();
-            System.out.println("Estado del producto en el inventario actualizado.");
+            pstmt.setInt(1, producto.getCantidad());
+            pstmt.setInt(2, producto.getId());
+            int filasActualizadas = pstmt.executeUpdate();
+            if (filasActualizadas > 0) {
+                System.out.println("Producto en el inventario actualizado: " + producto.getNombre());
+            } else {
+                System.out.println("No se encontró producto con ID: " + producto.getId());
+            }
         }
     }
+
+
     public void eliminarInventario(int id) throws SQLException {
         String sql = "DELETE FROM inventario WHERE id = ?";
 

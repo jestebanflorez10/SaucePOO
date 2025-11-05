@@ -4,21 +4,27 @@ import saucepizza.saucepoo.igu.SplashScreen;
 //import saucepizza.saucepoo.igu.UtilidadesPedidos;
 import saucepizza.saucepoo.logic.Producto;
 //import saucepizza.saucepoo.logic.Ventas;
-import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Controladora;
+
 public class SaucePOO {
     public static String pizzeria = "Pizzeria Demo";
     public static void main(String[] args) {
         //Empresa pizzeria = new Empresa("Pizzeria Demo",1);
+        
         Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
         Producto prod2= new Producto("Queso", 1500, 1, 1);
         Producto prod3 = new Producto("Carne", 1700, 1, 2);
         Producto prod4= new Producto("Soda", 500, 1, 3);
         Controladora helper = new Controladora();
-        /*if(helper.getEmpresaServicio().leer(String.valueOf(1))==null){helper.getEmpresaServicio().crear(pizzeria);}
-        
-        System.out.println(pizzeria.getNombre());
-        System.out.println(helper.getEmpresaServicio().leer(String.valueOf(1)).getNombre());*/
+        try {
+            helper.getProductoServicio().Inv_inicializarBase();
+            int id = helper.getProductoServicio().Inv_crear(prod4);  // Retorna ID si existe o inserta si no
+            prod4.setId(id);
+            prod4.setCantidad(4);
+            helper.getProductoServicio().Inv_actualizar(prod4);  // Actualiza la cantidad del registro existente
+            } catch(Exception e) {
+             System.out.println(e.getMessage());
+            }
         helper.getProductoServicio().crear(prod1);
         helper.getProductoServicio().crear(prod2);
         helper.getProductoServicio().crear(prod3);

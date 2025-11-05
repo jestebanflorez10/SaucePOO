@@ -25,13 +25,19 @@ public class Producto_Servicio {
     public Producto Inv_leer(String nombre) throws SQLException {
         return control.getInventarioDAO().obtenerInventarioPorNombre(nombre);
     }
-    public void Inv_crear(Producto producto) throws SQLException{
-        control.getInventarioDAO().agregarInventario(producto);    
+    public int Inv_crear(Producto producto) throws SQLException{
+        return control.getInventarioDAO().agregarInventario(producto);    
     }
     public void Inv_eliminar(int id) throws SQLException {
         control.getInventarioDAO().eliminarInventario(id);
     }
-    public void Inv_actualizar(){
-    
+    public void Inv_actualizar(Producto prod)throws SQLException {
+        control.getInventarioDAO().actualizarInventario(prod);
+    }    
+    public void Inv_inicializarBase() throws SQLException {
+        control.getInventarioDAO().crearTablaInventario();
     }
+    public void Inv_crearTablaUsuarios() throws SQLException {
+        control.getInventarioDAO().crearTablaInventario();
+       }
 }
