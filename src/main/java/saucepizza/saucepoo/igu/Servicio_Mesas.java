@@ -1,6 +1,5 @@
 package saucepizza.saucepoo.igu;
 
-
 import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
@@ -27,111 +26,10 @@ public class Servicio_Mesas extends javax.swing.JFrame {
     private Controladora control = new Controladora();
     private Pedido pedidoActual; private Ventas ventaActual; private String pizzaname;
     private Stack<Integer> historialProductoIds = new Stack<>();
-    public Servicio_Mesas() {          
-        this.pizzaname=SaucePOO.pizzeria;
-        control.getPedidoServicio().crearTablasPedidos();
-        iniciarNuevoPedido();        
+    public Servicio_Mesas() {                  
         initComponents();
-        try {
-            this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
-        } catch (Exception e) {
-            System.err.println("Error al cargar el icono: " + e.getMessage());
-        }
-        modeloTablaPedido = new javax.swing.table.DefaultTableModel(
-        new Object[]{"ID", "Producto", "Cantidad", "Precio", "Importe"}, 0
-        );
-        tablaPedido.setModel(modeloTablaPedido);
-        
-    }
-    private void actualizarTablaPedido() {
-    modeloTablaPedido.setRowCount(0); // Limpia la tabla
-    for (Producto p : pedidoActual.getListaProductos()) {
-        modeloTablaPedido.addRow(new Object[]{
-            p.getId(),
-            p.getNombre(),
-            p.getCantidad(),
-            p.getPrecioUnitario(),
-            p.getCantidad() * p.getPrecioUnitario()
-                });
-            }
-        }
-
-    private void iniciarNuevoPedido() {        
-        ventaActual = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
-        if(ventaActual==null){
-        ventaActual = new Ventas(obtenerFecha());
-        control.getVentasServicio().crear(ventaActual);
-        }
-        pedidoActual = control.getPedidoServicio().crearPedido("Fecha Predeterminada",this.pizzaname, "Cliente Predeterminado");  
-        }
-    
-
-    private void actualizarVistaTotales() {
-            control.getPedidoServicio().actualizarTotales(pedidoActual);
-            jLabel4.setText(String.format("Total: %.2f", pedidoActual.getTotal()));
     }
     
-    private void efectivo(){
-    JTextField textField = new JTextField();
-
-        ((AbstractDocument) textField.getDocument()).setDocumentFilter(new DocumentFilter() {
-    
-    // Método auxiliar para validar que solo haya un punto decimal en la cadena resultante
-    private boolean tieneMaximoUnPunto(String texto) {
-        int contadorPuntos = 0;
-        for (char c : texto.toCharArray()) {
-            if (c == '.') {
-                contadorPuntos++;
-                if (contadorPuntos > 1) return false;
-            }
-        }
-        return true;
-    }
-    
-    @Override
-    public void insertString(FilterBypass fb, int offset, String string, AttributeSet attr) throws BadLocationException {
-        if (string.matches("[0-9.,]*")) {
-            // Construir la cadena resultante tras insertar el nuevo texto
-            String textoActual = fb.getDocument().getText(0, fb.getDocument().getLength());
-            StringBuilder sb = new StringBuilder(textoActual);
-            sb.insert(offset, string);
-            
-            // Reemplazamos comas por puntos (si usas coma como decimal)
-            String textoValidado = sb.toString().replace(',', '.');
-            
-            if (tieneMaximoUnPunto(textoValidado)) {
-                super.insertString(fb, offset, string, attr);
-            }
-        }
-    }
-
-    @Override
-    public void replace(FilterBypass fb, int offset, int length, String text, AttributeSet attrs) throws BadLocationException {
-        if (text.matches("[0-9.,]*")) {
-            String textoActual = fb.getDocument().getText(0, fb.getDocument().getLength());
-            StringBuilder sb = new StringBuilder(textoActual);
-            sb.replace(offset, offset + length, text);
-            
-            String textoValidado = sb.toString().replace(',', '.');
-            
-            if (tieneMaximoUnPunto(textoValidado)) {
-                super.replace(fb, offset, length, text, attrs);
-            }
-        }
-    }
-     });
-
-        int result = JOptionPane.showConfirmDialog(null, textField, "Ingrese el efectivo", JOptionPane.OK_CANCEL_OPTION);
-        if (result == JOptionPane.OK_OPTION) {
-            String exchange = textField.getText().replace(',', '.');
-            if (exchange.isBlank()) {
-                pedidoActual.setEfectivo(0);
-            } else {
-                pedidoActual.setEfectivo(Double.parseDouble(exchange));
-            }
-            System.out.println("Entrada: " + exchange);
-        }
-    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -698,80 +596,15 @@ public class Servicio_Mesas extends javax.swing.JFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void btnLimpiarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarOrdenActionPerformed
-        pedidoActual.getListaProductos().clear(); // Borra toda la lista de productos
-        historialProductoIds.clear();
-        actualizarVistaTotales();
-        actualizarTablaPedido();
+
     }//GEN-LAST:event_btnLimpiarOrdenActionPerformed
 
     private void btnQuitarUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimoActionPerformed
-        if (!historialProductoIds.isEmpty()) {
-            int idUltimo = historialProductoIds.pop();
-            Producto aEliminar = null;
-            for (Producto p : pedidoActual.getListaProductos()) {
-                if (p.getId() == idUltimo) {
-                    if (p.getCantidad() > 1) {
-                        p.setCantidad(p.getCantidad() - 1);
-                    } else {
-                        aEliminar = p;
-                    }
-                    break; // Es importante salir del bucle aquí
-                }
-            }
-            if (aEliminar != null) {
-                pedidoActual.getListaProductos().remove(aEliminar);
-            }
-            actualizarVistaTotales();
-            actualizarTablaPedido();
-        } else {
-            JOptionPane.showMessageDialog(this, "No hay productos para eliminar.");
-        }
+
     }//GEN-LAST:event_btnQuitarUltimoActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        if(pedidoActual.getListaProductos().isEmpty()){
-            JOptionPane.showMessageDialog(this,"Agregue productos antes de realizar el pago","No se puede completar su pedido",JOptionPane.ERROR_MESSAGE);
-        } else {
-            // Actualizar fecha y solicitar nombre de cliente
-            pedidoActual.setFecha(obtenerFechaHoraActual());
-            do{
-                efectivo();
-                if(pedidoActual.getTotal()>pedidoActual.getEfectivo()){
-                    JOptionPane.showMessageDialog(this,"El efectivo es inferior que el total a pagar","Revise",JOptionPane.INFORMATION_MESSAGE);
-                }
-            }while(pedidoActual.getTotal()>pedidoActual.getEfectivo());
-            if (pedidoActual.getEfectivo() != 0) {
-                pedidoActual.setCambio(pedidoActual.getEfectivo()-pedidoActual.getTotal());
-            }
-            else {
-                pedidoActual.setEfectivo(pedidoActual.getTotal());
-                pedidoActual.setCambio(0);
-                JOptionPane.showMessageDialog(this,"No se entrega cambio","Aviso",JOptionPane.INFORMATION_MESSAGE);}
-            //Pedir el nombre del cliente o usar uno predeterminado
-            String nombreCliente = JOptionPane.showInputDialog(this,"Ingrese el nombre del cliente:","Nombre del Cliente",JOptionPane.PLAIN_MESSAGE);
-            if (nombreCliente != null && !nombreCliente.trim().isEmpty()) {pedidoActual.setNombreCliente(nombreCliente.trim());
-            } else {
-                pedidoActual.setNombreCliente("Cliente");
-                JOptionPane.showMessageDialog(this,"Se asignó nombre por defecto: Cliente","Aviso",JOptionPane.INFORMATION_MESSAGE);
-            }
-            //Registrar en las bases de datos
-            control.getPedidoServicio().registrarPedido(pedidoActual);
-
-            //Registrar pedido en archivos
-            ventaActual.agregarPedido(pedidoActual);
-            control.getVentasServicio().actualizar(ventaActual);
-
-            /*empresa.agregarVenta(obtenerFecha(), ventaActual);
-            control.getEmpresaServicio().actualizar(empresa);*/
-
-            //Generar la factura
-            ImprimirFactura imprime = new ImprimirFactura();
-            imprime.generarfactura(pedidoActual);
-            // Actualizar interfaz para un nuevo pedido
-            iniciarNuevoPedido();
-            actualizarVistaTotales();
-            actualizarTablaPedido();
-        }
+ 
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void btnQuitarUltimo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimo3ActionPerformed

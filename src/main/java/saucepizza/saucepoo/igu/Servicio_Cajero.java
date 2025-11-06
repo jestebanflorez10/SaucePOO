@@ -3,6 +3,7 @@ package saucepizza.saucepoo.igu;
 
 import java.util.Stack;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 import javax.swing.text.AbstractDocument;
@@ -13,6 +14,7 @@ import saucepizza.saucepoo.SaucePOO;
 import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Empresa;
+import saucepizza.saucepoo.logic.Mesa;
 import saucepizza.saucepoo.logic.Pedido;
 import saucepizza.saucepoo.logic.Producto;
 import saucepizza.saucepoo.logic.Ventas;
@@ -615,13 +617,13 @@ public class Servicio_Cajero extends javax.swing.JFrame {
      // Actualizar fecha y solicitar nombre de cliente
     pedidoActual.setFecha(obtenerFechaHoraActual());
     do{
-    efectivo();
+    efectivo(); //revisar
     if(pedidoActual.getTotal()>pedidoActual.getEfectivo()){
         JOptionPane.showMessageDialog(this,"El efectivo es inferior que el total a pagar","Revise",JOptionPane.INFORMATION_MESSAGE);
         }
     }while(pedidoActual.getTotal()>pedidoActual.getEfectivo());
     if (pedidoActual.getEfectivo() != 0) {
-        pedidoActual.setCambio(pedidoActual.getEfectivo()-pedidoActual.getTotal());
+        pedidoActual.setCambio(pedidoActual.getEfectivo() - pedidoActual.getTotal());
         } 
     else {
         pedidoActual.setEfectivo(pedidoActual.getTotal());
@@ -641,8 +643,14 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     ventaActual.agregarPedido(pedidoActual);    
     control.getVentasServicio().actualizar(ventaActual);
     
-    /*empresa.agregarVenta(obtenerFecha(), ventaActual);
-    control.getEmpresaServicio().actualizar(empresa);*/
+    Mesa mesa = new Mesa(2, "Libre", pedidoActual.getId()); //temporal
+    
+    /*Object[] mesas = {"mesa 1", "mesa 2", "mesa 3", "mesa 4", "mesa 5", "mesa 6"};
+    JComboBox combo = new JComboBox(mesas);*/
+    //combo.setSelectedIndex(1);
+    //JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
+    
+    control.getMesasServicio().actualizar(mesa);
     
     //Generar la factura
     ImprimirFactura imprime = new ImprimirFactura();

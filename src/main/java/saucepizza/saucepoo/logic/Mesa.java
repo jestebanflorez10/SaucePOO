@@ -1,14 +1,20 @@
 package saucepizza.saucepoo.logic;
-
-public class Mesa {
+import java.io.Serializable;
+public class Mesa implements Serializable{
+    
     private int numero;
     private String estado;
-    private Pedido pedido;
+    private int idPedido;
+    
+    
+    public String ObtenerNombre(){
+        return "Mesa "+ String.valueOf(this.numero);
+    }
 
-    public Mesa(int numero, String estado, Pedido pedido) {
+    public Mesa(int numero, String estado, int idPedido) {
         this.numero = numero;
         this.estado = estado;
-        this.pedido = pedido;
+        this.idPedido = idPedido;
     }
 
     public int getNumero() {
@@ -27,13 +33,16 @@ public class Mesa {
         this.estado = estado;
     }
 
-    public Pedido getPedido() {
-        return this.pedido;
+    public int getIdPedido() {
+        return this.idPedido;
     }
 
-    public void setPedido(Pedido pedido) {
-        this.pedido = pedido;
+    public void setIdPedido(int idPedido) {
+        this.idPedido = idPedido;
     }
     
-    
+    @Override
+    public String toString(){
+        return String.valueOf(this.numero);
+    }
 }

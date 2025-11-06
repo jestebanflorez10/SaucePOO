@@ -5,6 +5,7 @@ import saucepizza.saucepoo.igu.SplashScreen;
 import saucepizza.saucepoo.logic.Producto;
 //import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Mesa;
 
 public class SaucePOO {
     public static String pizzeria = "Pizzeria Demo";
@@ -19,6 +20,15 @@ public class SaucePOO {
         try {
             helper.getProductoServicio().Inv_inicializarBase();
             int id = helper.getProductoServicio().Inv_crear(prod4);  // Retorna ID si existe o inserta si no
+            Mesa mesa = new Mesa(2, "Libre", 2250); //temporal
+    
+            /*Object[] mesas = {"mesa 1", "mesa 2", "mesa 3", "mesa 4", "mesa 5", "mesa 6"};
+            JComboBox combo = new JComboBox(mesas);*/
+            //combo.setSelectedIndex(1);
+            //JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
+            
+            helper.getMesasServicio().Crear(mesa);
+            helper.getMesasServicio().actualizar(mesa);
             prod4.setId(id);
             prod4.setCantidad(4);
             helper.getProductoServicio().Inv_actualizar(prod4);  // Actualiza la cantidad del registro existente
