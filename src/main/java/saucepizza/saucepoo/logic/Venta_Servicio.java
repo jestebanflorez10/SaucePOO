@@ -20,6 +20,10 @@ public class Venta_Servicio {
         return control.getVentasFile().eliminar(id);
         
     }
+    public boolean eliminar(String id){    
+        return control.getVentasFile().eliminar(id);
+        
+    }
     public ArrayList<Ventas> obtenerTodos(){ return control.getVentasFile().obtenerTodos();}
     
     public TreeMap<String, Ventas> segunFecha(){

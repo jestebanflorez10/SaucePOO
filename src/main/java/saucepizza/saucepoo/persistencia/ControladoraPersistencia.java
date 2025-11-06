@@ -12,6 +12,7 @@ import saucepizza.saucepoo.logic.Mesa;
 public class ControladoraPersistencia {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
     private PedidoDAO pedidoDAO = new PedidoDAO();
+    private InventarioDAO inventarioDAO = new InventarioDAO(); //Depende mucho de ProductoFile
     //private ProductoAdminArchivos productoFile = new ProductoAdminArchivos();
     //public ObjetoAdminArchivos(String carpeta, String tipoArchivos, Class clase)
     private ObjetoAdminArchivos<Producto> productoFile= new ObjetoAdminArchivos<>("productos","productos",Producto.class);
@@ -48,15 +49,8 @@ public class ControladoraPersistencia {
     
     public ObjetoAdminArchivos<Empresa> getEmpresaFile() {return empresaFile;}
     public void setEmpresaFile(ObjetoAdminArchivos<Empresa> empresaFile) {this.empresaFile = empresaFile;}
+    public ObjetoAdminArchivos<Mesa> getMesaFile() { return this.mesaFile; } public void setMesaFile(ObjetoAdminArchivos<Mesa> mesaFile) { this.mesaFile = mesaFile; }
 
-    public ObjetoAdminArchivos<Mesa> getMesaFile() {
-        return this.mesaFile;
-    }
-
-    public void setMesaFile(ObjetoAdminArchivos<Mesa> mesaFile) {
-        this.mesaFile = mesaFile;
-    }
-    
-  
-  
+    public InventarioDAO getInventarioDAO() {return inventarioDAO;}
+    public void setInventarioDAO(InventarioDAO inventarioDAO) {this.inventarioDAO = inventarioDAO;} 
 }

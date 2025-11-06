@@ -1,5 +1,6 @@
 
 package saucepizza.saucepoo.logic;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 public class Producto_Servicio {
@@ -18,4 +19,19 @@ public class Producto_Servicio {
         
     }
     public ArrayList<Producto> obtenerTodos(){ return control.getProductoFile().obtenerTodos();}
+    
+    //Metodos para el acceso del inventario
+    
+    public Producto Inv_leer(String nombre) throws SQLException {
+        return control.getInventarioDAO().obtenerInventarioPorNombre(nombre);
+    }
+    public void Inv_crear(Producto producto) throws SQLException{
+        control.getInventarioDAO().agregarInventario(producto);    
+    }
+    public void Inv_eliminar(int id) throws SQLException {
+        control.getInventarioDAO().eliminarInventario(id);
+    }
+    public void Inv_actualizar(){
+    
+    }
 }
