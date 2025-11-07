@@ -40,4 +40,14 @@ public class Producto_Servicio {
     public void Inv_crearTablaUsuarios() throws SQLException {
         control.getInventarioDAO().crearTablaInventario();
        }
+    public ArrayList<Producto> Inv_obtenerTodos() {
+        ArrayList<Producto> retorno = new ArrayList<>();
+        try{
+            retorno=(ArrayList<Producto>) control.getInventarioDAO().obtenerTodasCantidades();
+            return retorno;}
+        catch(Exception e){            
+             System.out.println(e.getMessage());
+            return retorno;
+        }
+    }
 }

@@ -1,6 +1,7 @@
 package saucepizza.saucepoo.logic;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Mesas_Servicio {
     private ControladoraPersistencia controlP = new ControladoraPersistencia();
@@ -25,4 +26,16 @@ public class Mesas_Servicio {
     public ArrayList<Mesa> obtenerTodos(){
         return controlP.getMesaFile().obtenerTodos();
     }
-}
+    public ArrayList<Mesa> obtener(String estado){
+       Iterator<Mesa> it1 = controlP.getMesaFile().obtenerTodos().iterator();
+       ArrayList<Mesa> retorno = new ArrayList<Mesa>();
+       while (it1.hasNext()){
+           Mesa m = it1.next();
+           if(m.getEstado().equals(estado)){           
+               retorno.add(m);
+           }          
+           
+       }
+       return retorno;
+      }
+    }

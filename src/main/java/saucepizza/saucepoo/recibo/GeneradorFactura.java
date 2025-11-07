@@ -1,7 +1,9 @@
 package saucepizza.saucepoo.recibo;
 
 import java.awt.Desktop;
+import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import saucepizza.saucepoo.logic.Pedido;
@@ -9,6 +11,7 @@ import saucepizza.saucepoo.logic.Pedido;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import javax.imageio.ImageIO;
 import javax.swing.JOptionPane;
 /// # GeneradorFactura
 /// 
@@ -47,21 +50,31 @@ public class GeneradorFactura {
     /// ```
     ///@param pedido  El pedido con toda la información necesaria para generar la factura
     ///@param rutaSalida Ruta completa donde se guardará el archivo PDF generado
+    ///@param mesa Un String de la forma "Mesa #"
     ///@see Pedido
-    public void generarPDF(Pedido pedido, String rutaSalida) {
+    public void generarPDF(Pedido pedido, String rutaSalida,String mesa) {
         try {
             // 1. Preparar parámetros (datos de cabecera)
             Map<String, Object> parametros = new HashMap<>();
             parametros.put("P_ID", pedido.getId());
             parametros.put("P_FECHA", pedido.getFecha());
             parametros.put("P_EMPRESA", pedido.getNombreEmpresa());
+            parametros.put("P_MESA", mesa);
             parametros.put("P_CLIENTE", pedido.getNombreCliente());
             parametros.put("P_SUBTOTAL", pedido.getSubTotal());
             parametros.put("P_IMPUESTOS", pedido.getImpuestos());
             parametros.put("P_CAMBIO", pedido.getCambio());
             parametros.put("P_EFECTIVO", pedido.getEfectivo());
             parametros.put("P_TOTAL", pedido.getTotal());
-
+            BufferedImage imagen = null;
+            try {
+            imagen = ImageIO.read(
+                getClass().getResourceAsStream("/saucepizza/saucepoo/igu/images/business.png")
+                );
+             } catch (IOException e) {
+            e.printStackTrace();
+            }
+            parametros.put("IMAGE_LOGO",imagen);
             // 2. Preparar datasource (lista de productos)
             JRBeanCollectionDataSource dataSource =
                 new JRBeanCollectionDataSource(pedido.getListaProductos());

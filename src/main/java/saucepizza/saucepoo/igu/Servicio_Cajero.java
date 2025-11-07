@@ -1,6 +1,8 @@
 package saucepizza.saucepoo.igu;
 
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Stack;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
@@ -27,11 +29,13 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaPedido;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
     private Controladora control = new Controladora();
-    private Pedido pedidoActual; private Ventas ventaActual; private String pizzaname;
+    private Pedido pedidoActual; private Ventas ventaActual; private ArrayList<Producto> Inventario;
+    private String pizzaname;
     private Stack<Integer> historialProductoIds = new Stack<>();
     public Servicio_Cajero() {          
         this.pizzaname=SaucePOO.pizzeria;
         control.getPedidoServicio().crearTablasPedidos();
+        Inventario=control.getProductoServicio().Inv_obtenerTodos();
         iniciarNuevoPedido();        
         initComponents();
         try {
@@ -45,19 +49,43 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         tablaPedido.setModel(modeloTablaPedido);
         
     }    
-    private void registrarProducto(int id, int cantidad){
-        Producto prod = control.getProductoServicio().leer(id); //Producto("Carne", 1700, 1, 2);
+    private void registrarProducto(int id, int cantidad){        
         try{
-        if(prod.getCantidad()>0){
+        Producto prod = control.getProductoServicio().leer(id); //El producto de referencia
+        Inventario.sort((p1, p2) -> Integer.compare(p1.getId(), p2.getId()));
+        Producto inv = Inventario.get(id-1); //El inventario del producto
+        if(inv.getCantidad()>0){
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);        
-        prod.setCantidad(prod.getCantidad()+cantidad);
-        control.getProductoServicio().Inv_actualizar(prod);
+        //inv.setCantidad(inv.getCantidad()-prod.getCantidad());
+        //control.getProductoServicio().Inv_actualizar(inv);
+        for (Producto p : Inventario) {
+            if (p.getId() == id) {
+                p.setCantidad(p.getCantidad() - cantidad);
+                break;
+            }
+         }        
+        
         } else{
-        JOptionPane.showMessageDialog(this, "Recarge el inventario del producto", "No hay stock", 0);
+        JOptionPane.showMessageDialog(this, "Recarge el inventario del producto", "No hay stock", JOptionPane.ERROR_MESSAGE);
         }
         }catch(Exception e){
-            System.out.println(e.getMessage());;
+            System.out.println(e.getMessage());
+        }
+        actualizarVistaTotales();
+        actualizarTablaPedido();
+    }
+    private void eliminarProducto(int id, int cantidad){        
+        try{
+        //control.getProductoServicio().Inv_actualizar(inv);   
+        for (Producto p : Inventario) {
+            if (p.getId() == id) {
+                p.setCantidad(p.getCantidad() + cantidad);
+                break;
+            }
+         } 
+        }catch(Exception e){
+            System.out.println(e.getMessage());
         }
         actualizarVistaTotales();
         actualizarTablaPedido();
@@ -75,7 +103,8 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             }
         }
 
-    private void iniciarNuevoPedido() {        
+    private void iniciarNuevoPedido() { 
+        Inventario = control.getProductoServicio().Inv_obtenerTodos();
         ventaActual = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
         if(ventaActual==null){
         ventaActual = new Ventas(obtenerFecha());
@@ -144,7 +173,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         if (result == JOptionPane.OK_OPTION) {
             String exchange = textField.getText().replace(',', '.');
             if (exchange.isBlank()) {
-                pedidoActual.setEfectivo(0);
+                pedidoActual.setEfectivo(pedidoActual.getTotal());
             } else {
                 pedidoActual.setEfectivo(Double.parseDouble(exchange));
             }
@@ -272,7 +301,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         jLabel3.setText("Servicio");
 
         jButton4.setBackground(new java.awt.Color(240, 240, 240));
-        jButton4.setText("Pizza Pepperoni");
+        jButton4.setText("Producto 1");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton4ActionPerformed(evt);
@@ -280,7 +309,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton5.setBackground(new java.awt.Color(244, 240, 240));
-        jButton5.setText("Pizza Queso");
+        jButton5.setText("Producto 2");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton5ActionPerformed(evt);
@@ -288,7 +317,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton6.setBackground(new java.awt.Color(240, 240, 240));
-        jButton6.setText("Pizza Carne ");
+        jButton6.setText("Producto 9");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton6ActionPerformed(evt);
@@ -296,7 +325,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton7.setBackground(new java.awt.Color(240, 240, 240));
-        jButton7.setText("Soda");
+        jButton7.setText("Producto 5");
         jButton7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton7ActionPerformed(evt);
@@ -328,7 +357,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton10.setBackground(new java.awt.Color(240, 240, 240));
-        jButton10.setText("Pizza Pepperoni");
+        jButton10.setText("Producto 3");
         jButton10.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton10ActionPerformed(evt);
@@ -336,7 +365,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton11.setBackground(new java.awt.Color(244, 240, 240));
-        jButton11.setText("Pizza Queso");
+        jButton11.setText("Producto 4");
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton11ActionPerformed(evt);
@@ -344,7 +373,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton12.setBackground(new java.awt.Color(240, 240, 240));
-        jButton12.setText("Soda");
+        jButton12.setText("Producto 6");
         jButton12.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton12ActionPerformed(evt);
@@ -352,7 +381,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton13.setBackground(new java.awt.Color(240, 240, 240));
-        jButton13.setText("Pizza Pepperoni");
+        jButton13.setText("Producto 7");
         jButton13.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton13ActionPerformed(evt);
@@ -360,7 +389,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton14.setBackground(new java.awt.Color(244, 240, 240));
-        jButton14.setText("Pizza Queso");
+        jButton14.setText("Producto 8");
         jButton14.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton14ActionPerformed(evt);
@@ -368,7 +397,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton15.setBackground(new java.awt.Color(240, 240, 240));
-        jButton15.setText("Pizza Pepperoni");
+        jButton15.setText("Producto 10");
         jButton15.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton15ActionPerformed(evt);
@@ -376,7 +405,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton16.setBackground(new java.awt.Color(244, 240, 240));
-        jButton16.setText("Pizza Queso");
+        jButton16.setText("Producto 11");
         jButton16.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton16ActionPerformed(evt);
@@ -384,7 +413,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton17.setBackground(new java.awt.Color(240, 240, 240));
-        jButton17.setText("Soda");
+        jButton17.setText("Producto 12");
         jButton17.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton17ActionPerformed(evt);
@@ -392,7 +421,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton18.setBackground(new java.awt.Color(240, 240, 240));
-        jButton18.setText("Pizza Pepperoni");
+        jButton18.setText("Producto 13");
         jButton18.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton18ActionPerformed(evt);
@@ -400,7 +429,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton19.setBackground(new java.awt.Color(244, 240, 240));
-        jButton19.setText("Pizza Queso");
+        jButton19.setText("Producto 14");
         jButton19.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton19ActionPerformed(evt);
@@ -408,7 +437,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         });
 
         jButton20.setBackground(new java.awt.Color(240, 240, 240));
-        jButton20.setText("Pizza Carne ");
+        jButton20.setText("Producto 15");
         jButton20.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton20ActionPerformed(evt);
@@ -586,6 +615,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
             if (p.getId() == idUltimo) {
                 if (p.getCantidad() > 1) {
                     p.setCantidad(p.getCantidad() - 1);
+                    eliminarProducto(p.getId(),1);
                 } else {
                     aEliminar = p;
                 }
@@ -594,6 +624,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         }
         if (aEliminar != null) {
             pedidoActual.getListaProductos().remove(aEliminar);
+            eliminarProducto(aEliminar.getId(),1);
         }
         actualizarVistaTotales();
         actualizarTablaPedido();
@@ -603,11 +634,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnQuitarUltimoActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        Producto prod = control.getProductoServicio().leer(0);//Producto("Pepperoni", 1000, 1, 0);
-        historialProductoIds.push(prod.getId());
-        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
-        actualizarVistaTotales();
-        actualizarTablaPedido();
+        registrarProducto(1,1);
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
@@ -617,16 +644,16 @@ public class Servicio_Cajero extends javax.swing.JFrame {
      // Actualizar fecha y solicitar nombre de cliente
     pedidoActual.setFecha(obtenerFechaHoraActual());
     do{
-    efectivo(); //revisar
+    efectivo();
     if(pedidoActual.getTotal()>pedidoActual.getEfectivo()){
         JOptionPane.showMessageDialog(this,"El efectivo es inferior que el total a pagar","Revise",JOptionPane.INFORMATION_MESSAGE);
         }
     }while(pedidoActual.getTotal()>pedidoActual.getEfectivo());
-    if (pedidoActual.getEfectivo() != 0) {
+    if ((pedidoActual.getEfectivo() - pedidoActual.getTotal())!= 0) {
         pedidoActual.setCambio(pedidoActual.getEfectivo() - pedidoActual.getTotal());
         } 
     else {
-        pedidoActual.setEfectivo(pedidoActual.getTotal());
+        //pedidoActual.setEfectivo(pedidoActual.getTotal());
         pedidoActual.setCambio(0);
         JOptionPane.showMessageDialog(this,"No se entrega cambio","Aviso",JOptionPane.INFORMATION_MESSAGE);}
     //Pedir el nombre del cliente o usar uno predeterminado
@@ -642,19 +669,49 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     //Registrar pedido en archivos    
     ventaActual.agregarPedido(pedidoActual);    
     control.getVentasServicio().actualizar(ventaActual);
+      
+    Iterator<Mesa> consulta = control.getMesasServicio().obtener("Libre").iterator();
+    ArrayList<String> inspeccion = new ArrayList<>(); Object[] mesas;
+    while(consulta.hasNext()){
+        inspeccion.add(consulta.next().ObtenerNombre());        
+    }    
+    if(!inspeccion.isEmpty()){
+        mesas=inspeccion.toArray();
+        JComboBox combo = new JComboBox(mesas);
+        combo.setSelectedIndex(0);
+        JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
+        Mesa mesa = control.getMesasServicio().leer(Integer.parseInt(combo.getSelectedItem().toString().replaceFirst("Mesa ", "")));
+        mesa.setEstado("Pendiente");
+        mesa.setIdPedido(pedidoActual.getId());
+        control.getMesasServicio().actualizar(mesa); 
+        try{
+        Iterator<Producto> it3 = Inventario.iterator();        
+        while(it3.hasNext()){
+        control.getProductoServicio().Inv_actualizar(it3.next());}
+        }
+        catch(Exception e){
+                System.out.println(e.getMessage());
+                System.out.println(e.getStackTrace());
+        }
+        
+        //Generar la factura
+        ImprimirFactura imprime = new ImprimirFactura();
+        imprime.generarfactura(pedidoActual,mesa.ObtenerNombre());}
+    else {
+        JOptionPane.showMessageDialog(null,"No hay mesas disponibles, la entrega sera para llevar","Advertencia: Sin mesas libres",JOptionPane.INFORMATION_MESSAGE);
+        ImprimirFactura imprime = new ImprimirFactura();
+        imprime.generarfactura(pedidoActual,"Para llevar");
+        System.out.println(Inventario);
+        try{
+        Iterator<Producto> it3 = Inventario.iterator();        
+        while(it3.hasNext()){
+        control.getProductoServicio().Inv_actualizar(it3.next());}
+        }
+        catch(Exception e){
+                System.out.println(e.getMessage());
+        }
+    }
     
-    Mesa mesa = new Mesa(2, "Libre", pedidoActual.getId()); //temporal
-    
-    /*Object[] mesas = {"mesa 1", "mesa 2", "mesa 3", "mesa 4", "mesa 5", "mesa 6"};
-    JComboBox combo = new JComboBox(mesas);*/
-    //combo.setSelectedIndex(1);
-    //JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
-    
-    control.getMesasServicio().actualizar(mesa);
-    
-    //Generar la factura
-    ImprimirFactura imprime = new ImprimirFactura();
-    imprime.generarfactura(pedidoActual);
     // Actualizar interfaz para un nuevo pedido
     iniciarNuevoPedido();
     actualizarVistaTotales();
@@ -663,11 +720,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Producto prod = control.getProductoServicio().leer(1); //Producto("Queso", 1500, 1, 1);
-        historialProductoIds.push(prod.getId());
-        control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);
-        actualizarVistaTotales();
-        actualizarTablaPedido();
+        registrarProducto(2,1);
     }//GEN-LAST:event_jButton5ActionPerformed
      
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
@@ -675,7 +728,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton6ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        registrarProducto(3,1);
+       
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
@@ -686,6 +739,11 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void btnLimpiarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarOrdenActionPerformed
+        Iterator<Producto> it2 = pedidoActual.getListaProductos().iterator();
+        while(it2.hasNext()){
+        Producto p = it2.next();
+        eliminarProducto(p.getId(),p.getCantidad());
+        }
         pedidoActual.getListaProductos().clear(); // Borra toda la lista de productos
         historialProductoIds.clear();
         actualizarVistaTotales();
@@ -697,11 +755,11 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+        registrarProducto(3,1);
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        // TODO add your handling code here:
+       registrarProducto(4,1);
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed

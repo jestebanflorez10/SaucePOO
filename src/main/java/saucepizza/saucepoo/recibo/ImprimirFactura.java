@@ -32,7 +32,8 @@ public class ImprimirFactura {
     /// imprimir.generarfactura(pedidoActual);
     /// ```
     ///@param pedidoActual El pedido con toda la información necesaria para generar la factura
-    public void generarfactura(Pedido pedidoActual){
+    ///@param mesa String que indica la mesa de la forma "Mesa #"
+    public void generarfactura(Pedido pedidoActual,String mesa){
     try {
         File carpetaFacturas = new File("facturas");
         if (!carpetaFacturas.exists()) {
@@ -57,7 +58,7 @@ public class ImprimirFactura {
 
         // Generar PDF
         GeneradorFactura generador = new GeneradorFactura();
-        generador.generarPDF(pedidoActual, rutaPDFrelativa);
+        generador.generarPDF(pedidoActual, rutaPDFrelativa,mesa);
 
         // Mensajes de confirmación
         System.out.println("Ruta absoluta PDF: " + rutaPDFabsoluta);

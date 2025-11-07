@@ -19,26 +19,40 @@ public class SaucePOO {
         Controladora helper = new Controladora();
         try {
             helper.getProductoServicio().Inv_inicializarBase();
-            int id = helper.getProductoServicio().Inv_crear(prod4);  // Retorna ID si existe o inserta si no
-            Mesa mesa = new Mesa(2, "Libre", 2250); //temporal
-    
+            int id1 = helper.getProductoServicio().Inv_crear(prod1);  // Retorna ID si existe o inserta si no
+            int id2 = helper.getProductoServicio().Inv_crear(prod2);
+            int id3 = helper.getProductoServicio().Inv_crear(prod3);
+            int id4 = helper.getProductoServicio().Inv_crear(prod4);
+            Mesa mesa1 = new Mesa(2, "Ocupado", 2250); //temporal
+            Mesa mesa2 = new Mesa(1, "Ocupado", 2350); //temporal
+            Mesa mesa3 = new Mesa(0, "Ocupado", 2450); //temporal
             /*Object[] mesas = {"mesa 1", "mesa 2", "mesa 3", "mesa 4", "mesa 5", "mesa 6"};
             JComboBox combo = new JComboBox(mesas);*/
             //combo.setSelectedIndex(1);
             //JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
             
-            helper.getMesasServicio().Crear(mesa);
-            helper.getMesasServicio().actualizar(mesa);
-            prod4.setId(id);
+            helper.getMesasServicio().Crear(mesa1);
+            helper.getMesasServicio().Crear(mesa2);
+            helper.getMesasServicio().Crear(mesa3);
+            prod1.setId(id1);
+            prod2.setId(id2);
+            prod3.setId(id3);
+            prod4.setId(id4);
+            helper.getProductoServicio().crear(prod1); //Crea los archivos
+            helper.getProductoServicio().crear(prod2);
+            helper.getProductoServicio().crear(prod3);
+            helper.getProductoServicio().crear(prod4); 
+            prod1.setCantidad(4);
+            prod2.setCantidad(4);
+            prod3.setCantidad(4);
             prod4.setCantidad(4);
-            helper.getProductoServicio().Inv_actualizar(prod4);  // Actualiza la cantidad del registro existente
+            helper.getProductoServicio().Inv_actualizar(prod1);  // Actualiza la cantidad del registro existente
+            helper.getProductoServicio().Inv_actualizar(prod2);
+            helper.getProductoServicio().Inv_actualizar(prod3);
+            helper.getProductoServicio().Inv_actualizar(prod4);
             } catch(Exception e) {
              System.out.println(e.getMessage());
-            }
-        helper.getProductoServicio().crear(prod1);
-        helper.getProductoServicio().crear(prod2);
-        helper.getProductoServicio().crear(prod3);
-        helper.getProductoServicio().crear(prod4);   
+            }          
         //helper.getVentasServicio().crear(venta);
         System.out.println("2025-II by Sauce Team");
         SplashScreen inicio = new SplashScreen();
