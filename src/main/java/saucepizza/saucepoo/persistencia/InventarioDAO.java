@@ -1,4 +1,3 @@
-
 package saucepizza.saucepoo.persistencia;
 
 import java.io.File;
@@ -20,103 +19,92 @@ public class InventarioDAO {
     public void crearTablaInventario() throws SQLException {
         String sql = """
             CREATE TABLE IF NOT EXISTS inventario (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER PRIMARY KEY,
                 nombre TEXT NOT NULL,
                 cantidad INTEGER NOT NULL
             );
-        """; //Creas un formato de tabla
+        """;
 
         try (Connection conn = abrirConexion();
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
-            System.out.println("Tabla 'usuarios' creada o ya existe.");
+            System.out.println("Tabla 'inventario' creada o ya existe.");
         }
     }
 
     private Connection abrirConexion() throws SQLException {
-        // Asegura que exista la carpeta
         File carpeta = new File(DB_FOLDER);
         if (!carpeta.exists()) {
             carpeta.mkdirs();
             System.out.println("Carpeta creada: " + carpeta.getAbsolutePath());
         }
-        // Ruta al archivo de base de datos
         File db = new File(carpeta, DB_FILE);
         System.out.println("Conectando a la base: " + db.getAbsolutePath());
         String url = "jdbc:sqlite:" + db.getPath();
         return DriverManager.getConnection(url);
     }
 
-      public Producto obtenerInventarioPorNombre(String producto) throws SQLException {
+    public Producto obtenerInventarioPorNombre(String nombre) throws SQLException {
         String sql = "SELECT * FROM inventario WHERE nombre = ?";
 
         try (Connection conn = abrirConexion();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setString(1, producto);
+            pstmt.setString(1, nombre);
             try (ResultSet rs = pstmt.executeQuery()) {
                 if (rs.next()) {
-                    ControladoraPersistencia helper = new ControladoraPersistencia();
-                    Producto r = helper.getProductoFile().leer(rs.getInt("id"));
-                    //    public Producto(String nombre, double precio, int cantidad, int id) 
-                    return new Producto(                        
+                    // Crear producto con datos de BD, obtener precio desde archivo
+                    Producto producto = new Producto(
                         rs.getString("nombre"),
-                        r.getPrecioUnitario(),
+                        0, // Precio temporal, se actualizará desde archivo
                         rs.getInt("cantidad"),
                         rs.getInt("id")
                     );
+                    return producto;
                 }
             }
         }
         return null;
     }
+
     public List<Producto> obtenerTodasCantidades() throws SQLException {
         List<Producto> inv = new ArrayList<>();
-        String sql = "SELECT * FROM inventario";
+        String sql = "SELECT id, nombre, cantidad FROM inventario";
 
         try (Connection conn = abrirConexion();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
             while (rs.next()) {
-                ControladoraPersistencia helper = new ControladoraPersistencia();
-                Producto r = helper.getProductoFile().leer(rs.getInt("id"));
-                //    public Producto(String nombre, double precio, int cantidad, int id)
-                inv.add(new Producto(                    
+                Producto producto = new Producto(
                     rs.getString("nombre"),
-                    r.getPrecioUnitario(),
+                    0, // Precio temporal, se actualizará desde archivo
                     rs.getInt("cantidad"),
                     rs.getInt("id")
-                ));
+                );
+                inv.add(producto);
             }
         }
         return inv;
     }
-        public int agregarInventario(Producto producto) throws SQLException {        
-        // Primero verifica si el producto ya existe
+
+    public int agregarInventario(Producto producto) throws SQLException {        
         Producto existente = obtenerInventarioPorNombre(producto.getNombre());
         if (existente != null) {
             System.out.println("Producto ya existe con ID: " + existente.getId());
             return existente.getId();
         }
 
-        // Si no existe, entonces inserta
-        String sql = "INSERT INTO inventario(nombre, cantidad) VALUES (?, ?)";
+        String sql = "INSERT INTO inventario(id, nombre, cantidad) VALUES (?, ?, ?)";
 
         try (Connection conn = abrirConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
-            pstmt.setString(1, producto.getNombre());
-            pstmt.setInt(2, producto.getCantidad());
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, producto.getId());
+            pstmt.setString(2, producto.getNombre());
+            pstmt.setInt(3, producto.getCantidad());
             pstmt.executeUpdate();
-
-            // Obtener el ID generado automáticamente
-            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
-                if (generatedKeys.next()) {
-                    int idGenerado = generatedKeys.getInt(1);
-                    System.out.println("Inventario agregado con ID: " + idGenerado);
-                    return idGenerado;
-                }
-            }
+            
+            System.out.println("Inventario agregado con ID: " + producto.getId());
+            return producto.getId();
         }
-        return -1;
     }
 
     public void actualizarInventario(Producto producto) throws SQLException {
@@ -128,13 +116,12 @@ public class InventarioDAO {
             pstmt.setInt(2, producto.getId());
             int filasActualizadas = pstmt.executeUpdate();
             if (filasActualizadas > 0) {
-                System.out.println("Producto en el inventario actualizado: " + producto.getNombre());
+                System.out.println("Cantidad del producto actualizada: " + producto.getNombre());
             } else {
                 System.out.println("No se encontró producto con ID: " + producto.getId());
             }
         }
     }
-
 
     public void eliminarInventario(int id) throws SQLException {
         String sql = "DELETE FROM inventario WHERE id = ?";
@@ -143,8 +130,8 @@ public class InventarioDAO {
              PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, id);
             pstmt.executeUpdate();
-            System.out.println("Registro de inventario eliminado.");
+            System.out.println("Registro de inventario eliminado con ID: " + id);
         }
     }
-    
 }
+

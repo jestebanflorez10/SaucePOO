@@ -15,7 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import saucepizza.saucepoo.SaucePOO;
 import saucepizza.saucepoo.logic.Controladora;
-import saucepizza.saucepoo.logic.Empresa;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorITotal;
 import saucepizza.saucepoo.recibo.GeneradorIVentas;

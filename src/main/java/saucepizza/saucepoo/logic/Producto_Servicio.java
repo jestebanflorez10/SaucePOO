@@ -3,7 +3,6 @@ package saucepizza.saucepoo.logic;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 public class Producto_Servicio {
     private ControladoraPersistencia control = new ControladoraPersistencia();
@@ -23,10 +22,22 @@ public class Producto_Servicio {
     public ArrayList<Producto> obtenerTodos(){ return control.getProductoFile().obtenerTodos();}
     
     //Metodos para el acceso del inventario
-    
     public Producto Inv_leer(String nombre) throws SQLException {
-        return control.getInventarioDAO().obtenerInventarioPorNombre(nombre);
+    // Obtener referencia desde BD (con cantidad de inventario)
+    Producto productoBD = control.getInventarioDAO().obtenerInventarioPorNombre(nombre);
+    
+    if (productoBD != null) {
+        // Obtener producto completo desde archivo (con imagen, precio, etc.)
+        Producto productoCompleto = this.leer(productoBD.getId());
+        
+        if (productoCompleto != null) {
+            // Reemplazar cantidad con la del inventario
+            productoCompleto.setCantidad(productoBD.getCantidad());
+            return productoCompleto; // Retorna con imagen incluida
+        }
     }
+    return null;
+}
     public int Inv_crear(Producto producto) throws SQLException{
         return control.getInventarioDAO().agregarInventario(producto);    
     }
@@ -42,20 +53,26 @@ public class Producto_Servicio {
     public void Inv_crearTablaUsuarios() throws SQLException {
         control.getInventarioDAO().crearTablaInventario();
        }
-    public HashMap<Integer,Producto> Inv_obtenerTodos() {
-        HashMap<Integer,Producto> retorno = new HashMap<>();
-        ArrayList<Producto> inv;
-        try{            
-            inv=(ArrayList<Producto>) control.getInventarioDAO().obtenerTodasCantidades();
-            Iterator<Producto> it1 = inv.iterator();
-            while(it1.hasNext()){
-            Producto p = it1.next();
-            retorno.put(p.getId(), p);
+    
+    public HashMap<Integer, Producto> Inv_obtenerTodos() {
+    HashMap<Integer, Producto> retorno = new HashMap<>();
+    try {
+        // Obtener referencias desde BD (solo id, nombre, cantidad)
+        ArrayList<Producto> inventarioBD = (ArrayList<Producto>) control.getInventarioDAO().obtenerTodasCantidades();
+        
+        // Para cada producto, obtener desde archivo (con imagen, precio y datos completos)
+        for (Producto p : inventarioBD) {
+            Producto productoCompleto = this.leer(p.getId());
+            if (productoCompleto != null) {
+                // Actualizar la cantidad del archivo con la del inventario (BD)
+                productoCompleto.setCantidad(p.getCantidad());
+                retorno.put(p.getId(), productoCompleto);
             }
-            return retorno;}
-        catch(Exception e){            
-             System.out.println(e.getMessage());
-            return retorno;
         }
-    }
+        return retorno;
+    } catch (Exception e) {
+        System.out.println("Error al obtener productos: " + e.getMessage());
+        return retorno;
+        }
+    }   
 }

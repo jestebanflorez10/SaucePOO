@@ -1,4 +1,5 @@
 package saucepizza.saucepoo.logic;
+import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class Producto implements Serializable{
@@ -6,6 +7,7 @@ public class Producto implements Serializable{
     private double precio;
     private int cantidad;
     private int id;
+    private byte[] imagenBytes;
     private static final long serialVersionUID = 1L;
     public Producto(String nombre, double precio, int cantidad, int id) {
         this.nombre = nombre;
@@ -49,5 +51,22 @@ public class Producto implements Serializable{
     public String toString(){
     return String.valueOf(this.id);
     }
-    
+     public void setImagen(BufferedImage imagen) {
+        this.imagenBytes = ImagenUtilidades.bufferedImageToBytes(imagen);
+    }
+
+    public BufferedImage getImagen() {
+    if (imagenBytes == null) {
+        return null;
+    }
+    return ImagenUtilidades.bytesToBufferedImage(imagenBytes);
+    }
+    public byte[] getImagenBytes() {
+        return imagenBytes;
+        }
+
+    public void setImagenBytes(byte[] imagenBytes) {
+         this.imagenBytes = imagenBytes;
+    }
+
 }

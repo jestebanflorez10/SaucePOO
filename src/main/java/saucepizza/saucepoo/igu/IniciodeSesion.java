@@ -23,6 +23,7 @@ public class IniciodeSesion extends javax.swing.JFrame {
             control.getUsuarioService().crearTablaUsuarios();
             if (control.getUsuarioService().login("demo", "demo") == null) {
                 control.getUsuarioService().crearUsuario("demo", "demo", "Cajero", true);
+                control.getUsuarioService().crearUsuario("Administrador", "admin", "Admin", true);
                 System.out.println("Usuario demo creado.");
             }
         } catch (SQLException | IllegalStateException ex) {

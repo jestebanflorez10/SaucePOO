@@ -1,5 +1,10 @@
 
 package saucepizza.saucepoo;
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import javax.imageio.ImageIO;
 import saucepizza.saucepoo.igu.SplashScreen;
 //import saucepizza.saucepoo.igu.UtilidadesPedidos;
 import saucepizza.saucepoo.logic.Producto;
@@ -10,30 +15,36 @@ import saucepizza.saucepoo.logic.Mesa;
 public class SaucePOO {
     public static String pizzeria = "Pizzeria Demo";
     public static void main(String[] args) {
-        //Empresa pizzeria = new Empresa("Pizzeria Demo",1);
-        
-        Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
-        Producto prod2= new Producto("Queso", 1500, 1, 1);
-        Producto prod3 = new Producto("Carne", 1700, 1, 2);
-        Producto prod4= new Producto("Soda", 500, 1, 3);
-        Controladora helper = new Controladora();
-        try {
+        try(
+            BufferedReader br = new BufferedReader(new FileReader(new File("demo.txt")));             
+            ){
+            String modo = br.readLine();
+            if(modo.isBlank()||modo.isEmpty()){pizzeria = "Pizzeria Demo";}
+            else{pizzeria = modo;}
+            BufferedImage imagen1 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo0.png"));
+            BufferedImage imagen2 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo1.png"));
+            BufferedImage imagen3 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo2.png"));
+            BufferedImage imagen4 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo3.png"));
+            Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
+            Producto prod2= new Producto("Queso", 1500, 1, 1);
+            Producto prod3 = new Producto("Carne", 1700, 1, 2);
+            Producto prod4= new Producto("Soda", 500, 1, 3);
+            prod1.setImagen(imagen1);
+            prod2.setImagen(imagen2);
+            prod3.setImagen(imagen3);
+            prod4.setImagen(imagen4);
+            Controladora helper = new Controladora();
             helper.getProductoServicio().Inv_inicializarBase();
-            int id1 = helper.getProductoServicio().Inv_crear(prod1);  // Retorna ID si existe o inserta si no
-            int id2 = helper.getProductoServicio().Inv_crear(prod2);
-            int id3 = helper.getProductoServicio().Inv_crear(prod3);
-            int id4 = helper.getProductoServicio().Inv_crear(prod4);
+                int id1 = helper.getProductoServicio().Inv_crear(prod1);  // Retorna ID si existe o inserta si no
+                int id2 = helper.getProductoServicio().Inv_crear(prod2);
+                int id3 = helper.getProductoServicio().Inv_crear(prod3);
+                int id4 = helper.getProductoServicio().Inv_crear(prod4);
             Mesa mesa1 = new Mesa(2, "Ocupado", 2250); //temporal
             Mesa mesa2 = new Mesa(1, "Ocupado", 2350); //temporal
-            Mesa mesa3 = new Mesa(0, "Ocupado", 2450); //temporal
-            /*Object[] mesas = {"mesa 1", "mesa 2", "mesa 3", "mesa 4", "mesa 5", "mesa 6"};
-            JComboBox combo = new JComboBox(mesas);*/
-            //combo.setSelectedIndex(1);
-            //JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
-            
-            helper.getMesasServicio().Crear(mesa1);
-            helper.getMesasServicio().Crear(mesa2);
-            helper.getMesasServicio().Crear(mesa3);
+            Mesa mesa3 = new Mesa(0, "Ocupado", 2450); //temporal            
+                helper.getMesasServicio().Crear(mesa1);
+                helper.getMesasServicio().Crear(mesa2);
+                helper.getMesasServicio().Crear(mesa3);
             prod1.setId(id1);
             prod2.setId(id2);
             prod3.setId(id3);
@@ -46,14 +57,15 @@ public class SaucePOO {
             prod2.setCantidad(4);
             prod3.setCantidad(4);
             prod4.setCantidad(4);
-            helper.getProductoServicio().Inv_actualizar(prod1);  // Actualiza la cantidad del registro existente
-            helper.getProductoServicio().Inv_actualizar(prod2);
-            helper.getProductoServicio().Inv_actualizar(prod3);
-            helper.getProductoServicio().Inv_actualizar(prod4);
-            } catch(Exception e) {
-             System.out.println(e.getMessage());
-            }          
-        //helper.getVentasServicio().crear(venta);
+                helper.getProductoServicio().Inv_actualizar(prod1);  // Actualiza la cantidad del registro existente
+                helper.getProductoServicio().Inv_actualizar(prod2);
+                helper.getProductoServicio().Inv_actualizar(prod3);
+                helper.getProductoServicio().Inv_actualizar(prod4);
+                }catch(Exception e){
+                System.out.println("No se activa el modo demo");
+                System.err.println(e.getMessage());
+                System.err.println(e.getStackTrace());
+                }            
         System.out.println("2025-II by Sauce Team");
         SplashScreen inicio = new SplashScreen();
         inicio.setLocationRelativeTo(null);
