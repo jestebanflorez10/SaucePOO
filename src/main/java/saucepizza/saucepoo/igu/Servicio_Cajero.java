@@ -2,6 +2,7 @@ package saucepizza.saucepoo.igu;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Stack;
 import javax.swing.ImageIcon;
@@ -29,7 +30,8 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaPedido;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Cajero.class.getName());
     private Controladora control = new Controladora();
-    private Pedido pedidoActual; private Ventas ventaActual; private ArrayList<Producto> Inventario;
+    private Pedido pedidoActual; private Ventas ventaActual; 
+    private HashMap<Integer,Producto> Inventario;
     private String pizzaname;
     private Stack<Integer> historialProductoIds = new Stack<>();
     public Servicio_Cajero() {          
@@ -52,14 +54,14 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private void registrarProducto(int id, int cantidad){        
         try{
         Producto prod = control.getProductoServicio().leer(id); //El producto de referencia
-        Inventario.sort((p1, p2) -> Integer.compare(p1.getId(), p2.getId()));
-        Producto inv = Inventario.get(id-1); //El inventario del producto
+        //Inventario.sort((p1, p2) -> Integer.compare(p1.getId(), p2.getId()));
+        Producto inv = Inventario.get(id); //El inventario del producto obteenido a traves de una llave
         if(inv.getCantidad()>0){
         historialProductoIds.push(prod.getId());
         control.getPedidoServicio().agregarProductoAlPedido(pedidoActual, prod);        
         //inv.setCantidad(inv.getCantidad()-prod.getCantidad());
         //control.getProductoServicio().Inv_actualizar(inv);
-        for (Producto p : Inventario) {
+        for (Producto p : Inventario.values()) {
             if (p.getId() == id) {
                 p.setCantidad(p.getCantidad() - cantidad);
                 break;
@@ -78,7 +80,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     private void eliminarProducto(int id, int cantidad){        
         try{
         //control.getProductoServicio().Inv_actualizar(inv);   
-        for (Producto p : Inventario) {
+        for (Producto p : Inventario.values()) {
             if (p.getId() == id) {
                 p.setCantidad(p.getCantidad() + cantidad);
                 break;
@@ -685,7 +687,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         mesa.setIdPedido(pedidoActual.getId());
         control.getMesasServicio().actualizar(mesa); 
         try{
-        Iterator<Producto> it3 = Inventario.iterator();        
+        Iterator<Producto> it3 = Inventario.values().iterator();        
         while(it3.hasNext()){
         control.getProductoServicio().Inv_actualizar(it3.next());}
         }
@@ -703,7 +705,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         imprime.generarfactura(pedidoActual,"Para llevar");
         System.out.println(Inventario);
         try{
-        Iterator<Producto> it3 = Inventario.iterator();        
+        Iterator<Producto> it3 = Inventario.values().iterator();        
         while(it3.hasNext()){
         control.getProductoServicio().Inv_actualizar(it3.next());}
         }

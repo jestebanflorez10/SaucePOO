@@ -2,6 +2,8 @@
 package saucepizza.saucepoo.logic;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 public class Producto_Servicio {
     private ControladoraPersistencia control = new ControladoraPersistencia();
@@ -40,10 +42,16 @@ public class Producto_Servicio {
     public void Inv_crearTablaUsuarios() throws SQLException {
         control.getInventarioDAO().crearTablaInventario();
        }
-    public ArrayList<Producto> Inv_obtenerTodos() {
-        ArrayList<Producto> retorno = new ArrayList<>();
-        try{
-            retorno=(ArrayList<Producto>) control.getInventarioDAO().obtenerTodasCantidades();
+    public HashMap<Integer,Producto> Inv_obtenerTodos() {
+        HashMap<Integer,Producto> retorno = new HashMap<>();
+        ArrayList<Producto> inv;
+        try{            
+            inv=(ArrayList<Producto>) control.getInventarioDAO().obtenerTodasCantidades();
+            Iterator<Producto> it1 = inv.iterator();
+            while(it1.hasNext()){
+            Producto p = it1.next();
+            retorno.put(p.getId(), p);
+            }
             return retorno;}
         catch(Exception e){            
              System.out.println(e.getMessage());
