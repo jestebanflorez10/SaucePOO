@@ -890,7 +890,10 @@ public class Servicio_Cajero extends javax.swing.JFrame {
     }//GEN-LAST:event_btnLimpiarOrdenActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        Servicio_Mesas window = new Servicio_Mesas();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void btn_prod2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_prod2ActionPerformed

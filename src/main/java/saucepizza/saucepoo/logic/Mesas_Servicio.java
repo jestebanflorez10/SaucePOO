@@ -1,6 +1,7 @@
 package saucepizza.saucepoo.logic;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 public class Mesas_Servicio {
@@ -38,4 +39,14 @@ public class Mesas_Servicio {
        }
        return retorno;
       }
+    public HashMap<Integer,Mesa> obtenerTodosH(){
+        ArrayList<Mesa> mesas = controlP.getMesaFile().obtenerTodos();
+        HashMap<Integer,Mesa> retorno = new HashMap<>();
+        Iterator<Mesa> it = mesas.iterator();
+        while(it.hasNext()){
+            Mesa m = it.next();
+            retorno.put(m.getNumero(), m);
+        }
+        return retorno;
+    }
     }

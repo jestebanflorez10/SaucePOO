@@ -25,6 +25,7 @@ public class SaucePOO {
             BufferedImage imagen2 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo1.png"));
             BufferedImage imagen3 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo2.png"));
             BufferedImage imagen4 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo3.png"));
+            BufferedImage mesaimagen = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demomesa0.png")); //nuevo
             Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
             Producto prod2= new Producto("Queso", 1500, 1, 1);
             Producto prod3 = new Producto("Carne", 1700, 1, 2);
@@ -39,12 +40,16 @@ public class SaucePOO {
                 int id2 = helper.getProductoServicio().Inv_crear(prod2);
                 int id3 = helper.getProductoServicio().Inv_crear(prod3);
                 int id4 = helper.getProductoServicio().Inv_crear(prod4);
-            Mesa mesa1 = new Mesa(2, "Ocupado", 2250); //temporal
-            Mesa mesa2 = new Mesa(1, "Ocupado", 2350); //temporal
-            Mesa mesa3 = new Mesa(0, "Ocupado", 2450); //temporal            
-                helper.getMesasServicio().Crear(mesa1);
-                helper.getMesasServicio().Crear(mesa2);
-                helper.getMesasServicio().Crear(mesa3);
+            Mesa mesa1 = new Mesa(2, "Libre", 0); //temporal -1: sin pedido asignado
+            Mesa mesa2 = new Mesa(1, "Libre", 0); //temporal -1: sin pedido asignado
+            Mesa mesa3 = new Mesa(0, "Libre", 0); //temporal -1: sin pedido asignado 
+            
+            mesa1.setImagen(mesaimagen);  mesa2.setImagen(mesaimagen); mesa3.setImagen(mesaimagen);          
+            
+            helper.getMesasServicio().Crear(mesa1);
+            helper.getMesasServicio().Crear(mesa2);
+            helper.getMesasServicio().Crear(mesa3);            
+            
             prod1.setId(id1);
             prod2.setId(id2);
             prod3.setId(id3);

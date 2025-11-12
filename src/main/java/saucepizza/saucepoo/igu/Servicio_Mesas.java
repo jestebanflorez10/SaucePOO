@@ -1,20 +1,16 @@
 package saucepizza.saucepoo.igu;
 
-import java.util.Stack;
+import java.awt.image.BufferedImage;
+import java.util.HashMap;
+import java.util.Iterator;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-import javax.swing.JTextField;
-import javax.swing.text.AbstractDocument;
-import javax.swing.text.AttributeSet;
-import javax.swing.text.BadLocationException;
-import javax.swing.text.DocumentFilter;
-import saucepizza.saucepoo.SaucePOO;
 import static saucepizza.saucepoo.igu.UtilidadesPedidos.*;
 import saucepizza.saucepoo.logic.Controladora;
-import saucepizza.saucepoo.logic.Pedido;
+import saucepizza.saucepoo.logic.Mesa;
 import saucepizza.saucepoo.logic.Producto;
-import saucepizza.saucepoo.logic.Ventas;
-import saucepizza.saucepoo.recibo.ImprimirFactura;
 /**
  *
  * @author EQUIPO
@@ -23,11 +19,43 @@ public class Servicio_Mesas extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaPedido;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Servicio_Mesas.class.getName());
     private Controladora control = new Controladora();
-    private Pedido pedidoActual; private Ventas ventaActual; private String pizzaname;
-    private Stack<Integer> historialProductoIds = new Stack<>();
-    public Servicio_Mesas() {                  
+    private HashMap<Integer, Mesa> local;
+    public Servicio_Mesas() {
+        local = control.getMesasServicio().obtenerTodosH();
         initComponents();
+        cargarDatos();
+        try {
+            this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
+        } catch (Exception e) {
+            System.err.println("Error al cargar el icono: " + e.getMessage());
+        }
+        
     }
+    
+    private void cargarDatos() {
+    JLabel[] seleccion = new JLabel[]{
+        img_mesa1, img_mesa2, img_mesa3, img_mesa4, img_mesa5, img_mesa6 };
+    Iterator<Mesa> it = local.values().iterator();
+        for (JLabel lbl : seleccion) {
+            if (it.hasNext()) {
+                Mesa m = it.next();
+                if (m != null) { // Validar que producto no sea null
+                    BufferedImage img = m.getImagen();
+                    if (img != null) {
+                        lbl.setIcon(new ImageIcon(img));
+                        lbl.setVisible(true);
+                    } else {
+                        lbl.setVisible(false);
+                    }
+                } else {
+                    lbl.setVisible(false);
+                }
+            } else {
+                lbl.setVisible(false);
+            }
+        }
+    }
+    
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -47,36 +75,42 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         jButton9 = new javax.swing.JButton();
         jPanel3 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
-        jButton8 = new javax.swing.JButton();
-        btnQuitarUltimo = new javax.swing.JButton();
-        btnLimpiarOrden = new javax.swing.JButton();
-        jComboBox1 = new javax.swing.JComboBox<>();
-        jComboBox2 = new javax.swing.JComboBox<>();
-        jComboBox3 = new javax.swing.JComboBox<>();
-        jComboBox4 = new javax.swing.JComboBox<>();
-        jComboBox5 = new javax.swing.JComboBox<>();
-        jComboBox6 = new javax.swing.JComboBox<>();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
-        jLabel9 = new javax.swing.JLabel();
-        jButton10 = new javax.swing.JButton();
-        jButton11 = new javax.swing.JButton();
-        jButton12 = new javax.swing.JButton();
-        jButton13 = new javax.swing.JButton();
-        jButton14 = new javax.swing.JButton();
-        jLabel10 = new javax.swing.JLabel();
-        jLabel12 = new javax.swing.JLabel();
-        btnLimpiarOrden1 = new javax.swing.JButton();
-        jLabel13 = new javax.swing.JLabel();
-        jLabel14 = new javax.swing.JLabel();
-        jLabel15 = new javax.swing.JLabel();
-        jLabel16 = new javax.swing.JLabel();
-        btnQuitarUltimo1 = new javax.swing.JButton();
-        btnQuitarUltimo2 = new javax.swing.JButton();
-        btnQuitarUltimo3 = new javax.swing.JButton();
+        jpl_mesa1 = new javax.swing.JPanel();
+        img_mesa1 = new javax.swing.JLabel();
+        lbl_mesa1 = new javax.swing.JLabel();
+        cmb_mesa1 = new javax.swing.JComboBox<>();
+        btn_obtmesa1 = new javax.swing.JButton();
+        btn_actmesa1 = new javax.swing.JButton();
+        jpl_mesa2 = new javax.swing.JPanel();
+        img_mesa2 = new javax.swing.JLabel();
+        lbl_mesa2 = new javax.swing.JLabel();
+        cmb_mesa2 = new javax.swing.JComboBox<>();
+        btn_obtmesa2 = new javax.swing.JButton();
+        btn_actmesa2 = new javax.swing.JButton();
+        jpl_mesa3 = new javax.swing.JPanel();
+        img_mesa3 = new javax.swing.JLabel();
+        lbl_mesa3 = new javax.swing.JLabel();
+        cmb_mesa3 = new javax.swing.JComboBox<>();
+        btn_obtmesa3 = new javax.swing.JButton();
+        btn_actmesa3 = new javax.swing.JButton();
+        jpl_mesa4 = new javax.swing.JPanel();
+        img_mesa4 = new javax.swing.JLabel();
+        lbl_mesa4 = new javax.swing.JLabel();
+        cmb_mesa4 = new javax.swing.JComboBox<>();
+        btn_obtmesa4 = new javax.swing.JButton();
+        btn_actmesa4 = new javax.swing.JButton();
+        jpl_mesa6 = new javax.swing.JPanel();
+        img_mesa6 = new javax.swing.JLabel();
+        lbl_mesa6 = new javax.swing.JLabel();
+        cmb_mesa6 = new javax.swing.JComboBox<>();
+        btn_obtmesa6 = new javax.swing.JButton();
+        btn_actmesa6 = new javax.swing.JButton();
+        jpl_mesa5 = new javax.swing.JPanel();
+        img_mesa5 = new javax.swing.JLabel();
+        lbl_mesa5 = new javax.swing.JLabel();
+        cmb_mesa5 = new javax.swing.JComboBox<>();
+        btn_obtmesa5 = new javax.swing.JButton();
+        btn_actmesa5 = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -158,351 +192,462 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
         jLabel3.setText("Mesas");
 
-        jButton8.setBackground(new java.awt.Color(227, 40, 32));
-        jButton8.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setText("Actualizar");
-        jButton8.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        jpl_mesa1.setBackground(new java.awt.Color(255, 255, 255));
+
+        img_mesa1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa1.setText("Imagen");
+
+        lbl_mesa1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa1.setText("Mesa 1");
+
+        cmb_mesa1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                cmb_mesa1ActionPerformed(evt);
             }
         });
 
-        btnQuitarUltimo.setBackground(new java.awt.Color(240, 240, 240));
-        btnQuitarUltimo.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnQuitarUltimo.setForeground(new java.awt.Color(227, 40, 32));
-        btnQuitarUltimo.setText("Obtener Recibo");
-        btnQuitarUltimo.setAutoscrolls(true);
-        btnQuitarUltimo.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnQuitarUltimo.addActionListener(new java.awt.event.ActionListener() {
+        btn_obtmesa1.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa1.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa1.setText("Obtener Recibo");
+        btn_obtmesa1.setAutoscrolls(true);
+        btn_obtmesa1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarUltimoActionPerformed(evt);
+                btn_obtmesa1ActionPerformed(evt);
             }
         });
 
-        btnLimpiarOrden.setBackground(new java.awt.Color(240, 240, 240));
-        btnLimpiarOrden.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnLimpiarOrden.setForeground(new java.awt.Color(227, 40, 32));
-        btnLimpiarOrden.setText("Obtenr Recibo");
-        btnLimpiarOrden.setToolTipText("");
-        btnLimpiarOrden.setAutoscrolls(true);
-        btnLimpiarOrden.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnLimpiarOrden.addActionListener(new java.awt.event.ActionListener() {
+        btn_actmesa1.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa1.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa1.setText("Actualizar");
+        btn_actmesa1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarOrdenActionPerformed(evt);
+                btn_actmesa1ActionPerformed(evt);
             }
         });
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jpl_mesa1Layout = new javax.swing.GroupLayout(jpl_mesa1);
+        jpl_mesa1.setLayout(jpl_mesa1Layout);
+        jpl_mesa1Layout.setHorizontalGroup(
+            jpl_mesa1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa1Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(48, Short.MAX_VALUE))
+        );
+        jpl_mesa1Layout.setVerticalGroup(
+            jpl_mesa1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa1Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa1, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+
+        jpl_mesa2.setBackground(new java.awt.Color(255, 255, 255));
+
+        img_mesa2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa2.setText("Imagen");
+
+        lbl_mesa2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa2.setText("Mesa 2");
+
+        cmb_mesa2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cmb_mesa2ActionPerformed(evt);
             }
         });
 
-        jComboBox2.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-
-        jComboBox3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-
-        jComboBox4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-
-        jComboBox5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-
-        jComboBox6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
-
-        jLabel4.setText("Mesa 1");
-
-        jLabel5.setText("Mesa 2");
-
-        jLabel6.setText("Mesa 3");
-
-        jLabel7.setText("Mesa 4");
-
-        jLabel8.setText("Mesa 5");
-
-        jLabel9.setText("Mesa 6");
-
-        jButton10.setBackground(new java.awt.Color(227, 40, 32));
-        jButton10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton10.setForeground(new java.awt.Color(255, 255, 255));
-        jButton10.setText("Actualizar");
-        jButton10.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
+        btn_obtmesa2.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa2.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa2.setText("Obtener Recibo");
+        btn_obtmesa2.setAutoscrolls(true);
+        btn_obtmesa2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
+                btn_obtmesa2ActionPerformed(evt);
             }
         });
 
-        jButton11.setBackground(new java.awt.Color(227, 40, 32));
-        jButton11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton11.setForeground(new java.awt.Color(255, 255, 255));
-        jButton11.setText("Actualizar");
-        jButton11.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton11.addActionListener(new java.awt.event.ActionListener() {
+        btn_actmesa2.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa2.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa2.setText("Actualizar");
+        btn_actmesa2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton11ActionPerformed(evt);
+                btn_actmesa2ActionPerformed(evt);
             }
         });
 
-        jButton12.setBackground(new java.awt.Color(227, 40, 32));
-        jButton12.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton12.setForeground(new java.awt.Color(255, 255, 255));
-        jButton12.setText("Actualizar");
-        jButton12.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton12.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jpl_mesa2Layout = new javax.swing.GroupLayout(jpl_mesa2);
+        jpl_mesa2.setLayout(jpl_mesa2Layout);
+        jpl_mesa2Layout.setHorizontalGroup(
+            jpl_mesa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa2Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa2, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jpl_mesa2Layout.setVerticalGroup(
+            jpl_mesa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa2Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa2, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jpl_mesa3.setBackground(new java.awt.Color(255, 255, 255));
+
+        img_mesa3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa3.setText("Imagen");
+
+        lbl_mesa3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa3.setText("Mesa 3");
+
+        cmb_mesa3.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton12ActionPerformed(evt);
+                cmb_mesa3ActionPerformed(evt);
             }
         });
 
-        jButton13.setBackground(new java.awt.Color(227, 40, 32));
-        jButton13.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton13.setForeground(new java.awt.Color(255, 255, 255));
-        jButton13.setText("Actualizar");
-        jButton13.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton13.addActionListener(new java.awt.event.ActionListener() {
+        btn_obtmesa3.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa3.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa3.setText("Obtener Recibo");
+        btn_obtmesa3.setAutoscrolls(true);
+        btn_obtmesa3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton13ActionPerformed(evt);
+                btn_obtmesa3ActionPerformed(evt);
             }
         });
 
-        jButton14.setBackground(new java.awt.Color(227, 40, 32));
-        jButton14.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton14.setForeground(new java.awt.Color(255, 255, 255));
-        jButton14.setText("Actualizar");
-        jButton14.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton14.addActionListener(new java.awt.event.ActionListener() {
+        btn_actmesa3.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa3.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa3.setText("Actualizar");
+        btn_actmesa3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton14ActionPerformed(evt);
+                btn_actmesa3ActionPerformed(evt);
             }
         });
 
-        jLabel10.setText("jLabel10");
+        javax.swing.GroupLayout jpl_mesa3Layout = new javax.swing.GroupLayout(jpl_mesa3);
+        jpl_mesa3.setLayout(jpl_mesa3Layout);
+        jpl_mesa3Layout.setHorizontalGroup(
+            jpl_mesa3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa3Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa3, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jpl_mesa3Layout.setVerticalGroup(
+            jpl_mesa3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa3Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa3, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
 
-        jLabel12.setText("jLabel10");
+        jpl_mesa4.setBackground(new java.awt.Color(255, 255, 255));
 
-        btnLimpiarOrden1.setBackground(new java.awt.Color(240, 240, 240));
-        btnLimpiarOrden1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnLimpiarOrden1.setForeground(new java.awt.Color(227, 40, 32));
-        btnLimpiarOrden1.setText("Obtenr Recibo");
-        btnLimpiarOrden1.setToolTipText("");
-        btnLimpiarOrden1.setAutoscrolls(true);
-        btnLimpiarOrden1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnLimpiarOrden1.addActionListener(new java.awt.event.ActionListener() {
+        img_mesa4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa4.setText("Imagen");
+
+        lbl_mesa4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa4.setText("Mesa 4");
+
+        cmb_mesa4.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnLimpiarOrden1ActionPerformed(evt);
+                cmb_mesa4ActionPerformed(evt);
             }
         });
 
-        jLabel13.setText("jLabel10");
-
-        jLabel14.setText("jLabel10");
-
-        jLabel15.setText("jLabel10");
-
-        jLabel16.setText("jLabel10");
-
-        btnQuitarUltimo1.setBackground(new java.awt.Color(240, 240, 240));
-        btnQuitarUltimo1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnQuitarUltimo1.setForeground(new java.awt.Color(227, 40, 32));
-        btnQuitarUltimo1.setText("Obtener Recibo");
-        btnQuitarUltimo1.setAutoscrolls(true);
-        btnQuitarUltimo1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnQuitarUltimo1.addActionListener(new java.awt.event.ActionListener() {
+        btn_obtmesa4.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa4.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa4.setText("Obtener Recibo");
+        btn_obtmesa4.setAutoscrolls(true);
+        btn_obtmesa4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarUltimo1ActionPerformed(evt);
+                btn_obtmesa4ActionPerformed(evt);
             }
         });
 
-        btnQuitarUltimo2.setBackground(new java.awt.Color(240, 240, 240));
-        btnQuitarUltimo2.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnQuitarUltimo2.setForeground(new java.awt.Color(227, 40, 32));
-        btnQuitarUltimo2.setText("Obtener Recibo");
-        btnQuitarUltimo2.setAutoscrolls(true);
-        btnQuitarUltimo2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnQuitarUltimo2.addActionListener(new java.awt.event.ActionListener() {
+        btn_actmesa4.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa4.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa4.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa4.setText("Actualizar");
+        btn_actmesa4.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa4.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarUltimo2ActionPerformed(evt);
+                btn_actmesa4ActionPerformed(evt);
             }
         });
 
-        btnQuitarUltimo3.setBackground(new java.awt.Color(240, 240, 240));
-        btnQuitarUltimo3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        btnQuitarUltimo3.setForeground(new java.awt.Color(227, 40, 32));
-        btnQuitarUltimo3.setText("Obtener Recibo");
-        btnQuitarUltimo3.setAutoscrolls(true);
-        btnQuitarUltimo3.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        btnQuitarUltimo3.addActionListener(new java.awt.event.ActionListener() {
+        javax.swing.GroupLayout jpl_mesa4Layout = new javax.swing.GroupLayout(jpl_mesa4);
+        jpl_mesa4.setLayout(jpl_mesa4Layout);
+        jpl_mesa4Layout.setHorizontalGroup(
+            jpl_mesa4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa4Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa4, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+        jpl_mesa4Layout.setVerticalGroup(
+            jpl_mesa4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa4Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa4Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa4, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jpl_mesa6.setBackground(new java.awt.Color(255, 255, 255));
+
+        img_mesa6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa6.setText("Imagen");
+
+        lbl_mesa6.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa6.setText("Mesa 6");
+
+        cmb_mesa6.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa6.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnQuitarUltimo3ActionPerformed(evt);
+                cmb_mesa6ActionPerformed(evt);
             }
         });
+
+        btn_obtmesa6.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa6.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa6.setText("Obtener Recibo");
+        btn_obtmesa6.setAutoscrolls(true);
+        btn_obtmesa6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_obtmesa6ActionPerformed(evt);
+            }
+        });
+
+        btn_actmesa6.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa6.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa6.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa6.setText("Actualizar");
+        btn_actmesa6.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_actmesa6ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpl_mesa6Layout = new javax.swing.GroupLayout(jpl_mesa6);
+        jpl_mesa6.setLayout(jpl_mesa6Layout);
+        jpl_mesa6Layout.setHorizontalGroup(
+            jpl_mesa6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa6Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa6, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+        jpl_mesa6Layout.setVerticalGroup(
+            jpl_mesa6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa6Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(23, Short.MAX_VALUE))
+        );
+
+        jpl_mesa5.setBackground(new java.awt.Color(255, 255, 255));
+
+        img_mesa5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        img_mesa5.setText("Imagen");
+
+        lbl_mesa5.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_mesa5.setText("Mesa 5");
+
+        cmb_mesa5.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Disponible", "Ocupado", "Limpiar" }));
+        cmb_mesa5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                cmb_mesa5ActionPerformed(evt);
+            }
+        });
+
+        btn_obtmesa5.setBackground(new java.awt.Color(240, 240, 240));
+        btn_obtmesa5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_obtmesa5.setForeground(new java.awt.Color(227, 40, 32));
+        btn_obtmesa5.setText("Obtener Recibo");
+        btn_obtmesa5.setAutoscrolls(true);
+        btn_obtmesa5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_obtmesa5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_obtmesa5ActionPerformed(evt);
+            }
+        });
+
+        btn_actmesa5.setBackground(new java.awt.Color(227, 40, 32));
+        btn_actmesa5.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
+        btn_actmesa5.setForeground(new java.awt.Color(255, 255, 255));
+        btn_actmesa5.setText("Actualizar");
+        btn_actmesa5.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
+        btn_actmesa5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_actmesa5ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jpl_mesa5Layout = new javax.swing.GroupLayout(jpl_mesa5);
+        jpl_mesa5.setLayout(jpl_mesa5Layout);
+        jpl_mesa5Layout.setHorizontalGroup(
+            jpl_mesa5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa5Layout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addComponent(img_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(jpl_mesa5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(btn_obtmesa5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btn_actmesa5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(cmb_mesa5, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lbl_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(24, Short.MAX_VALUE))
+        );
+        jpl_mesa5Layout.setVerticalGroup(
+            jpl_mesa5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jpl_mesa5Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jpl_mesa5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(jpl_mesa5Layout.createSequentialGroup()
+                        .addComponent(lbl_mesa5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(cmb_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(btn_obtmesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btn_actmesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(img_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, 150, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(35, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addGap(39, 39, 39)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addComponent(jLabel3)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                        .addGap(44, 44, 44)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel4)
-                                .addGap(132, 132, 132)
-                                .addComponent(jLabel5))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                                .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(btnLimpiarOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                            .addComponent(jLabel13, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(12, 12, 12))))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGap(32, 32, 32)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel6)
-                                    .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE))))))
-                .addGap(824, 824, 824))
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnQuitarUltimo, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(37, 37, 37)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnLimpiarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGap(11, 11, 11)
-                                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addGap(18, 18, 18)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnQuitarUltimo1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(33, 33, 33)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(btnQuitarUltimo3, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)))))))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(89, 89, 89)
-                        .addComponent(jLabel7)
-                        .addGap(138, 138, 138)
-                        .addComponent(jLabel8)
-                        .addGap(149, 149, 149)
-                        .addComponent(jLabel9)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel3Layout.createSequentialGroup()
-                    .addGap(66, 66, 66)
-                    .addComponent(btnQuitarUltimo2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(1219, Short.MAX_VALUE)))
+                .addGap(39, 39, 39)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpl_mesa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel3)
+                    .addComponent(jpl_mesa2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpl_mesa3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(32, 32, 32)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jpl_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpl_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpl_mesa4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(336, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addGap(34, 34, 34)
                 .addComponent(jLabel3)
-                .addGap(26, 26, 26)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(jLabel6))
-                    .addComponent(jLabel4))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpl_mesa4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpl_mesa1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpl_mesa2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jpl_mesa5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLabel10, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(21, 21, 21)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel14, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel12, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addComponent(jComboBox4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jComboBox6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                    .addComponent(btnLimpiarOrden, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnQuitarUltimo, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(6, 6, 6)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createSequentialGroup()
-                                        .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(37, 37, 37)
-                                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                            .addComponent(jLabel7)
-                                            .addComponent(jLabel8)
-                                            .addComponent(jLabel9)))
-                                    .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(btnLimpiarOrden1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel15, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel16, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jComboBox3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jComboBox5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(48, 48, 48)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jButton13, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnQuitarUltimo3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnQuitarUltimo1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jButton14, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(24, 24, 24))))
-            .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                    .addContainerGap(631, Short.MAX_VALUE)
-                    .addComponent(btnQuitarUltimo2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGap(75, 75, 75)))
+                    .addComponent(jpl_mesa6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jpl_mesa3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(32, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -511,14 +656,16 @@ public class Servicio_Mesas extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -550,57 +697,77 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton2ActionPerformed
 
-    private void btnQuitarUltimo2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimo2ActionPerformed
+    private void btn_actmesa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuitarUltimo2ActionPerformed
+    }//GEN-LAST:event_btn_actmesa1ActionPerformed
 
-    private void btnQuitarUltimo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimo1ActionPerformed
+    private void cmb_mesa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa1ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuitarUltimo1ActionPerformed
+    }//GEN-LAST:event_cmb_mesa1ActionPerformed
 
-    private void btnLimpiarOrden1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarOrden1ActionPerformed
+    private void btn_obtmesa1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa1ActionPerformed
+
+    }//GEN-LAST:event_btn_obtmesa1ActionPerformed
+
+    private void cmb_mesa2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnLimpiarOrden1ActionPerformed
+    }//GEN-LAST:event_cmb_mesa2ActionPerformed
 
-    private void jButton14ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton14ActionPerformed
+    private void btn_obtmesa2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton14ActionPerformed
+    }//GEN-LAST:event_btn_obtmesa2ActionPerformed
 
-    private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
+    private void btn_actmesa2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa2ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton13ActionPerformed
+    }//GEN-LAST:event_btn_actmesa2ActionPerformed
 
-    private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
+    private void cmb_mesa3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton12ActionPerformed
+    }//GEN-LAST:event_cmb_mesa3ActionPerformed
 
-    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+    private void btn_obtmesa3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton11ActionPerformed
+    }//GEN-LAST:event_btn_obtmesa3ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
+    private void btn_actmesa3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton10ActionPerformed
+    }//GEN-LAST:event_btn_actmesa3ActionPerformed
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cmb_mesa4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cmb_mesa4ActionPerformed
 
-    private void btnLimpiarOrdenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarOrdenActionPerformed
-
-    }//GEN-LAST:event_btnLimpiarOrdenActionPerformed
-
-    private void btnQuitarUltimoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimoActionPerformed
-
-    }//GEN-LAST:event_btnQuitarUltimoActionPerformed
-
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
- 
-    }//GEN-LAST:event_jButton8ActionPerformed
-
-    private void btnQuitarUltimo3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQuitarUltimo3ActionPerformed
+    private void btn_obtmesa4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa4ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_btnQuitarUltimo3ActionPerformed
+    }//GEN-LAST:event_btn_obtmesa4ActionPerformed
+
+    private void btn_actmesa4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa4ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_actmesa4ActionPerformed
+
+    private void cmb_mesa5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_mesa5ActionPerformed
+
+    private void btn_obtmesa5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_obtmesa5ActionPerformed
+
+    private void btn_actmesa5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa5ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_actmesa5ActionPerformed
+
+    private void cmb_mesa6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cmb_mesa6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_cmb_mesa6ActionPerformed
+
+    private void btn_obtmesa6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_obtmesa6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_obtmesa6ActionPerformed
+
+    private void btn_actmesa6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_actmesa6ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btn_actmesa6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -628,44 +795,50 @@ public class Servicio_Mesas extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnLimpiarOrden;
-    private javax.swing.JButton btnLimpiarOrden1;
-    private javax.swing.JButton btnQuitarUltimo;
-    private javax.swing.JButton btnQuitarUltimo1;
-    private javax.swing.JButton btnQuitarUltimo2;
-    private javax.swing.JButton btnQuitarUltimo3;
+    private javax.swing.JButton btn_actmesa1;
+    private javax.swing.JButton btn_actmesa2;
+    private javax.swing.JButton btn_actmesa3;
+    private javax.swing.JButton btn_actmesa4;
+    private javax.swing.JButton btn_actmesa5;
+    private javax.swing.JButton btn_actmesa6;
+    private javax.swing.JButton btn_obtmesa1;
+    private javax.swing.JButton btn_obtmesa2;
+    private javax.swing.JButton btn_obtmesa3;
+    private javax.swing.JButton btn_obtmesa4;
+    private javax.swing.JButton btn_obtmesa5;
+    private javax.swing.JButton btn_obtmesa6;
+    private javax.swing.JComboBox<String> cmb_mesa1;
+    private javax.swing.JComboBox<String> cmb_mesa2;
+    private javax.swing.JComboBox<String> cmb_mesa3;
+    private javax.swing.JComboBox<String> cmb_mesa4;
+    private javax.swing.JComboBox<String> cmb_mesa5;
+    private javax.swing.JComboBox<String> cmb_mesa6;
+    private javax.swing.JLabel img_mesa1;
+    private javax.swing.JLabel img_mesa2;
+    private javax.swing.JLabel img_mesa3;
+    private javax.swing.JLabel img_mesa4;
+    private javax.swing.JLabel img_mesa5;
+    private javax.swing.JLabel img_mesa6;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
-    private javax.swing.JButton jButton11;
-    private javax.swing.JButton jButton12;
-    private javax.swing.JButton jButton13;
-    private javax.swing.JButton jButton14;
     private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
-    private javax.swing.JComboBox<String> jComboBox1;
-    private javax.swing.JComboBox<String> jComboBox2;
-    private javax.swing.JComboBox<String> jComboBox3;
-    private javax.swing.JComboBox<String> jComboBox4;
-    private javax.swing.JComboBox<String> jComboBox5;
-    private javax.swing.JComboBox<String> jComboBox6;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel10;
-    private javax.swing.JLabel jLabel12;
-    private javax.swing.JLabel jLabel13;
-    private javax.swing.JLabel jLabel14;
-    private javax.swing.JLabel jLabel15;
-    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jpl_mesa1;
+    private javax.swing.JPanel jpl_mesa2;
+    private javax.swing.JPanel jpl_mesa3;
+    private javax.swing.JPanel jpl_mesa4;
+    private javax.swing.JPanel jpl_mesa5;
+    private javax.swing.JPanel jpl_mesa6;
+    private javax.swing.JLabel lbl_mesa1;
+    private javax.swing.JLabel lbl_mesa2;
+    private javax.swing.JLabel lbl_mesa3;
+    private javax.swing.JLabel lbl_mesa4;
+    private javax.swing.JLabel lbl_mesa5;
+    private javax.swing.JLabel lbl_mesa6;
     // End of variables declaration//GEN-END:variables
 }

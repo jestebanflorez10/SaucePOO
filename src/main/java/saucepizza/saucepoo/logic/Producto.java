@@ -51,7 +51,7 @@ public class Producto implements Serializable{
     public String toString(){
     return String.valueOf(this.id);
     }
-     public void setImagen(BufferedImage imagen) {
+    public void setImagen(BufferedImage imagen) {
         this.imagenBytes = ImagenUtilidades.bufferedImageToBytes(imagen);
     }
 
