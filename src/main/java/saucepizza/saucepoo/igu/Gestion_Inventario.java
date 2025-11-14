@@ -113,6 +113,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         jLabel6.setText("Nombre");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));

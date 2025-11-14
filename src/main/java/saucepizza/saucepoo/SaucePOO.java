@@ -40,9 +40,9 @@ public class SaucePOO {
                 int id2 = helper.getProductoServicio().Inv_crear(prod2);
                 int id3 = helper.getProductoServicio().Inv_crear(prod3);
                 int id4 = helper.getProductoServicio().Inv_crear(prod4);
-            Mesa mesa1 = new Mesa(2, "Libre", 0); //temporal -1: sin pedido asignado
-            Mesa mesa2 = new Mesa(1, "Libre", 0); //temporal -1: sin pedido asignado
-            Mesa mesa3 = new Mesa(0, "Libre", 0); //temporal -1: sin pedido asignado 
+            Mesa mesa1 = new Mesa(0, "Libre", 0); //temporal 0: sin pedido asignado
+            Mesa mesa2 = new Mesa(1, "Libre", 0); //temporal 0: sin pedido asignado
+            Mesa mesa3 = new Mesa(2, "Libre", 0); //temporal 0: sin pedido asignado 
             
             mesa1.setImagen(mesaimagen);  mesa2.setImagen(mesaimagen); mesa3.setImagen(mesaimagen);          
             

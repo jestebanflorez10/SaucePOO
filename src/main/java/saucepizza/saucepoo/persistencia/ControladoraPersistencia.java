@@ -10,13 +10,13 @@ import saucepizza.saucepoo.logic.Mesa;
 
 public class ControladoraPersistencia {
     private UsuarioDAO usuarioDAO = new UsuarioDAO();
-    private PedidoDAO pedidoDAO = new PedidoDAO();
     private InventarioDAO inventarioDAO = new InventarioDAO(); //Depende mucho de ProductoFile
     //private ProductoAdminArchivos productoFile = new ProductoAdminArchivos();
     //public ObjetoAdminArchivos(String carpeta, String tipoArchivos, Class clase)
     private ObjetoAdminArchivos<Producto> productoFile= new ObjetoAdminArchivos<>("productos","productos",Producto.class);
     private ObjetoAdminArchivos<Ventas> ventasFile= new ObjetoAdminArchivos<>("ventas","ventas",Ventas.class);
     private ObjetoAdminArchivos<Mesa> mesaFile = new ObjetoAdminArchivos<>("mesa", "mesa", Mesa.class);
+    private PedidoDAO pedidoDAO = new PedidoDAO(this.productoFile);
   public int obtenerNuevoIdPedido() {
     int nuevoId = 1; // valor por defecto
     String sql = "SELECT MAX(id) AS max_id FROM pedido";

@@ -311,6 +311,7 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         tablaPedido = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setUndecorated(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -538,7 +539,6 @@ public class Servicio_Cajero extends javax.swing.JFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_prod11, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btn_prod12, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btn_prod13, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -820,8 +820,8 @@ public class Servicio_Cajero extends javax.swing.JFrame {
         combo.setSelectedIndex(0);
         JOptionPane.showMessageDialog(null, combo, "Escoje una mesa", JOptionPane.PLAIN_MESSAGE);
         Mesa mesa = control.getMesasServicio().leer(Integer.parseInt(combo.getSelectedItem().toString().replaceFirst("Mesa ", "")));
-        mesa.setEstado("Pendiente");
-        mesa.setIdPedido(pedidoActual.getId());
+        mesa.setEstado("Ocupado");
+        mesa.setIdPedido(pedidoActual.getId()); //Aqui se le conecta el pedido a la mesa
         control.getMesasServicio().actualizar(mesa); 
         try{
         Iterator<Producto> it3 = Inventario.values().iterator();        
