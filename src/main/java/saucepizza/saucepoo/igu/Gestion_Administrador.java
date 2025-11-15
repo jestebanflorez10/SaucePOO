@@ -203,7 +203,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
         jButton11.setBackground(new java.awt.Color(227, 40, 32));
         jButton11.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton11.setForeground(new java.awt.Color(255, 255, 255));
-        jButton11.setText("Cerrar Caja");
+        jButton11.setText("Editar Usuarios");
         jButton11.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
         jButton11.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -330,7 +330,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel4, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(126, 126, 126)
+                .addGap(61, 61, 61)
                 .addComponent(jLabel4, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLabel6)
@@ -392,9 +392,13 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton10ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        Ventas ventaHoy = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
+        /*Ventas ventaHoy = control.getVentasServicio().leer(UtilidadesPedidos.obtenerFecha());
         GeneradorIVentas imprimir = new GeneradorIVentas();
-        imprimir.ImprimirPDF(ventaHoy);
+        imprimir.ImprimirPDF(ventaHoy);*/
+        Usuario_Administrador ventana = new Usuario_Administrador();
+        ventana.setVisible(true);
+        ventana.setLocationRelativeTo(null);
+        
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
