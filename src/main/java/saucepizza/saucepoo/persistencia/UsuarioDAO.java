@@ -146,4 +146,93 @@ public class UsuarioDAO {
             System.out.println("Usuario eliminado.");
         }
     }
+    public Usuario guardarUsuario(Usuario usuario) throws SQLException {
+    // Verificar si el usuario existe por username
+    Usuario usuarioExistente = obtenerUsuarioPorUsername(usuario.getUsername());
+    
+    if (usuarioExistente != null) {
+        // Usuario existe: actualizar todos sus campos
+        usuario.setId(usuarioExistente.getId());
+        actualizarUsuarioCompleto(usuario);
+        System.out.println("Usuario actualizado: " + usuario.getUsername());
+        return usuario;
+    } else {
+        // Usuario no existe: crear nuevo (sin asignar ID, la BD lo hace automáticamente)
+        agregarUsuario(usuario);
+        System.out.println("Usuario creado: " + usuario.getUsername());
+        // Recuperar el usuario con su ID asignado por la BD
+        return obtenerUsuarioPorUsername(usuario.getUsername());
+    }
+}
+
+/**
+ * Actualiza todos los campos de un usuario existente.
+ * Busca por username, no por ID.
+ */
+private void actualizarUsuarioCompleto(Usuario usuario) throws SQLException {
+    String sqlVerificar = "SELECT COUNT(*) FROM usuarios WHERE username = ?";
+    String sqlActualizar = "UPDATE usuarios SET password = ?, tipo = ?, activo = ? WHERE username = ?";
+    
+    try (Connection conn = abrirConexion();
+         PreparedStatement pstmtVerificar = conn.prepareStatement(sqlVerificar)) {
+        
+        pstmtVerificar.setString(1, usuario.getUsername());
+        
+        try (ResultSet rs = pstmtVerificar.executeQuery()) {
+            if (rs.next() && rs.getInt(1) == 0) {
+                throw new SQLException("Usuario '" + usuario.getUsername() + "' no existe en la base de datos.");
+            }
+        }
+        
+        // Si existe, procedemos con la actualización
+        try (PreparedStatement pstmtActualizar = conn.prepareStatement(sqlActualizar)) {
+            pstmtActualizar.setString(1, usuario.getPassword());
+            pstmtActualizar.setString(2, usuario.getTipo());
+            pstmtActualizar.setBoolean(3, usuario.isActivo());
+            pstmtActualizar.setString(4, usuario.getUsername());
+            
+            int filasActualizadas = pstmtActualizar.executeUpdate();
+            
+            if (filasActualizadas > 0) {
+                System.out.println("Usuario actualizado: " + usuario.getUsername());
+            }
+        }
+    }
+}
+public void actualizarUsuarioPorId(Usuario usuario) throws SQLException {
+    String sql = "UPDATE usuarios SET username = ?, password = ?, tipo = ?, activo = ? WHERE id = ?";
+    
+    try (Connection conn = abrirConexion();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        
+        pstmt.setString(1, usuario.getUsername());
+        pstmt.setString(2, usuario.getPassword());
+        pstmt.setString(3, usuario.getTipo());
+        pstmt.setBoolean(4, usuario.isActivo());
+        pstmt.setInt(5, usuario.getId());
+        
+        int filasActualizadas = pstmt.executeUpdate();
+        
+        if (filasActualizadas > 0) {
+            System.out.println("Usuario actualizado: " + usuario.getUsername());
+        }
+    }
+}
+public boolean usernameYaExiste(String username, int idActual) throws SQLException {
+    String sql = "SELECT COUNT(*) FROM usuarios WHERE username = ? AND id != ?";
+    
+    try (Connection conn = abrirConexion();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setString(1, username);
+        pstmt.setInt(2, idActual);
+        
+        try (ResultSet rs = pstmt.executeQuery()) {
+            if (rs.next()) {
+                return rs.getInt(1) > 0;
+            }
+        }
+    }
+    return false;
+}
+
 }
