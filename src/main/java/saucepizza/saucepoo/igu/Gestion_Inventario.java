@@ -5,19 +5,15 @@
 package saucepizza.saucepoo.igu;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.NavigableMap;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import javax.swing.Timer;
-import saucepizza.saucepoo.SaucePOO;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorITotal;
-import saucepizza.saucepoo.recibo.GeneradorIVentas;
 /**
  *
  * @author juane
@@ -35,47 +31,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         initComponents();
                
     }
-    private String ventasHoy(){
-    Iterator<Map.Entry<String,Ventas>> iterator = control.getVentasServicio().segunFecha().entrySet().iterator();
-        Ventas actual = null;
-        while (iterator.hasNext()) {
-        
-        Map.Entry<String, Ventas> entry = iterator.next();
-        if (entry.getKey().equals(UtilidadesPedidos.obtenerFecha())) {
-            actual = entry.getValue();
-            break;  // encontramos el objeto específico, salimos
-            }                 
-        }
-        if(actual!=null){
-            return String.valueOf(actual.getTotal());
-                } else {
-            return String.valueOf(0);  
-        }
-    }
-    private void actualizarTablaInforme() {
-    modeloTablaInforme.setRowCount(0); // Limpia la tabla
-    NavigableMap<String, Ventas> registro = control.getVentasServicio().segunFecha();
-    List<Map.Entry<String, Ventas>> lista = new ArrayList<>(registro.descendingMap().entrySet());
-
-    for (int i = 0; i < lista.size(); i++) {
-        double porcentajeCambio = 0;
-        if (i + 1 < lista.size()) {
-            double actual = lista.get(i).getValue().getTotal();
-            double siguiente = lista.get(i + 1).getValue().getTotal();
-            if (siguiente != 0) {
-                porcentajeCambio = ((actual - siguiente) / siguiente) * 100;
-            } else {
-                porcentajeCambio = 0;
-            }
-        }
-        modeloTablaInforme.addRow(new Object[]{
-            lista.get(i).getKey(),
-            lista.get(i).getValue().getUnidadesVendidas(),
-            lista.get(i).getValue().getTotal(),
-            String.format("%.1f%%", porcentajeCambio) // Formato con 1 decimal
-        });
-    }
-}
+    
     
 
     /**
@@ -122,7 +78,8 @@ public class Gestion_Inventario extends javax.swing.JFrame {
 
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png"))); // NOI18N
 
-        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png"))); // NOI18N
+        jLabel2.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLabel2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/minilogo.png"))); // NOI18N
 
         jButton1.setBackground(new java.awt.Color(240, 240, 240));
         jButton1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -164,14 +121,14 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(75, 75, 75)
+                .addGap(51, 51, 51)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel2)
                     .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
                     .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(79, Short.MAX_VALUE))
+                .addContainerGap(52, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -182,7 +139,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 160, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 263, Short.MAX_VALUE)
                 .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(30, 30, 30)
                 .addComponent(jLabel2)
@@ -211,7 +168,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         jButton3.setBackground(new java.awt.Color(240, 240, 240));
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(227, 40, 32));
-        jButton3.setText("Consultar informes previos");
+        jButton3.setText("Editar inventario del producto");
         jButton3.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(227, 40, 32)));
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -309,7 +266,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(767, Short.MAX_VALUE)
+                .addContainerGap(791, Short.MAX_VALUE)
                 .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
             .addGroup(jPanel3Layout.createSequentialGroup()
@@ -384,7 +341,10 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        Gestion_Administrador window = new Gestion_Administrador();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

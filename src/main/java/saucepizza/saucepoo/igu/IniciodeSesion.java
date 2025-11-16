@@ -9,12 +9,14 @@ import saucepizza.saucepoo.logic.Usuario;
 //import saucepizza.saucepoo.logic.Usuario_Servicio;
 import saucepizza.saucepoo.logic.Controladora;
 import javax.swing.ImageIcon;
+import saucepizza.saucepoo.SaucePOO;
 
 public class IniciodeSesion extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(IniciodeSesion.class.getName());
     /*private Usuario_Servicio usuarioService = new Usuario_Servicio();*/
     private Controladora control = new Controladora();
+    String pizzaname;
     /**
      * Creates new form IniciodeSesion
      */
@@ -30,6 +32,8 @@ public class IniciodeSesion extends javax.swing.JFrame {
             ex.printStackTrace();
         }
         initComponents();
+        this.pizzaname=SaucePOO.pizzeria;
+        jLabel2.setText(this.pizzaname.toUpperCase());
         try {
             this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
         } catch (Exception e) {

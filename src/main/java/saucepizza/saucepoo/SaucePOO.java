@@ -68,6 +68,7 @@ public class SaucePOO {
                 helper.getProductoServicio().Inv_actualizar(prod4);
                 }catch(Exception e){
                 System.out.println("No se activa el modo demo");
+                System.out.println("Se ejecuta normal para la pizzeria: "+pizzeria);
                 System.err.println(e.getMessage());
                 System.err.println(e.getStackTrace());
                 }            
