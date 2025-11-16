@@ -92,7 +92,6 @@ public class Usuario_Administrador extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Editor de Usuarios [Administrador]");
-        setAlwaysOnTop(true);
         setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
@@ -432,8 +431,7 @@ public class Usuario_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton9ActionPerformed
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
-        String usernameAConsultar = txt_check.getText().trim();
-        
+        String usernameAConsultar = txt_check.getText().trim();        
         if (usernameAConsultar.isBlank()) {
             JOptionPane.showMessageDialog(null, "Ingrese un usuario a consultar", "Campo vacío", 0);
             return;
