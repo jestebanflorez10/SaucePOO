@@ -4,8 +4,8 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -15,6 +15,8 @@ import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import saucepizza.saucepoo.SaucePOO;
 import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Mesa;
+import saucepizza.saucepoo.logic.Usuario;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorITotal;
 import saucepizza.saucepoo.recibo.GeneradorIVentas;
@@ -43,6 +45,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
         new Object[]{"Fecha", "Unidades Vendidas", "Total", "Cambio"}, 0);
         jTable1.setModel(modeloTablaInforme);
         actualizarTablaInforme();
+        sobreCajeros();
         jLabel6.setText("HOY: "+ventasHoy());
         new Timer(1000, e -> {
             jLabel5.setText(UtilidadesPedidos.obtenerFechaHoraActual());
@@ -63,6 +66,28 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             return String.valueOf(actual.getTotal());
                 } else {
             return String.valueOf(0);  
+        }
+    }
+    private void sobreCajeros(){
+         try {
+            ArrayList<Usuario> u = (ArrayList<Usuario>) control.getUsuarioService().obtenerTodos();
+            Iterator<Usuario> it2 = u.iterator();
+            boolean local=false;
+            while(it2.hasNext()){
+            Usuario a = it2.next();
+            if(a.esCajero()){
+                local = a.isActivo();
+            }
+            if(local){
+            btn_crrlocal.setText("Cerrar Local");
+            btn_crrcajeros.setText("Pausar Cajeros");
+            } else{
+            btn_crrlocal.setText("Abrir Local");
+            btn_crrcajeros.setText("Activar Cajeros");
+            }
+       }
+        } catch (SQLException ex) {
+            System.err.println("Algo salio mal al leer la base de datos");
         }
     }
     private void actualizarTablaInforme() {
@@ -88,9 +113,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             String.format("%.1f%%", porcentajeCambio) // Formato con 1 decimal
         });
     }
-}
-    
-
+}    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -465,10 +488,50 @@ public class Gestion_Administrador extends javax.swing.JFrame {
 
     private void btn_crrcajerosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crrcajerosActionPerformed
         // Solo deshabilita los cajeros
+         try {
+            ArrayList<Usuario> u = (ArrayList<Usuario>) control.getUsuarioService().obtenerTodos();
+            Iterator<Usuario> it2 = u.iterator();
+            while(it2.hasNext()){
+            Usuario a = it2.next();
+            if(a.esCajero()){
+                a.setActivo(!(btn_crrcajeros.getText().equalsIgnoreCase("Pausar Cajeros")));
+                control.getUsuarioService().actualizarUsuarioPorId(a);
+            }
+       }
+        } catch (SQLException ex) {
+            System.err.println("Algo salio mal al leer la base de datos");
+        }
+        JOptionPane.showMessageDialog(null, "El software a ha cambiado el estado de los cajeros", "Cierre de caja", JOptionPane.INFORMATION_MESSAGE);
+        sobreCajeros();
+
     }//GEN-LAST:event_btn_crrcajerosActionPerformed
 
     private void btn_crrlocalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_crrlocalActionPerformed
         // Limpiar las mesas y deshabilitar los cajeros
+        
+       ArrayList<Mesa> m = control.getMesasServicio().obtenerTodos();
+       Iterator<Mesa> it = m.iterator();
+       while(it.hasNext()){
+           Mesa a = it.next();
+           a.setEstado("Libre");
+           control.getMesasServicio().actualizar(a);
+       }
+        try {
+            ArrayList<Usuario> u = (ArrayList<Usuario>) control.getUsuarioService().obtenerTodos();
+            Iterator<Usuario> it2 = u.iterator();
+            while(it2.hasNext()){
+            Usuario a = it2.next();
+            if(a.esCajero()){
+                a.setActivo(!(btn_crrlocal.getText().equalsIgnoreCase("Cerrar Local")));
+                control.getUsuarioService().actualizarUsuarioPorId(a);
+            }
+       }
+        } catch (SQLException ex) {
+            System.err.println("Algo salio mal al leer la base de datos");
+        }
+        JOptionPane.showMessageDialog(null, "El software a marcado las mesas como limpias y se ha cambiado el estado de los cajeros", "Cierre de local", JOptionPane.INFORMATION_MESSAGE);
+        sobreCajeros();
+        
     }//GEN-LAST:event_btn_crrlocalActionPerformed
 
     /**

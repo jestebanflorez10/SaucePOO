@@ -23,8 +23,7 @@ public class IniciodeSesion extends javax.swing.JFrame {
     public IniciodeSesion() {
         try {
             control.getUsuarioService().crearTablaUsuarios();
-            if (control.getUsuarioService().login("demo", "demo") == null) {
-                control.getUsuarioService().crearUsuario("demo", "demo", "Cajero", true);
+            if (control.getUsuarioService().contarUsuariosActivos() == 0) {
                 control.getUsuarioService().crearUsuario("Administrador", "admin", "Admin", true);
                 System.out.println("Usuario demo creado.");
             }

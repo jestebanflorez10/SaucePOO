@@ -108,19 +108,20 @@ public class InventarioDAO {
     }
 
     public void actualizarInventario(Producto producto) throws SQLException {
-        String sql = "UPDATE inventario SET cantidad = ? WHERE id = ?";
+        String sql = "UPDATE inventario SET cantidad = ?, nombre = ? WHERE id = ?";
 
-        try (Connection conn = abrirConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, producto.getCantidad());
-            pstmt.setInt(2, producto.getId());
-            int filasActualizadas = pstmt.executeUpdate();
-            if (filasActualizadas > 0) {
-                System.out.println("Cantidad del producto actualizada: " + producto.getNombre());
-            } else {
-                System.out.println("No se encontró producto con ID: " + producto.getId());
-            }
+    try (Connection conn = abrirConexion();
+         PreparedStatement pstmt = conn.prepareStatement(sql)) {
+        pstmt.setInt(1, producto.getCantidad());
+        pstmt.setString(2, producto.getNombre());
+        pstmt.setInt(3, producto.getId());
+        int filasActualizadas = pstmt.executeUpdate();
+        if (filasActualizadas > 0) {
+            System.out.println("Producto actualizado: " + producto.getNombre());
+        } else {
+            System.out.println("No se encontró producto con ID: " + producto.getId());
         }
+    }
     }
 
     public void eliminarInventario(int id) throws SQLException {

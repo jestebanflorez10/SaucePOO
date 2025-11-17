@@ -1,6 +1,7 @@
 package saucepizza.saucepoo.logic;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import saucepizza.saucepoo.persistencia.ControladoraPersistencia;
 
@@ -66,6 +67,9 @@ public class Usuario_Servicio {
         }
 
         return contador;
+    }
+    public List<Usuario> obtenerTodos() throws SQLException{
+        return controlP.getUsuarioDAO().obtenerTodosLosUsuarios();
     }
 
 }
