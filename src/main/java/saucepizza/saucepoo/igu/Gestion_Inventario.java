@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.NavigableMap;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.Timer;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorITotal;
@@ -29,6 +30,9 @@ public class Gestion_Inventario extends javax.swing.JFrame {
      */
     public Gestion_Inventario() {
         initComponents();
+         new Timer(1000, e -> {
+            jLabel5.setText(UtilidadesPedidos.obtenerFechaHoraActual());
+        }).start();
                
     }
     
@@ -206,7 +210,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))))
-                .addContainerGap(51, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGap(31, 31, 31)
