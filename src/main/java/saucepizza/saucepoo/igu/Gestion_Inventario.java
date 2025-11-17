@@ -409,8 +409,11 @@ public class Gestion_Inventario extends javax.swing.JFrame {
             Producto p = control.getProductoServicio().leer(Integer.parseInt(jTable2.getValueAt(seleccion, 0).toString()));
             String identificador = p.getNombre();
             try {
-                Producto Inventario = control.getProductoServicio().Inv_leer(identificador);
-                JOptionPane.showInputDialog(null, "Ingrese un nuevo dato para inventario", "Inventario", 4);
+                Producto inventario = control.getProductoServicio().Inv_leer(identificador);
+                String input = JOptionPane.showInputDialog(null, "Ingrese un nuevo dato para inventario", "Inventario", JOptionPane.QUESTION_MESSAGE);
+                inventario.setCantidad(Integer.parseInt(input));
+                control.getProductoServicio().Inv_actualizar(inventario);
+                actualizarTablaInforme();
             } catch (SQLException ex) { }
         } else{
             JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla", "No hay producto seleccionado", 1);
