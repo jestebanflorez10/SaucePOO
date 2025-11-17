@@ -434,7 +434,7 @@ public class Usuario_Administrador extends javax.swing.JFrame {
         String usernameAConsultar = txt_check.getText().trim();        
         if (usernameAConsultar.isBlank()) {
             JOptionPane.showMessageDialog(null, "Ingrese un usuario a consultar", "Campo vacío", 0);
-            return;
+            return; //genera problemas
         }
         
         try {

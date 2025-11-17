@@ -1,8 +1,7 @@
 
 package saucepizza.saucepoo;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import javax.imageio.ImageIO;
 import saucepizza.saucepoo.igu.SplashScreen;
@@ -14,69 +13,43 @@ import saucepizza.saucepoo.logic.Mesa;
 
 public class SaucePOO {
     public static String pizzeria = "Pizzeria Demo";
-    public static void main(String[] args) {
-        try(
-            BufferedReader br = new BufferedReader(new FileReader(new File("demo.txt")));             
-            ){
-            String modo = br.readLine();
-            if(modo.isBlank()||modo.isEmpty()){pizzeria = "Pizzeria Demo";}
-            else{pizzeria = modo;}
+    public static void main(String[] args) {              
+        try{
+            FileReader frp = new FileReader("productos/producto0.producto");//buscar si minimo existe un producto
+            FileReader frm = new FileReader("mesa/mesa0.mesa");//buscar si minimo existe un producto            
+        }catch(FileNotFoundException ep){
+            System.out.println("Asuma que los archivos desaparecieron");
+            System.out.println("Tome aire y sientase feliz");
+            //Cree una mesa y un producto "demo"
+            try{
             BufferedImage imagen1 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo0.png"));
-            BufferedImage imagen2 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo1.png"));
-            BufferedImage imagen3 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo2.png"));
-            BufferedImage imagen4 = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demo3.png"));
-            BufferedImage mesaimagen = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demomesa0.png")); //nuevo
-            Producto prod1 = new Producto("Pepperoni", 1000, 1, 0);
-            Producto prod2= new Producto("Queso", 1500, 1, 1);
-            Producto prod3 = new Producto("Carne", 1700, 1, 2);
-            Producto prod4= new Producto("Soda", 500, 1, 3);
-            prod1.setImagen(imagen1);
-            prod2.setImagen(imagen2);
-            prod3.setImagen(imagen3);
-            prod4.setImagen(imagen4);
-            Controladora helper = new Controladora();
-            helper.getProductoServicio().Inv_inicializarBase();
-                int id1 = helper.getProductoServicio().Inv_crear(prod1);  // Retorna ID si existe o inserta si no
-                int id2 = helper.getProductoServicio().Inv_crear(prod2);
-                int id3 = helper.getProductoServicio().Inv_crear(prod3);
-                int id4 = helper.getProductoServicio().Inv_crear(prod4);
+            BufferedImage mesaimagen = ImageIO.read(SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demomesa0.png"));
+            Producto pizza = new Producto("Pizza", 1000, 1, 0);
             Mesa mesa1 = new Mesa(0, "Libre", 0); //temporal 0: sin pedido asignado
-            Mesa mesa2 = new Mesa(1, "Libre", 0); //temporal 0: sin pedido asignado
-            Mesa mesa3 = new Mesa(2, "Libre", 0); //temporal 0: sin pedido asignado 
+            mesa1.setImagen(mesaimagen);
+            pizza.setImagen(imagen1);
             
-            mesa1.setImagen(mesaimagen);  mesa2.setImagen(mesaimagen); mesa3.setImagen(mesaimagen);          
+            //llame a la controladora
+            Controladora control = new Controladora();
+            control.getMesasServicio().Crear(mesa1);
+            control.getProductoServicio().Inv_inicializarBase();
+            int id = control.getProductoServicio().Inv_crear(pizza);
+            pizza.setId(id);
+            control.getProductoServicio().crear(pizza);
             
-            helper.getMesasServicio().Crear(mesa1);
-            helper.getMesasServicio().Crear(mesa2);
-            helper.getMesasServicio().Crear(mesa3);            
-            
-            prod1.setId(id1);
-            prod2.setId(id2);
-            prod3.setId(id3);
-            prod4.setId(id4);
-            helper.getProductoServicio().crear(prod1); //Crea los archivos
-            helper.getProductoServicio().crear(prod2);
-            helper.getProductoServicio().crear(prod3);
-            helper.getProductoServicio().crear(prod4); 
-            prod1.setCantidad(4);
-            prod2.setCantidad(4);
-            prod3.setCantidad(4);
-            prod4.setCantidad(4);
-                helper.getProductoServicio().Inv_actualizar(prod1);  // Actualiza la cantidad del registro existente
-                helper.getProductoServicio().Inv_actualizar(prod2);
-                helper.getProductoServicio().Inv_actualizar(prod3);
-                helper.getProductoServicio().Inv_actualizar(prod4);
-                }catch(Exception e){
-                System.out.println("No se activa el modo demo");
-                System.out.println("Se ejecuta normal para la pizzeria: "+pizzeria);
+            //Configuraciones perzonalizadas
+            pizza.setCantidad(1);
+            control.getProductoServicio().Inv_actualizar(pizza);
+            }catch(Exception e){
+                System.out.println("Definitivamente algo salio mal");
                 System.err.println(e.getMessage());
-                System.err.println(e.getStackTrace());
-                }            
-        System.out.println("2025-II by Sauce Team");
-        SplashScreen inicio = new SplashScreen();
-        inicio.setLocationRelativeTo(null);
-        inicio.setVisible(true);       
-                
+            }
+        } finally{
+            inicio_exitoso();
+        }
+    }
+    public static void inicio_exitoso(){
+            
         String art = 
         """
                                                                                                                                                  
@@ -108,5 +81,9 @@ public class SaucePOO {
         System.out.println(art);
         System.out.println("Desarollado por Juan Esteban Florez, Andres Felipe Pilonieta, Maria Camila Giraldo y Eric Samuel Vargas");
         System.out.println("Hecho en Java con la libreria Swing y el gestor de proyectos Maven");
+        System.out.println("2025-II by Sauce Team");
+        SplashScreen inicio = new SplashScreen();
+        inicio.setLocationRelativeTo(null);
+        inicio.setVisible(true);
     }
 }
