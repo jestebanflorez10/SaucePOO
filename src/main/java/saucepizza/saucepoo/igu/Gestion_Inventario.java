@@ -4,6 +4,7 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -12,7 +13,9 @@ import java.util.NavigableMap;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import saucepizza.saucepoo.SaucePOO;
 import saucepizza.saucepoo.logic.Controladora;
+import saucepizza.saucepoo.logic.Producto;
 import saucepizza.saucepoo.logic.Ventas;
 import saucepizza.saucepoo.recibo.GeneradorITotal;
 /**
@@ -29,11 +32,33 @@ public class Gestion_Inventario extends javax.swing.JFrame {
      * Creates new form Gestion_Administrador
      */
     public Gestion_Inventario() {
+        this.pizzaname=SaucePOO.pizzeria;
         initComponents();
+        try {
+            this.setIconImage(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/logo.png")).getImage());
+        } catch (Exception e) {
+            System.err.println("Error al cargar el icono: " + e.getMessage());
+        }      
+        modeloTablaInforme = new javax.swing.table.DefaultTableModel(
+        new Object[]{"ID", "Producto", "Unidades", "Precio Unitario"}, 0 );
+        jTable2.setModel(modeloTablaInforme);
+        actualizarTablaInforme();
          new Timer(1000, e -> {
             jLabel5.setText(UtilidadesPedidos.obtenerFechaHoraActual());
         }).start();
                
+    }
+    private void actualizarTablaInforme() {
+    modeloTablaInforme.setRowCount(0); // Limpia la tabla
+    ArrayList<Producto> registro = control.getProductoServicio().obtenerTodos();
+    Iterator<Producto> it1 = registro.iterator();
+    while(it1.hasNext()){
+        Producto p = it1.next();
+        try {
+            modeloTablaInforme.addRow(new Object[]{p.getId(), p.getNombre(), control.getProductoServicio().Inv_leer(p.getNombre()).getCantidad(), p.getPrecioUnitario()});
+        } catch (SQLException ex) { }
+    }
+    
     }
     
     
