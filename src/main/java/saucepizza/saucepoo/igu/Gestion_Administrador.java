@@ -40,8 +40,7 @@ public class Gestion_Administrador extends javax.swing.JFrame {
             System.err.println("Error al cargar el icono: " + e.getMessage());
         }      
         modeloTablaInforme = new javax.swing.table.DefaultTableModel(
-        new Object[]{"Fecha", "Unidades Vendidas", "Total", "Cambio"}, 0
-        );
+        new Object[]{"Fecha", "Unidades Vendidas", "Total", "Cambio"}, 0);
         jTable1.setModel(modeloTablaInforme);
         actualizarTablaInforme();
         jLabel6.setText("HOY: "+ventasHoy());
@@ -407,7 +406,10 @@ public class Gestion_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        // TODO add your handling code here:
+        Gestion_Inventario window = new Gestion_Inventario();
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
