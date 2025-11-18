@@ -11,7 +11,7 @@
 
 ---
 
-Sauce es un proyecto de software en Java con interfaz grafica (gracias a la libreria Swing) para la gestión de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario de la pizzeria. Sauce contara con dos tipos de usuario: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.
+Sauce es un proyecto de software en Java con interfaz grafica (gracias a la librería Swing) para la gestión de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario de la pizzeria. Sauce contara con dos tipos de usuario: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.
 ## ¿Cómo instalar Sauce?
 El proyecto es un proyecto desarrollado con el [IDE de Netbeans](https://netbeans.apache.org/front/main/download/nb26/) en su versión 26 y con el gestor de proyectos [Apache Maven](https://maven.apache.org/download.cgi) usando el Java Development Kit o [JDK 24](https://www.oracle.com/java/technologies/javase/jdk24-archive-downloads.html), para conseguir el ejecutrable .jar del proyecto puede usar el comando de maven desde la carpeta donde usted tenga guardado el pom.xml junto al proyecto:
 ```bash
