@@ -18,10 +18,10 @@ public class InventarioDAO {
     
     public void crearTablaInventario() throws SQLException {
         String sql = """
-            CREATE TABLE IF NOT EXISTS inventario (
-                id INTEGER PRIMARY KEY,
-                nombre TEXT NOT NULL,
-                cantidad INTEGER NOT NULL
+        CREATE TABLE IF NOT EXISTS inventario (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nombre TEXT NOT NULL,
+            cantidad INTEGER NOT NULL
             );
         """;
 
@@ -87,24 +87,27 @@ public class InventarioDAO {
     }
 
     public int agregarInventario(Producto producto) throws SQLException {        
-        Producto existente = obtenerInventarioPorNombre(producto.getNombre());
-        if (existente != null) {
-            System.out.println("Producto ya existe con ID: " + existente.getId());
-            return existente.getId();
-        }
-
-        String sql = "INSERT INTO inventario(id, nombre, cantidad) VALUES (?, ?, ?)";
+    Producto existente = obtenerInventarioPorNombre(producto.getNombre());
+    if (existente != null) {
+        System.out.println("Producto ya existe con ID: " + existente.getId());
+        return existente.getId();
+    }
+    String sql = "INSERT INTO inventario(nombre, cantidad) VALUES (?, ?)";
 
         try (Connection conn = abrirConexion();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
-            pstmt.setInt(1, producto.getId());
-            pstmt.setString(2, producto.getNombre());
-            pstmt.setInt(3, producto.getCantidad());
+             PreparedStatement pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+            pstmt.setString(1, producto.getNombre());
+            pstmt.setInt(2, producto.getCantidad());
             pstmt.executeUpdate();
-            
-            System.out.println("Inventario agregado con ID: " + producto.getId());
-            return producto.getId();
+            try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                if (generatedKeys.next()) {
+                    int idGenerado = (int) generatedKeys.getLong(1);
+                    System.out.println("Inventario agregado con ID: " + idGenerado);
+                    return idGenerado;
+                }
+            }
         }
+        return -1; // Error
     }
 
     public void actualizarInventario(Producto producto) throws SQLException {
@@ -133,6 +136,26 @@ public class InventarioDAO {
             pstmt.executeUpdate();
             System.out.println("Registro de inventario eliminado con ID: " + id);
         }
+    }
+    public Producto obtenerInventarioPorId(int id) throws SQLException {
+        String sql = "SELECT * FROM inventario WHERE id = ?";
+        try (Connection conn = abrirConexion();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+            pstmt.setInt(1, id);
+            try (ResultSet rs = pstmt.executeQuery()) {
+                if (rs.next()) {
+                    // Crear producto con datos de BD
+                    Producto producto = new Producto(
+                        rs.getString("nombre"),
+                        0, // Precio temporal, se actualizará desde archivo
+                        rs.getInt("cantidad"),
+                        rs.getInt("id")
+                    );
+                    return producto;
+                }
+            }
+        }
+        return null;
     }
 }
 

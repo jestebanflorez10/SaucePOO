@@ -74,5 +74,17 @@ public class Producto_Servicio {
         System.out.println("Error al obtener productos: " + e.getMessage());
         return retorno;
         }
-    }   
+    }
+    public Producto Inv_leerPorId(int id) throws SQLException {
+    Producto productoBD = control.getInventarioDAO().obtenerInventarioPorId(id);
+    
+    if (productoBD != null) {
+            Producto productoCompleto = this.leer(productoBD.getId());
+            if (productoCompleto != null) {
+                productoCompleto.setCantidad(productoBD.getCantidad());
+                return productoCompleto;
+            }
+        }
+        return null;
+    }
 }

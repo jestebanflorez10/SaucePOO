@@ -52,10 +52,6 @@ public class Usuario_Servicio {
     public boolean usernameYaExiste(String username, int idActual) throws SQLException {
         return controlP.getUsuarioDAO().usernameYaExiste(username, idActual);
     }
-    /**
- * Cuenta cuántos usuarios están activos en la base de datos
- * @return cantidad de usuarios activos
- */
     public int contarUsuariosActivos() throws SQLException {
         List<Usuario> todosLosUsuarios = controlP.getUsuarioDAO().obtenerTodosLosUsuarios();
         int contador = 0;
@@ -70,6 +66,9 @@ public class Usuario_Servicio {
     }
     public List<Usuario> obtenerTodos() throws SQLException{
         return controlP.getUsuarioDAO().obtenerTodosLosUsuarios();
+    }
+    public void eliminarUsuario(int id) throws SQLException {
+    controlP.getUsuarioDAO().eliminarUsuario(id);
     }
 
 }

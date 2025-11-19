@@ -511,7 +511,36 @@ public class Usuario_Administrador extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton8ActionPerformed
 
     private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        // TODO add your handling code here:
+         if (usuarioConsultado == null) {
+        JOptionPane.showMessageDialog(this, "Debe cargar un usuario primero", 
+            "Usuario no cargado", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int confirmacion = JOptionPane.showConfirmDialog(this,
+        "¿Está seguro que desea eliminar el usuario '" + usuarioConsultado.getUsername() + "'?",
+        "Confirmar eliminación",
+        JOptionPane.YES_NO_OPTION,
+        JOptionPane.WARNING_MESSAGE);
+
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        try {
+            control.getUsuarioService().eliminarUsuario(usuarioConsultado.getId());
+            
+            JOptionPane.showMessageDialog(this, "Usuario eliminado correctamente", 
+                "Éxito", JOptionPane.INFORMATION_MESSAGE);
+            
+            limpiarFormulario();
+            actualizarEstadoBotones();
+            
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error SQL: " + e.getMessage(), 
+                "Error al eliminar", JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error inesperado: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     }//GEN-LAST:event_jButton10ActionPerformed
 
     /**

@@ -12,6 +12,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.PlainDocument;
 import saucepizza.saucepoo.logic.Controladora;
 import saucepizza.saucepoo.logic.Producto;
 /*
@@ -38,6 +39,30 @@ public class Productos_Administrador extends javax.swing.JFrame {
         ftxt_precio.setText(String.valueOf(p.getPrecioUnitario()));
         txt_nombre.setText(p.getNombre());
         img_producto.setIcon(new ImageIcon(p.getImagen()));
+        PlainDocument doc = (PlainDocument) ftxt_precio.getDocument();
+            doc.setDocumentFilter(new javax.swing.text.DocumentFilter() {
+                @Override
+                public void insertString(FilterBypass fb, int offset, String string, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+                    StringBuilder sb = new StringBuilder();
+                    for (char c : string.toCharArray()) {
+                        if (Character.isDigit(c) || c == '.' || c == ',') {
+                            sb.append(c);
+                        }
+                    }
+                    super.insertString(fb, offset, sb.toString(), attr);
+                }
+
+                @Override
+                public void replace(FilterBypass fb, int offset, int length, String text, javax.swing.text.AttributeSet attr) throws javax.swing.text.BadLocationException {
+                    StringBuilder sb = new StringBuilder();
+                    for (char c : text.toCharArray()) {
+                        if (Character.isDigit(c) || c == '.' || c == ',') {
+                            sb.append(c);
+                        }
+                    }
+                    super.replace(fb, offset, length, sb.toString(), attr);
+                }
+            });
     }
     
     public static BufferedImage iconToBufferedImage(Icon icon) {
@@ -417,55 +442,71 @@ public class Productos_Administrador extends javax.swing.JFrame {
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         try {
-        // Validar que el nombre no esté vacío
         String nuevoNombre = txt_nombre.getText().trim();
         if (nuevoNombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre del producto no puede estar vacío", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El nombre del producto no puede estar vacío", 
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Validar que el precio sea válido
         String precioText = ftxt_precio.getText().trim();
         if (precioText.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El precio no puede estar vacío", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El precio no puede estar vacío", 
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         double precio = Double.parseDouble(precioText);
         if (precio < 0) {
-            JOptionPane.showMessageDialog(this, "El precio no puede ser negativo", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El precio no puede ser negativo", 
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Validar que haya una imagen
         if (img_producto.getIcon() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una imagen para el producto", "Error de validación", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una imagen para el producto", 
+                "Error de validación", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        Producto inventario = control.getProductoServicio().Inv_leer(retorno.getNombre());
-        int cantidad = inventario.getCantidad();
+        Producto inventario = control.getProductoServicio().Inv_leerPorId(retorno.getId());
+        
+        if (inventario == null) {
+            JOptionPane.showMessageDialog(this, 
+                "Error: No se encontró el registro de inventario", 
+                "Error de base de datos", 
+                JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
         BufferedImage bufferedImage = iconToBufferedImage(img_producto.getIcon());
-        inventario.setImagen(bufferedImage);
 
-        inventario.setPrecioUnitario(precio);
         inventario.setNombre(nuevoNombre);
+        inventario.setPrecioUnitario(precio);
+        inventario.setImagen(bufferedImage);
+        
         control.getProductoServicio().Inv_actualizar(inventario);
 
         retorno.setNombre(nuevoNombre);
         retorno.setPrecioUnitario(precio);
         retorno.setImagen(bufferedImage);
+        
         control.getProductoServicio().actualizar(retorno);
+        control.getProductoServicio().crear(retorno);
 
-        JOptionPane.showMessageDialog(this, "Producto actualizado correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Producto actualizado correctamente", 
+            "Éxito", JOptionPane.INFORMATION_MESSAGE);
+        
+        this.dispose();
 
-        } catch (NumberFormatException ex) {
-            JOptionPane.showMessageDialog(this, "El precio debe ser un número válido", "Error de formato", JOptionPane.ERROR_MESSAGE);
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-            JOptionPane.showMessageDialog(this, "Error al actualizar el producto en la base de datos", "Error SQL", JOptionPane.ERROR_MESSAGE);
-        }
+    } catch (NumberFormatException ex) {
+        JOptionPane.showMessageDialog(this, "El precio debe ser un número válido", 
+            "Error de formato", JOptionPane.ERROR_MESSAGE);
+    } catch (SQLException ex) {
+        ex.printStackTrace();
+        JOptionPane.showMessageDialog(this, "Error al actualizar el producto en la base de datos: " + ex.getMessage(), 
+            "Error SQL", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton7ActionPerformed
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed

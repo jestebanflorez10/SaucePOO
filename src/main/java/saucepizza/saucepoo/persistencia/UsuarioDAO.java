@@ -235,4 +235,5 @@ public boolean usernameYaExiste(String username, int idActual) throws SQLExcepti
     return false;
 }
 
+
 }

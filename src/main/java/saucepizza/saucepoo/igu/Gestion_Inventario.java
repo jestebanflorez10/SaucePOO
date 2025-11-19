@@ -4,10 +4,12 @@
  */
 package saucepizza.saucepoo.igu;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
@@ -30,7 +32,7 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     private javax.swing.table.DefaultTableModel modeloTablaInforme;
     private Controladora control = new Controladora();
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(Gestion_Inventario.class.getName());
-
+    private Producto p;
     /**
      * Creates new form Gestion_Administrador
      */
@@ -89,8 +91,13 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         Producto p = it1.next();
         try {
             modeloTablaInforme.addRow(new Object[]{p.getId(), p.getNombre(), control.getProductoServicio().Inv_leer(p.getNombre()).getCantidad(), p.getPrecioUnitario()});
-        } catch (SQLException ex) { }
+        } catch (SQLException ex) {
+            System.err.println(ex.getStackTrace());
+        }        
     }
+            lbl_nombre.setText("Nombre");
+            lbl_precio.setText("Precio");
+            img_producto.setIcon(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png")));
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -112,7 +119,6 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         jPanel3 = new javax.swing.JPanel();
         jLabel5 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
-        jButton10 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTable2 = new javax.swing.JTable();
@@ -215,17 +221,6 @@ public class Gestion_Inventario extends javax.swing.JFrame {
 
         jPanel4.setBackground(new java.awt.Color(255, 255, 255));
 
-        jButton10.setBackground(new java.awt.Color(227, 40, 32));
-        jButton10.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        jButton10.setForeground(new java.awt.Color(255, 255, 255));
-        jButton10.setText("Imprimir Catalogo");
-        jButton10.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
-        jButton10.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton10ActionPerformed(evt);
-            }
-        });
-
         jButton3.setBackground(new java.awt.Color(240, 240, 240));
         jButton3.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jButton3.setForeground(new java.awt.Color(227, 40, 32));
@@ -277,7 +272,6 @@ public class Gestion_Inventario extends javax.swing.JFrame {
                         .addGap(112, 112, 112)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jButton12, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE)
-                            .addComponent(jButton10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, 321, Short.MAX_VALUE))))
                 .addContainerGap(51, Short.MAX_VALUE))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -293,11 +287,9 @@ public class Gestion_Inventario extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 9, Short.MAX_VALUE)
                 .addComponent(jButton12, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(63, 63, 63))
+                .addGap(135, 135, 135))
             .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel4Layout.createSequentialGroup()
                     .addGap(27, 27, 27)
@@ -463,12 +455,6 @@ public class Gestion_Inventario extends javax.swing.JFrame {
         this.dispose();
     }//GEN-LAST:event_jButton9ActionPerformed
 
-    private void jButton10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton10ActionPerformed
-        GeneradorITotal imprimir = new GeneradorITotal();
-        imprimir.ImprimirPDF(control);
-        
-    }//GEN-LAST:event_jButton10ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         int seleccion = jTable2.getSelectedRow();
     if(seleccion != -1){
@@ -486,23 +472,25 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        Producto nuevo = new Producto("Nombre",500,1,0);
-        int nuevoId;
+        Producto nuevo = new Producto("Nombre",500,1,0);        
         try {
-            nuevoId = control.getProductoServicio().Inv_crear(nuevo);
-            nuevo.setId(nuevoId);
+            nuevo.setImagen(ImageIO.read(getClass().getResource("/saucepizza/saucepoo/igu/images/demo0.png")));
+            int nuevoId = control.getProductoServicio().Inv_crear(nuevo);
+            nuevo.setId(nuevoId);  // Asignar el ID real
+        
             Productos_Administrador window = new Productos_Administrador(nuevo);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
 
-            // Cuando se cierre la ventana: Ejecutar
             window.addWindowListener(new java.awt.event.WindowAdapter() {
                 @Override
-                public void windowClosed(java.awt.event.WindowEvent evt) {
+                    public void windowClosed(java.awt.event.WindowEvent evt) {
                     actualizarTablaInforme();
-                }
-            });
+            }
+        });
         } catch (SQLException ex) {
+            System.getLogger(Gestion_Inventario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+        } catch (IOException ex) {
             System.getLogger(Gestion_Inventario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         
@@ -510,13 +498,29 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
+       //primero verifiquemos que hay uno seleccionado
+       if(this.p != null){
+           try {
+               //ahora eliminelo de la base de datos
+               control.getProductoServicio().Inv_eliminar(this.p.getId());
+               //luego eliminelo de los archivos
+               control.getProductoServicio().eliminar(p.getId());
+               //Ahora borrelo de la temporal
+               this.p=null;
+               //Finalmente : Actualice
+               actualizarTablaInforme();
+           } catch (SQLException ex) {
+               System.err.println(ex.getStackTrace());
+           }
+       } else {
+        JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla", "No hay producto seleccionado", 1);
+       }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed
         int seleccion = jTable2.getSelectedRow();
         if(seleccion != -1){
-            Producto p = control.getProductoServicio().leer((int) jTable2.getValueAt(seleccion, 0));
+            this.p = control.getProductoServicio().leer((int) jTable2.getValueAt(seleccion, 0));
             lbl_nombre.setText(p.getNombre());
             lbl_precio.setText(String.valueOf(p.getPrecioUnitario()));
             img_producto.setIcon(new ImageIcon(p.getImagen()));
@@ -526,10 +530,8 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton12ActionPerformed
 
     private void jButton13ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton13ActionPerformed
-        int seleccion = jTable2.getSelectedRow();
-        if(seleccion != -1){
-            Producto p = control.getProductoServicio().leer((int) jTable2.getValueAt(seleccion, 0));
-            Productos_Administrador window = new Productos_Administrador(p);
+        if(this.p != null){
+            Productos_Administrador window = new Productos_Administrador(this.p);
             window.setLocationRelativeTo(null);
             window.setVisible(true);
 
@@ -538,11 +540,12 @@ public class Gestion_Inventario extends javax.swing.JFrame {
                 @Override
                 public void windowClosed(java.awt.event.WindowEvent evt) {
                     actualizarTablaInforme();
+                    p=null;
                 }
             });
 
         } else{
-            JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla", "No hay producto seleccionado", 1);
+            JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla, escoja uno y presione cargar", "No hay producto seleccionado", 1);
         }
     }//GEN-LAST:event_jButton13ActionPerformed
 
@@ -574,7 +577,6 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel img_producto;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton10;
     private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton12;
     private javax.swing.JButton jButton13;
