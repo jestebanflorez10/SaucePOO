@@ -441,58 +441,51 @@ public class Productos_Administrador extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        try {
+          try {
         String nuevoNombre = txt_nombre.getText().trim();
         if (nuevoNombre.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "El nombre del producto no puede estar vacío", 
-                "Error de validación", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "El nombre no puede estar vacío", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         String precioText = ftxt_precio.getText().trim();
         if (precioText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El precio no puede estar vacío", 
-                "Error de validación", JOptionPane.ERROR_MESSAGE);
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         double precio = Double.parseDouble(precioText);
         if (precio < 0) {
             JOptionPane.showMessageDialog(this, "El precio no puede ser negativo", 
-                "Error de validación", JOptionPane.ERROR_MESSAGE);
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         if (img_producto.getIcon() == null) {
-            JOptionPane.showMessageDialog(this, "Debe seleccionar una imagen para el producto", 
-                "Error de validación", JOptionPane.ERROR_MESSAGE);
-            return;
-        }
-
-        Producto inventario = control.getProductoServicio().Inv_leerPorId(retorno.getId());
-        
-        if (inventario == null) {
-            JOptionPane.showMessageDialog(this, 
-                "Error: No se encontró el registro de inventario", 
-                "Error de base de datos", 
-                JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Debe seleccionar una imagen", 
+                "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
         BufferedImage bufferedImage = iconToBufferedImage(img_producto.getIcon());
-
-        inventario.setNombre(nuevoNombre);
-        inventario.setPrecioUnitario(precio);
-        inventario.setImagen(bufferedImage);
-        
-        control.getProductoServicio().Inv_actualizar(inventario);
 
         retorno.setNombre(nuevoNombre);
         retorno.setPrecioUnitario(precio);
         retorno.setImagen(bufferedImage);
         
         control.getProductoServicio().actualizar(retorno);
-        control.getProductoServicio().crear(retorno);
+
+        try {
+            Producto inventario = control.getProductoServicio().Inv_leerPorId(retorno.getId());
+            if (inventario != null) {
+                inventario.setNombre(nuevoNombre);
+                control.getProductoServicio().Inv_actualizar(inventario);
+            }
+        } catch (SQLException ex) {
+            System.err.println("Error al actualizar inventario: " + ex.getMessage());
+        }
 
         JOptionPane.showMessageDialog(this, "Producto actualizado correctamente", 
             "Éxito", JOptionPane.INFORMATION_MESSAGE);
@@ -501,11 +494,11 @@ public class Productos_Administrador extends javax.swing.JFrame {
 
     } catch (NumberFormatException ex) {
         JOptionPane.showMessageDialog(this, "El precio debe ser un número válido", 
-            "Error de formato", JOptionPane.ERROR_MESSAGE);
-    } catch (SQLException ex) {
+            "Error", JOptionPane.ERROR_MESSAGE);
+    } catch (Exception ex) {
         ex.printStackTrace();
-        JOptionPane.showMessageDialog(this, "Error al actualizar el producto en la base de datos: " + ex.getMessage(), 
-            "Error SQL", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), 
+            "Error", JOptionPane.ERROR_MESSAGE);
     }
     }//GEN-LAST:event_jButton7ActionPerformed
 

@@ -101,62 +101,7 @@ public class GeneradorITotal {
 
     private void generarPDF(Controladora control, String ruta) {
         try {
-            /*DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-            for (Producto producto : ventaGenerar.getCantidadVendida()) {
-                dataset.addValue(producto.getCantidad(), "Cantidad", producto.getNombre());
-                //valor - informacion de la columna -  clave de la columna
-            }
-
-            // 2. CREAR GRÁFICO CON JFREECHART
-            JFreeChart chart = ChartFactory.createBarChart(
-                null, //titulo
-                "Productos", //Texto eje x
-                "Cantidad", //Texto eje y
-                dataset, //Conjunto de datos
-                PlotOrientation.VERTICAL, //Orientacion del grafico
-                true, //leyenda
-                false, //tooltips? no
-                false //URLs? no
-            );
-
-            // CONFIGURAR ANTIALIASING PARA MEJORAR CALIDAD
-            chart.setRenderingHints(new RenderingHints(RenderingHints.KEY_ANTIALIASING, 
-                                                      RenderingHints.VALUE_ANTIALIAS_ON));
-            chart.setRenderingHints(new RenderingHints(RenderingHints.KEY_TEXT_ANTIALIASING, 
-                                                      RenderingHints.VALUE_TEXT_ANTIALIAS_ON));
-
-            CategoryPlot plot = chart.getCategoryPlot();
-            plot.setShadowGenerator(null); // Quitar brillo blanco si existe
-            plot.setBackgroundPaint(Color.WHITE); // Cambiar color fondo del plot
-            plot.setOutlinePaint(null); // Opcional: quitar borde
-
-            // ACTIVAR LÍNEAS GUÍA
-            plot.setRangeGridlinesVisible(true);  // Líneas horizontales
-            plot.setDomainGridlinesVisible(true); // Líneas verticales  
-            plot.setRangeGridlinePaint(Color.LIGHT_GRAY);   // Color líneas horizontales
-            plot.setDomainGridlinePaint(Color.LIGHT_GRAY);  // Color líneas verticales
-
-            BarRenderer renderer = (BarRenderer) plot.getRenderer();
-            renderer.setBarPainter(new StandardBarPainter());
-            renderer.setSeriesPaint(0, Color.RED);
-
-            // Cambiar tipografía de ejes
-            plot.getDomainAxis().setTickLabelFont(new Font("Arial", Font.PLAIN, 12));
-            plot.getRangeAxis().setTickLabelFont(new Font("Arial", Font.PLAIN, 12));
-
-            // QUITAR FONDO GRIS DE LA LEYENDA
-            LegendTitle legend = chart.getLegend();
-            if (legend != null) {
-                legend.setBackgroundPaint(Color.WHITE);  // Fondo blanco para leyenda
-                legend.setFrame(BlockBorder.NONE);       // Sin borde en leyenda
-            }
-
-            // Cambiar color fondo del chart (fuera del plot)
-            chart.setBackgroundPaint(Color.WHITE);
-
-            // 3. CONVERTIR GRÁFICO A IMAGEN CON MAYOR RESOLUCIÓN (ANTI-PIXELADO)
-            BufferedImage chartImage = chart.createBufferedImage(1050, 450); // Doble resolución
-            */
+            
             BufferedImage imagen = null;
             try {
             imagen = ImageIO.read(

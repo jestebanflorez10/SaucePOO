@@ -1,12 +1,10 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
- */
+
 package saucepizza.saucepoo.igu;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import javax.imageio.ImageIO;
@@ -84,20 +82,29 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }
     }
     private void actualizarTablaInforme() {
-    modeloTablaInforme.setRowCount(0); // Limpia la tabla
-    ArrayList<Producto> registro = control.getProductoServicio().obtenerTodos();
-    Iterator<Producto> it1 = registro.iterator();
-    while(it1.hasNext()){
-        Producto p = it1.next();
+        modeloTablaInforme.setRowCount(0); // Limpia la tabla
+    
+    HashMap<Integer, Producto> registro = control.getProductoServicio().Inv_obtenerTodos();
+    
+    for (Producto p : registro.values()) {
         try {
-            modeloTablaInforme.addRow(new Object[]{p.getId(), p.getNombre(), control.getProductoServicio().Inv_leer(p.getNombre()).getCantidad(), p.getPrecioUnitario()});
-        } catch (SQLException ex) {
-            System.err.println(ex.getStackTrace());
+            modeloTablaInforme.addRow(new Object[]{
+                p.getId(), 
+                p.getNombre(), 
+                p.getCantidad(), 
+                p.getPrecioUnitario()
+            });
+        } catch (Exception ex) {
+            System.err.println("Error al agregar fila: " + ex.getMessage());
+            ex.printStackTrace();
         }        
     }
-            lbl_nombre.setText("Nombre");
-            lbl_precio.setText("Precio");
-            img_producto.setIcon(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png")));
+    
+    lbl_nombre.setText("Nombre");
+    lbl_precio.setText("Precio");
+    img_producto.setIcon(new ImageIcon(getClass().getResource("/saucepizza/saucepoo/igu/images/business.png")));
+    
+   
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -472,29 +479,36 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        Producto nuevo = new Producto("Nombre",500,1,0);        
-        try {
-            nuevo.setImagen(ImageIO.read(getClass().getResource("/saucepizza/saucepoo/igu/images/demo0.png")));
-            int nuevoId = control.getProductoServicio().Inv_crear(nuevo);
-            nuevo.setId(nuevoId);  // Asignar el ID real
+        Producto nuevo = new Producto("Nombre", 500, 1, 0);        
+    try {
+        nuevo.setImagen(ImageIO.read(getClass().getResource("/saucepizza/saucepoo/igu/images/demo0.png")));
         
-            Productos_Administrador window = new Productos_Administrador(nuevo);
-            window.setLocationRelativeTo(null);
-            window.setVisible(true);
+        int nuevoId = control.getProductoServicio().crearProductoCompleto(nuevo);
+        nuevo.setId(nuevoId);
+        
+        System.out.println("Producto creado con ID: " + nuevoId);
+    
+        Productos_Administrador window = new Productos_Administrador(nuevo);
+        window.setLocationRelativeTo(null);
+        window.setVisible(true);
 
-            window.addWindowListener(new java.awt.event.WindowAdapter() {
-                @Override
-                    public void windowClosed(java.awt.event.WindowEvent evt) {
-                    actualizarTablaInforme();
+        window.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosed(java.awt.event.WindowEvent evt) {
+                actualizarTablaInforme();
             }
         });
-        } catch (SQLException ex) {
-            System.getLogger(Gestion_Inventario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        } catch (IOException ex) {
-            System.getLogger(Gestion_Inventario.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
         
-
+    } catch (SQLException ex) {
+        System.err.println("Error SQL: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Error: " + ex.getMessage(), 
+            "Error SQL", JOptionPane.ERROR_MESSAGE);
+        ex.printStackTrace();
+    } catch (IOException ex) {
+        System.err.println("Error de imagen: " + ex.getMessage());
+        JOptionPane.showMessageDialog(this, "Error de imagen: " + ex.getMessage(), 
+            "Error IO", JOptionPane.ERROR_MESSAGE);
+    }
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed

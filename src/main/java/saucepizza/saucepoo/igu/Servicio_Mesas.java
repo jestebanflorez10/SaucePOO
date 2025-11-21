@@ -33,7 +33,7 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         
     }
     
-        private void cargarDatos() { //Muestra imagen, panel y actualiza estado en ComboBox
+        private void cargarDatos() {
         local = control.getMesasServicio().obtenerTodosH();
         JLabel[] seleccion = new JLabel[]{
             img_mesa1, img_mesa2, img_mesa3, img_mesa4, img_mesa5, img_mesa6 };
@@ -51,14 +51,12 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         for (int i = 0; i < seleccion.length; i++) {
             if (it.hasNext()) {
                 Mesa m = it.next();
-                if (m != null) { // Validar que mesa no sea null
+                if (m != null) {
                     BufferedImage img = m.getImagen();
                     if (img != null) {
                         seleccion[i].setIcon(new ImageIcon(img));
                         seleccion[i].setVisible(true);
                         paneles[i].setVisible(true);
-
-                        // Actualizar ComboBox con el estado de la mesa
                         String estado = m.getEstado();
                         if (estado != null) {
                             combos[i].setSelectedItem(estado);
@@ -135,8 +133,7 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         return;
     }
     
-    // Validar que la mesa NO esté Libre
-    if ("Libre".equalsIgnoreCase(m.getEstado())) {
+    if ("Libre".equalsIgnoreCase(m.getEstado()) || "Limpiar".equalsIgnoreCase(m.getEstado()) ) {
         JOptionPane.showMessageDialog(this,
             "La mesa está libre. No hay pedido asociado.",
             "Mesa Vacía",
@@ -146,7 +143,6 @@ public class Servicio_Mesas extends javax.swing.JFrame {
     
     int idPedido = m.getIdPedido();
     
-    // Validar que tenga un ID de pedido válido (diferente de 0 que significa "sin pedido")
     if (idPedido == 0) {
         JOptionPane.showMessageDialog(this,
             "Error: La mesa no tiene un pedido válido asociado.",
@@ -154,8 +150,6 @@ public class Servicio_Mesas extends javax.swing.JFrame {
             JOptionPane.ERROR_MESSAGE);
         return;
     }
-    
-    // Abrir la factura con el ID del pedido (que inicia en 1 en SQL)
     GestorFacturas imprimir = new GestorFacturas();
     imprimir.abrirFacturaPorId(idPedido);
 }
@@ -251,6 +245,7 @@ public class Servicio_Mesas extends javax.swing.JFrame {
         jButton2.setText("MESAS");
         jButton2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(227, 40, 32), 1, true));
         jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+        jButton2.setEnabled(false);
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
