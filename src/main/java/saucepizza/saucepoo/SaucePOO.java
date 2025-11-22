@@ -1,6 +1,7 @@
 package saucepizza.saucepoo;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 import javax.imageio.ImageIO;
 import saucepizza.saucepoo.igu.SplashScreen;
 import saucepizza.saucepoo.logic.Producto;
@@ -26,11 +27,10 @@ public class SaucePOO {
         }
     }
 
-    private static void crearProductoPorDefecto() {
-        try {
-            Producto productoExistente = control.getProductoServicio().leer(0);
-
-            if (productoExistente == null) {
+        private static void crearProductoPorDefecto() {
+            try {
+            ArrayList<Producto> productos = control.getProductoServicio().obtenerTodos();
+            if (productos.isEmpty()) {
                 System.out.println("Creando producto por defecto...");
 
                 BufferedImage imagen = ImageIO.read(
@@ -42,13 +42,14 @@ public class SaucePOO {
 
                 int idProducto = control.getProductoServicio().Inv_crear(pizza);
                 pizza.setId(idProducto);
-
                 control.getProductoServicio().crear(pizza);
 
                 pizza.setCantidad(1);
                 control.getProductoServicio().Inv_actualizar(pizza);
 
                 System.out.println("Producto por defecto creado con ID: " + idProducto);
+            } else {
+                System.out.println("Base de datos ya contiene " + productos.size() + " producto(s). Modo demostración desactivado.");
             }
         } catch (Exception e) {
             System.err.println("Error al crear producto por defecto: " + e.getMessage());
@@ -57,58 +58,61 @@ public class SaucePOO {
 
     private static void crearMesaPorDefecto() {
         try {
-            Mesa mesaExistente = control.getMesasServicio().leer(0);
+            ArrayList<Mesa> mesas = control.getMesasServicio().obtenerTodos();
 
-            if (mesaExistente == null) {
-                System.out.println("Creando mesa por defecto...");
+            if (mesas.isEmpty()) {
+                System.out.println("Creando mesas por defecto...");
 
                 BufferedImage imagenMesa = ImageIO.read(
                     SaucePOO.class.getResourceAsStream("/saucepizza/saucepoo/igu/images/demomesa0.png")
                 );
 
-                Mesa mesa = new Mesa(0, "Libre", 0);
-                mesa.setImagen(imagenMesa);
-
-                control.getMesasServicio().Crear(mesa);
-
-                System.out.println("Mesa por defecto creada con ID: 0");
+                Mesa[] mesasDemo = new Mesa[6];
+                for (int i = 0; i < 6; i++) {
+                    mesasDemo[i] = new Mesa(i, "Libre", 0);
+                    mesasDemo[i].setImagen(imagenMesa);
+                    control.getMesasServicio().Crear(mesasDemo[i]);
+                }
+                System.out.println("Mesas por defecto creadas");
+            } else {
+                System.out.println("Base de datos ya contiene " + mesas.size() + " mesa(s). Modo demostración desactivado.");
             }
         } catch (Exception e) {
             System.err.println("Error al crear mesa por defecto: " + e.getMessage());
         }
-    }
+        }
 
-    public static void inicio_exitoso() {
-        String art = 
-        """
-                            ########
-                           ##       ######
-                           #####         #####
-                           ##.########       ###
-                          ##         #####     ##:
-                         ##  #####       ###    +###           :####.
-                        ##   ###    ###    ### ######       ###########
-                       ##         .#####     ########      ####      #      #######      ####    #####      #####*       ######
-                      ##  #####    .:    -#########        #####          *##########    ####    #####   ###########   ##########
-                     ##  #####      .########               ##########           =###+   ####    #####  ####.    #    ###-     ###
-                    .#         ############                      #######   ###########   ####    #####  ####         ##############
-                    #     ################                          ####  ####    ####   ####    #####  ####     .    ###+
-                   #################    ##                 #############  ####  .#####   #############   ###########  ###########
-                  #############  ##    ####                 +########.     ###### ####     #####*.####     #######       #######.
-                   #     ####     ##   ####
-                         ####    ####
-                         ####    ####
-                        ######
-                        #####
-        """;
+        public static void inicio_exitoso() {
+            String art = 
+            """
+                                ########
+                               ##       ######
+                               #####         #####
+                               ##.########       ###
+                              ##         #####     ##:
+                             ##  #####       ###    +###           :####.
+                            ##   ###    ###    ### ######       ###########
+                           ##         .#####     ########      ####      #      #######      ####    #####      #####*       ######
+                          ##  #####    .:    -#########        #####          *##########    ####    #####   ###########   ##########
+                         ##  #####      .########               ##########           =###+   ####    #####  ####.    #    ###-     ###
+                        .#         ############                      #######   ###########   ####    #####  ####         ##############
+                        #     ################                          ####  ####    ####   ####    #####  ####     .    ###+
+                       #################    ##                 #############  ####  .#####   #############   ###########  ###########
+                      #############  ##    ####                 +########.     ###### ####     #####*.####     #######       #######.
+                       #     ####     ##   ####
+                             ####    ####
+                             ####    ####
+                            ######
+                            #####
+            """;
 
-        System.out.println(art);
-        System.out.println("Desarrollado por Juan Esteban Florez, Andres Felipe Pilonieta, Maria Camila Giraldo y Eric Samuel Vargas");
-        System.out.println("Hecho en Java con la libreria Swing y el gestor de proyectos Maven");
-        System.out.println("2025-II by Sauce Team");
-        
-        SplashScreen inicio = new SplashScreen();
-        inicio.setLocationRelativeTo(null);
-        inicio.setVisible(true);
-    }
+            System.out.println(art);
+            System.out.println("Desarrollado por Juan Esteban Florez, Andres Felipe Pilonieta, Maria Camila Giraldo y Eric Samuel Vargas");
+            System.out.println("Hecho en Java con la libreria Swing y el gestor de proyectos Maven");
+            System.out.println("2025-II by Sauce Team");
+
+            SplashScreen inicio = new SplashScreen();
+            inicio.setLocationRelativeTo(null);
+            inicio.setVisible(true);
+        }
 }
