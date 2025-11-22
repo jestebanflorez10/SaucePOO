@@ -479,7 +479,17 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
-        Producto nuevo = new Producto("Nombre", 500, 1, 0);        
+    HashMap<Integer, Producto> registroActual = control.getProductoServicio().Inv_obtenerTodos();
+    
+    if (registroActual.size() >= 15) {
+        JOptionPane.showMessageDialog(this, 
+            "No puedes crear más de 15 productos. Límite alcanzado.", 
+            "Límite de Productos", 
+            JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+    
+    Producto nuevo = new Producto("Nombre", 500, 1, 0);        
     try {
         nuevo.setImagen(ImageIO.read(getClass().getResource("/saucepizza/saucepoo/igu/images/demo0.png")));
         
@@ -512,23 +522,50 @@ public class Gestion_Inventario extends javax.swing.JFrame {
     }//GEN-LAST:event_jButton11ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-       //primero verifiquemos que hay uno seleccionado
-       if(this.p != null){
-           try {
-               //ahora eliminelo de la base de datos
-               control.getProductoServicio().Inv_eliminar(this.p.getId());
-               //luego eliminelo de los archivos
-               control.getProductoServicio().eliminar(p.getId());
-               //Ahora borrelo de la temporal
-               this.p=null;
-               //Finalmente : Actualice
-               actualizarTablaInforme();
-           } catch (SQLException ex) {
-               System.err.println(ex.getStackTrace());
-           }
-       } else {
-        JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla", "No hay producto seleccionado", 1);
-       }
+         if(this.p != null){
+        try {
+            if (jTable2.isEditing()) {
+                int row = jTable2.getEditingRow();
+                int col = jTable2.getEditingColumn();
+                jTable2.getCellEditor().stopCellEditing();
+                Thread.sleep(100);
+            }
+            
+            HashMap<Integer, Producto> registroActual = control.getProductoServicio().Inv_obtenerTodos();
+            
+            if (registroActual.size() <= 1) {
+                JOptionPane.showMessageDialog(this, 
+                    "No puedes eliminar el último producto. El negocio necesita al menos 1 producto.", 
+                    "No permitido", 
+                    JOptionPane.WARNING_MESSAGE);
+                return;
+            }
+            jTable2.clearSelection();
+            
+            control.getProductoServicio().Inv_eliminar(this.p.getId());
+            control.getProductoServicio().eliminar(p.getId());
+            this.p = null;
+            
+            JOptionPane.showMessageDialog(this, 
+                "Producto eliminado correctamente", 
+                "Éxito", 
+                JOptionPane.INFORMATION_MESSAGE);
+            
+            actualizarTablaInforme();
+            
+        } catch (SQLException ex) {
+            System.err.println(ex.getStackTrace());
+            JOptionPane.showMessageDialog(this, 
+                "Error al eliminar: " + ex.getMessage(), 
+                "Error", 
+                JOptionPane.ERROR_MESSAGE);
+        } catch (InterruptedException ex) {
+            System.err.println("Error de interruption: " + ex.getMessage());
+        }
+    } else {
+        JOptionPane.showMessageDialog(null, "No has seleccionado un producto de la tabla", 
+            "No hay producto seleccionado", 1);
+    }
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton12ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton12ActionPerformed

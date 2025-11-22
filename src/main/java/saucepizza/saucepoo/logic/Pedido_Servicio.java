@@ -61,7 +61,7 @@ public class Pedido_Servicio {
                                 .stream()
                                 .mapToDouble(p -> p.getCantidad() * p.getPrecioUnitario())
                                 .sum();
-        double impuestos = subTotal * 0.19; // ejemplo 19%
+        double impuestos = subTotal * 0; //Configurable
         pedido.setSubTotal(subTotal);
         pedido.setImpuestos(impuestos);
         pedido.setTotal(subTotal + impuestos);

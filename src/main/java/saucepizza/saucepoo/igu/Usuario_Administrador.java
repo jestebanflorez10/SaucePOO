@@ -246,7 +246,7 @@ public class Usuario_Administrador extends javax.swing.JFrame {
         jLabel6.setText("Cantidad de usuarios activos:");
 
         cmb_tipo.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
-        cmb_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Administrador", "Cajero" }));
+        cmb_tipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Admin", "Cajero" }));
 
         javax.swing.GroupLayout jPanel5Layout = new javax.swing.GroupLayout(jPanel5);
         jPanel5.setLayout(jPanel5Layout);

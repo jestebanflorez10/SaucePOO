@@ -6,7 +6,6 @@ package saucepizza.saucepoo.igu;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import saucepizza.saucepoo.logic.Usuario;
-//import saucepizza.saucepoo.logic.Usuario_Servicio;
 import saucepizza.saucepoo.logic.Controladora;
 import javax.swing.ImageIcon;
 import saucepizza.saucepoo.SaucePOO;
@@ -242,7 +241,6 @@ public class IniciodeSesion extends javax.swing.JFrame {
                     window.setVisible(true);
                     this.dispose();
                 }
-                this.dispose();
             } else {
                 JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
             }

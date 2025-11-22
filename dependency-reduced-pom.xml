@@ -4,8 +4,8 @@
   <groupId>saucepizza</groupId>
   <artifactId>SaucePOO</artifactId>
   <name>Sauce</name>
-  <version>prerelease 0.3</version>
-  <description>El proyecto consiste en desarrollar una aplicación de escritorio en Java Swing para la gestión integral de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario mediante una interfaz gráfica intuitiva. Está dirigido a dos tipos de usuarios: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.</description>
+  <version>prerelease 0.2</version>
+  <description>El proyecto consiste en desarrollar una aplicación de escritorio en Java Swing para la gestión integral de pequeñas pizzerías. El software automatizará los procesos de pedidos, facturación e inventario mediante una interfaz gráfica. Está dirigido a dos tipos de usuarios: administradores y cajeros, quienes podrán gestionar eficientemente las operaciones diarias del negocio, optimizando la atención al cliente y reduciendo errores operativos en el punto de venta.</description>
   <build>
     <plugins>
       <plugin>
