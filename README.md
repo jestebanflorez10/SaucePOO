@@ -4,7 +4,7 @@
   </a>
 </p>
 <p align="center">
-  <a href="#"><img src="https://img.shields.io/badge/version-prerelease%200.3-yellow" alt="Version"/></a>
+  <a href="#"><img src="https://img.shields.io/badge/version-prerelease%200.2-yellow" alt="Version"/></a>
   <a href="https://www.java.com"><img src="https://img.shields.io/badge/language-Java-red" alt="Language"/></a>
   <a href="#"><img src="https://img.shields.io/badge/packaging-jar-blue" alt="Packaging"/></a>
 </p>
@@ -36,11 +36,11 @@ mvn -version
 #Obtenga el instalador del proyecto a partir del pom.xml
 maven clean package
 ```
-Este comando le devolvera un archivo en formato JAR en el directorio /target/ de la forma SaucePOO-prerelase 0.3.jar (el nombre SaucePOO + algún codigo de la versión)
+Este comando le devolvera un archivo en formato JAR en el directorio /target/ de la forma SaucePOO-prerelase 0.2.jar (el nombre SaucePOO + algún codigo de la versión)
 ## Uso
 Para usar el ejecutable de Sauce construido anteriormente, ejecutelo con su instalación de Java de su dispositivo
 ```bash
-java -jar "SaucePOO-prerelase 0.3.jar"
+java -jar "SaucePOO-prerelase 0.2.jar"
 ```
 Al ejecutar el programa, este creara un directorio /database/ para guardar la base de datos de SQLite usuarios.db y un directorio /facturas/ para guardar en formato PDF las facturas creadas
 <p align="center">
